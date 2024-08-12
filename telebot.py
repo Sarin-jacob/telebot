@@ -200,7 +200,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     
     async def newfile(name:str ,channelid=-1002231845620):
         if BOT_TOKEN: 
-            bot_client = TelegramClient('bot', api_id, api_hash).start(bot_token=BOT_TOKEN)
+            bot_client = TelegramClient('bot', api_id, api_hash)
+            await bot_client.start(bot_token=BOT_TOKEN)
             entity = await bot_client.get_entity(channelid)
             search_url = f"tg://resolve?domain=ProSearchX1Bot&text={name.replace(' ', '%20')}"
             message=f"✅ **{name}**"
@@ -258,7 +259,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     system('systemctl --user restart telebot')
                 elif command=="update":
                     system('cd ~/telebot && curl -sOL "https://raw.githubusercontent.com/Sarin-jacob/telebot/main/telebot.py"')
-                    await msgo("Downloaded New files..\n Restarting Service")
+                    await msgo("Downloaded New files..\nRestarting Service")
                     system('systemctl --user restart telebot')
                     output="Updated"
                 elif "test" == command[:4]:
