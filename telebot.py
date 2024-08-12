@@ -250,7 +250,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     await asyncio.sleep(2)
                     system('systemctl --user restart telebot')
                     output="Updated"
-                elif "test" == command[:4]:
+                elif "test" == command[:5]:
                     prt=command[5:]
                     msgo(prt)
                     output="Test Successful"
