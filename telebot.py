@@ -29,7 +29,7 @@ def read_config(file_path):
 async def sendHelloMessage(client, peerChannel):
     entity = await client.get_entity(peerChannel)
     print("Telebot Daemon running using Telethon ")
-    await client.send_message(entity, "Telebot is up n Running and ready to Go!!")
+    await client.send_message(entity, "Telebot is up n Running")
 
 async def log_reply(message, reply):
     chunk_size=4096
