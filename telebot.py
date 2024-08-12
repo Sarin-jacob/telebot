@@ -204,6 +204,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         try:    
             if not event.media and event.message:
                 command = event.message.message
+                print(command)
                 if command[0] == "/":
                     command = command[1:]
                 valve=command
@@ -243,6 +244,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     await msgo("trying to sta..")
                     system('systemctl --user restart telebot')
                 elif command=="update":
+                    print("im here")
                     system('curl -sOL "https://raw.githubusercontent.com/Sarin-jacob/telebot/main/telebot.py"')
                     await msgo("Downloaded New files..\n Restarting Service")
                     await asyncio.sleep(2)
