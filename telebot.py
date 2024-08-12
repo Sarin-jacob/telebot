@@ -252,7 +252,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output="Updated"
                 elif "test" == command[:5]:
                     prt=command[5:]
-                    msgo(prt)
+                    await msgo(prt)
                     output="Test Successful"
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
