@@ -29,7 +29,7 @@ def read_config(file_path):
 async def sendHelloMessage(client, peerChannel):
     entity = await client.get_entity(peerChannel)
     print("Telebot Daemon running using Telethon ")
-    await client.send_message(entity, "Telebot is up n Running")
+    await client.send_message(entity, "Telebot is up n Running and ready to Go!!")
 
 async def log_reply(message, reply):
     chunk_size=4096
@@ -240,6 +240,10 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         output="Command Run Successful"
                 elif command=="roast":
                     await msgo("trying to sta..")
+                    system('systemctl --user restart telebot')
+                elif command=="update":
+                    system("curl -sOL https://raw.githubusercontent.com/Sarin-jacob/telebot/main/telebot.py")
+                    await msgo("Downloaded New files..\n Restarting Service")
                     system('systemctl --user restart telebot')
                 elif command=="channelz":
                     profile_pic = "PS.jpg"
