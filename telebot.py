@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import asyncio
 from datetime import datetime, timedelta
 from os import path, system, getenv
 import re
@@ -244,6 +245,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 elif command=="update":
                     system('curl -sOL "https://raw.githubusercontent.com/Sarin-jacob/telebot/main/telebot.py"')
                     await msgo("Downloaded New files..\n Restarting Service")
+                    asyncio.sleep(2)
                     system('systemctl --user restart telebot')
                 elif command=="channelz":
                     profile_pic = "PS.jpg"
