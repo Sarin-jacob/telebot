@@ -247,6 +247,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     await msgo("Downloaded New files..\n Restarting Service")
                     asyncio.sleep(2)
                     system('systemctl --user restart telebot')
+                    output=""
+                elif command=="test":
+                    output="Test Successful"
                 elif command=="channelz":
                     profile_pic = "PS.jpg"
                     channel_name ="Search Bot User 🔍 ⚓️ "
