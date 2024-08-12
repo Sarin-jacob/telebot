@@ -56,6 +56,7 @@ if path.isfile(CONFIG_FILE):
     TELEGRAM_DAEMON_API_ID = config.get('TELEGRAM_DAEMON_API_ID')
     TELEGRAM_DAEMON_API_HASH = config.get('TELEGRAM_DAEMON_API_HASH')
     TELEGRAM_DAEMON_CHANNEL = int(config.get('TELEGRAM_DAEMON_CHANNEL'))
+    BOT_TOKEN = config.get('BOT_TOKEN')
 else:
     print("config file Not Found creating one....\n")
     TELEGRAM_DAEMON_API_ID = input("Enter Telegram API ID: ")
@@ -197,12 +198,17 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         
         return channel_id
     
-    async def newfile(name:str ,channelid=-1002231845620): # other groups: ProSearch4Bot
-        entity = await client.get_entity(channelid)
-        search_url = f"tg://resolve?domain=ProSearchX1Bot&text={name.replace(' ', '%20')}"
-        message=f"✅ **{name}**"
-        butt=[Button.url("Click to Search",search_url)]
-        await client.send_message(entity, message,buttons=butt)
+    async def newfile(name:str ,channelid=-1002231845620):
+        if BOT_TOKEN: 
+            bot_client = TelegramClient('bot', api_id, api_hash).start(bot_token=BOT_TOKEN)
+            entity = await bot_client.get_entity(channelid)
+            search_url = f"tg://resolve?domain=ProSearchX1Bot&text={name.replace(' ', '%20')}"
+            message=f"✅ **{name}**"
+            butt=[Button.url("Click to Search",search_url)]
+            await bot_client.send_message(entity, message,buttons=butt)
+        else:
+            print("Bot Token not found")
+            await msgo("Bot Token not found\nAdd Bot Token in telebot.cnf file\nBOT_TOKEN=your_bot_token")
 
     @client.on(events.NewMessage())
     async def handler(event):
