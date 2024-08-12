@@ -251,7 +251,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 elif command=="test":
                     output="Test Successful"
                 elif command=="channelz":
-                    profile_pic = "PS.jpg"
+                    profile_pic = "0c5b070bd2ea83f9163cd.jpg"
                     channel_name ="Search Bot User 🔍 ⚓️ "
                     bot_list = ['ProSearch4Bot',
                                 'ProSearch5Bot',
