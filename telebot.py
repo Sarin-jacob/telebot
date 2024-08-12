@@ -198,7 +198,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         
         return channel_id
     
-    async def newfile(name:str ,channelid=-1002171035047):
+    async def newfile(name:str ,channelid=-1001847045854):
         if BOT_TOKEN: 
             bot_client = TelegramClient('bot', api_id, api_hash)
             await bot_client.start(bot_token=BOT_TOKEN)
@@ -265,7 +265,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 elif "test" == command[:4]:
                     prt=command[5:]
                     # await msgo(prt)
-                    await newfile(prt)
+                    await newfile(prt,channelid="Naruto_fan6")
                     output="Test Successful"
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
