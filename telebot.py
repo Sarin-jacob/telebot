@@ -261,7 +261,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                                 'MProSearchBot',
                                 'GroupProSearchBot']
                     ids=await Bots2Channel(channel_name,profile_pic,bot_list)
-                    output=f"Bots added to channel `{ids}`"
+                    output=f"Bots added to channel `-100{ids}`"
                 elif "sd:" in command:
                     mat=dict(finddetails(valve))
                     sd,ev,fr=mat.get("Sd") or mat.get("sd"),mat.get("ev"),mat.get("fr",1)
