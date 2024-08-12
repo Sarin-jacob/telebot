@@ -199,8 +199,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     
     async def newfile(name:str ,channelid=-1002231845620): # other groups: ProSearch4Bot
         entity = await client.get_entity(channelid)
+        search_url = f"tg://resolve?domain=ProSearchX1Bot&text={name.replace(' ', '%20')}"
         message=f"✅ **{name}**"
-        butt=[Button.url("Click to Search",f"tg://resolve?domain=ProSearchX1Bot&text={name.replace(' ','%20')}")]
+        butt=[Button.url("Click to Search",search_url)]
         await client.send_message(entity, message,buttons=butt)
 
     @client.on(events.NewMessage())
