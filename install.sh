@@ -7,8 +7,8 @@ mkdir -p ~/telebot
 cd ~/telebot
 touch keywords.txt
 echo "Downloading files to ~/telebot.."
-curl -sOL "https://github.com/Sarin-jacob/files/releases/download/telebot/telebot.py"
-curl -sOL "https://github.com/Sarin-jacob/files/releases/download/telebot/telebot.service"
+curl -sOL "https://raw.githubusercontent.com/Sarin-jacob/telebot/main/telebot.py"
+curl -sOL "hhttps://raw.githubusercontent.com/Sarin-jacob/telebot/main/telebot.service"
 # Copy the telebot.service file to the systemd user directory
 sudo cp ./telebot.service /etc/systemd/user/
 
