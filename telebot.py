@@ -198,7 +198,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         
         return channel_id
     
-    async def newfile(name:str ,channelid=-1002231845620):
+    async def newfile(name:str ,channelid=-1002171035047):
         if BOT_TOKEN: 
             bot_client = TelegramClient('bot', api_id, api_hash)
             await bot_client.start(bot_token=BOT_TOKEN)
