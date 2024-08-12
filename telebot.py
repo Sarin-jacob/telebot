@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from os import path, system, getenv
 import re
 import unicodedata
-from telethon import TelegramClient,events
+from telethon import TelegramClient,events,Button
 from telethon.sessions import StringSession
 from telethon.tl.functions.channels import CreateChannelRequest ,EditPhotoRequest
 from telethon.tl.types import InputChatUploadedPhoto,PeerChannel
@@ -196,6 +196,12 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             ))
         
         return channel_id
+    
+    async def newfile(name:str ,channelid=-1002231845620): # other groups: ProSearch4Bot
+        entity = await client.get_entity(channelid)
+        message=f"✅ **{name}**"
+        butt=[Button.url("Click to Search",f"tg://resolve?domain=ProSearchX1Bot&text={name.replace(' ','%20')}")]
+        await client.send_message(entity, message,buttons=butt)
 
     @client.on(events.NewMessage())
     async def handler(event):
@@ -246,12 +252,12 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 elif command=="update":
                     system('cd ~/telebot && curl -sOL "https://raw.githubusercontent.com/Sarin-jacob/telebot/main/telebot.py"')
                     await msgo("Downloaded New files..\n Restarting Service")
-                    # await asyncio.sleep(2)
                     system('systemctl --user restart telebot')
                     output="Updated"
                 elif "test" == command[:4]:
                     prt=command[5:]
-                    await msgo(prt)
+                    # await msgo(prt)
+                    await newfile(prt)
                     output="Test Successful"
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
