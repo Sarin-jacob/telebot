@@ -1,0 +1,13 @@
+[Unit]
+Description=telegram management bot.
+Wants=network-online.target
+After=network-online.target network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/telebot
+ExecStart=/usr/bin/python ./telebot.py
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

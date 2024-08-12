@@ -1,0 +1,269 @@
+#!/usr/bin/env python3
+from datetime import datetime, timedelta
+from os import path, system, getenv
+import re
+import unicodedata
+from telethon import TelegramClient,events
+from telethon.sessions import StringSession
+from telethon.tl.functions.channels import CreateChannelRequest ,EditPhotoRequest
+from telethon.tl.types import InputChatUploadedPhoto,PeerChannel
+
+TELEGRAM_DAEMON_API_ID =None
+TELEGRAM_DAEMON_API_HASH =None
+TELEGRAM_DAEMON_CHANNEL=None
+TELEGRAM_DAEMON_SESSION_PATH=''
+CONFIG_FILE="telebot.cnf"
+SESSION="telebot"
+
+def read_config(file_path):
+    config = {}
+    try:
+        with open(file_path, 'r') as file:
+            for line in file:
+                key, value = line.strip().split('=')
+                config[key.strip()] = value.strip()
+    except Exception as e:
+        print(f"Error reading config file: {e}")
+    return config
+
+async def sendHelloMessage(client, peerChannel):
+    entity = await client.get_entity(peerChannel)
+    print("Telebot Daemon running using Telethon ")
+    await client.send_message(entity, "Telebot is up n Running")
+
+async def log_reply(message, reply):
+    chunk_size=4096
+    chunks = [reply[i:i+chunk_size] for i in range(0, len(reply), chunk_size)]
+    for chunk in chunks:
+        print(chunk)
+        fm=await message.reply(chunk,link_preview=False)
+    return fm
+
+async def log_edit(message, reply):
+    print(reply)
+    await message.edit(reply)
+
+def finddetails(input_string):
+    pattern = r'(\w+):((?:\w+://)?.*?)\s*(?=\w+:|$)'
+    matches = re.findall(pattern, input_string)
+    return matches
+
+
+if path.isfile(CONFIG_FILE):
+    print("Using Config File.\n")
+    config = read_config(CONFIG_FILE)
+    TELEGRAM_DAEMON_API_ID = config.get('TELEGRAM_DAEMON_API_ID')
+    TELEGRAM_DAEMON_API_HASH = config.get('TELEGRAM_DAEMON_API_HASH')
+    TELEGRAM_DAEMON_CHANNEL = int(config.get('TELEGRAM_DAEMON_CHANNEL'))
+else:
+    print("config file Not Found creating one....\n")
+    TELEGRAM_DAEMON_API_ID = input("Enter Telegram API ID: ")
+    TELEGRAM_DAEMON_API_HASH = input("Enter Telegram API Hash: ")
+    TELEGRAM_DAEMON_CHANNEL = input("Enter Telegram Channel ID: ")
+    config = {
+        'TELEGRAM_DAEMON_API_ID': TELEGRAM_DAEMON_API_ID,
+        'TELEGRAM_DAEMON_API_HASH': TELEGRAM_DAEMON_API_HASH,
+        'TELEGRAM_DAEMON_CHANNEL': TELEGRAM_DAEMON_CHANNEL,
+    }
+    with open(CONFIG_FILE, 'w') as file:
+        for key, value in config.items():
+            file.write(f"{key}={value}\n")
+sessionName = SESSION
+stringSessionFilename = f"{sessionName}.session"
+
+def _getStringSessionIfExists():
+    sessionPath = path.join(TELEGRAM_DAEMON_SESSION_PATH, stringSessionFilename)
+    if path.isfile(sessionPath):
+        try:
+            with open(sessionPath, 'r') as file:
+                session = file.read()
+                print(f"Session loaded from {sessionPath}")
+                return session
+        except Exception as e:
+            print(f"Error loading session file: {e}")
+    return None
+
+def getSession():
+    if TELEGRAM_DAEMON_SESSION_PATH is None:
+        return sessionName
+    return StringSession(_getStringSessionIfExists())
+
+def normalize_string(s):
+    return unicodedata.normalize('NFKD', s).encode('ascii', 'ignore').decode('ascii').lower()
+
+def saveSession(session):
+    if TELEGRAM_DAEMON_SESSION_PATH is not None:
+        sessionPath = path.join(TELEGRAM_DAEMON_SESSION_PATH, stringSessionFilename)
+        try:
+            with open(sessionPath, 'w') as file:
+                file.write(session.save())
+            print(f"Session saved in {sessionPath}")
+        except Exception as e:
+            print(f"Error saving session file: {e}")
+
+api_id = TELEGRAM_DAEMON_API_ID
+api_hash = TELEGRAM_DAEMON_API_HASH
+channel_id = TELEGRAM_DAEMON_CHANNEL
+
+cods='''
+This script contains the following commands and their usage:
+
+0. `cmd`: list all the commands. Usage: cmd
+1. `cmdr, <command>`: run a command on the system. Usage: cmdr, <command>
+2. `channelz`: create a channel with a profile picture and add The Botz. Usage: channelz
+3. `roast`: restart the telebot service. Usage: roast
+4. `sen:`: send a file to the sender. Usage: sen: <file_path>
+5. `delch`: delete channels with specific keywords. Usage: delch <keywords to be added, seperated by space>
+6. `sd:`: schedule a command to be sent multiple times. Usage: sd:<command> ev:<interval in minutes> fr:<times>
+'''
+
+with TelegramClient(getSession(), api_id, api_hash).start() as client:
+    saveSession(client.session)
+    global peerChannel
+    peerChannel = PeerChannel(channel_id)
+
+    async def clearchannels():
+        # List of keywords to look for in group names
+        ndel=[] #list of channels/groups to never delete
+        chy=await client.get_entity(PeerChannel(TELEGRAM_DAEMON_CHANNEL))
+        ndel.append(chy.title.lower())
+        with open('keywords.txt', 'r') as f:
+            keywords = [line.strip() for line in f]
+        # never leave curent channel
+
+        # Get the list of your groups
+        dialogs = await client.get_dialogs()
+
+        for dialog in dialogs:
+            # Check if the dialog is a chat (group or channel)
+            if not dialog.is_group and dialog.is_channel:
+                chat_name = normalize_string(dialog.name)
+
+                if chat_name not in ndel :
+                    # Check if any of the keywords are in the chat name
+                    if any(keyword in chat_name for keyword in keywords):
+                        # Leave the group
+                        await dialog.delete()
+                        await msgo(f'Left group: {chat_name}')
+
+    async def msgo(mssg,hand=False):
+        # print(mssg)
+        entity = await client.get_entity(peerChannel)
+        chunk_size=4096
+        chunks = [mssg[i:i+chunk_size] for i in range(0, len(mssg), chunk_size)]
+        for chunk in chunks:
+            # print(chunk)     
+            lmsg= await client.send_message(entity, chunk,parse_mode='markdown',link_preview=False)
+        if hand==True:
+            await handler(events.NewMessage.Event(lmsg))
+        return lmsg
+    
+    async def sdule(command: str, ev: int, times: int):
+        entty = await client.get_entity(peerChannel)
+        for i in range(times):
+            # Calculate the scheduled time for each message
+            scheduled_time = datetime.now() + timedelta(minutes=ev * i) - timedelta(hours=5, minutes=30)
+            # Use the send_message function with the schedule parameter
+            lo=await client.send_message(entty, command, schedule=scheduled_time)
+    
+    async def Bots2Channel(channel_name, profile_pic, bot_list):
+        # Create the channel
+        result = await client(CreateChannelRequest(
+            title=channel_name,
+            about='',
+            megagroup=False
+        ))
+
+        channel_id = result.chats[0].id
+        print(f"Channel created with ID: {channel_id}")
+
+        # Add bots to the channel and promote them to admin
+        for bot in bot_list:
+            try:
+                bot_entity = await client.get_input_entity(bot)
+                await client.edit_admin(channel_id, bot_entity, is_admin=True)
+                print(f"Bot '{bot}' added to channel '{channel_name}' and promoted to admin!")
+            except Exception as e:
+                print(f"Error adding bot '{bot}' to channel '{channel_name}': {e}")
+     
+        # Optionally, set the profile picture and add bots to the channel
+        if profile_pic:
+            file = await client.upload_file(profile_pic)
+            await client(EditPhotoRequest(
+                channel=channel_id,
+                photo=InputChatUploadedPhoto(file)
+            ))
+        
+        return channel_id
+
+    @client.on(events.NewMessage())
+    async def handler(event):
+        if event.to_id != peerChannel:
+            return     
+        try:    
+            if not event.media and event.message:
+                command = event.message.message
+                if command[0] == "/":
+                    command = command[1:]
+                valve=command
+                command = command.lower()
+                output = "Unknown command"
+                if command == "cmd":
+                    output = cods
+                elif command[:4]=="sen:":
+                    file_path = command[4:].strip()  # Extract the file path from the command
+                    try:
+                        await client.send_file(event.message.sender_id, file=file_path)
+                        output = "File sent successfully"
+                    except:
+                        output = "File not found"
+                elif "delch" in command[:5]:
+                    if command != "delch ":
+                        keywords = command[6:].split()
+                    with open('keywords.txt', 'a') as f:
+                        for keyword in keywords:
+                            f.write(keyword + '\n')
+                    # await queue.task_done()
+                    await clearchannels()
+                    output="cleared"
+                elif "cmdr," in command:
+                    if 'cmdr,' in valve:
+                        cmdr=valve.split('cmdr, ')[-1]
+                    else:
+                        cmdr=valve.split('Cmdr, ')[-1]
+                    if system(cmdr + " > puto.txt")!=0:
+                        system(cmdr + " 2>> puto.txt")
+                    g=open("puto.txt", "r")
+                    output=g.read()
+                    g.close
+                    if output=='':
+                        output="Command Run Successful"
+                elif command=="roast":
+                    await msgo("trying to sta..")
+                    system('systemctl --user restart telebot')
+                elif command=="channelz":
+                    profile_pic = "PS.jpg"
+                    channel_name ="Search Bot User 🔍 ⚓️ "
+                    bot_list = ['ProSearch4Bot',
+                                'ProSearch5Bot',
+                                'ProSearchX1Bot',
+                                'ProSeriesTelegramBot',
+                                'ProWebSeriesBot',
+                                'MProSearchBot',
+                                'GroupProSearchBot']
+                    ids=await Bots2Channel(channel_name,profile_pic,bot_list)
+                    output=f"Bots added to channel `{ids}`"
+                elif "sd:" in command:
+                    mat=dict(finddetails(valve))
+                    sd,ev,fr=mat.get("Sd") or mat.get("sd"),mat.get("ev"),mat.get("fr",1)
+                    await sdule(sd,int(ev),int(fr))
+                    output=f"{sd} scheduled for {fr} times, every {ev} minutes"
+                await msgo(output)
+                await event.delete()
+        except:
+            pass
+    
+    async def start():
+        await sendHelloMessage(client, peerChannel)
+        await client.run_until_disconnected()
+    client.loop.run_until_complete(start())
