@@ -247,10 +247,10 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     print("im here")
                     system('curl -sOL "https://raw.githubusercontent.com/Sarin-jacob/telebot/main/telebot.py"')
                     await msgo("Downloaded New files..\n Restarting Service")
-                    await asyncio.sleep(2)
+                    # await asyncio.sleep(2)
                     system('systemctl --user restart telebot')
                     output="Updated"
-                elif "test" == command[:5]:
+                elif "test" == command[:4]:
                     prt=command[5:]
                     await msgo(prt)
                     output="Test Successful"
