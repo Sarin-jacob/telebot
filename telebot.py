@@ -117,6 +117,7 @@ This script contains the following commands and their usage:
 4. `sen:`: send a file to the sender. Usage: sen: <file_path>
 5. `delch`: delete channels with specific keywords. Usage: delch <keywords to be added, seperated by space>
 6. `sd:`: schedule a command to be sent multiple times. Usage: sd:<command> ev:<interval in minutes> fr:<times>
+7. `add <name year>`: sent movie added message with button to update channel. Usage: add <name>
 '''
 
 with TelegramClient(getSession(), api_id, api_hash).start() as client:
@@ -262,11 +263,10 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     await msgo("Downloaded New files..\nRestarting Service")
                     system('systemctl --user restart telebot')
                     output="Updated"
-                elif "test" == command[:4]:
-                    prt=command[5:]
-                    # await msgo(prt)
-                    await newfile(prt,channelid="Naruto_fan6")
-                    output="Test Successful"
+                elif "add" == command[:3]:
+                    prt=valve[4:]
+                    await newfile(prt)
+                    output=f"{prt} added message Sent."
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
                     channel_name ="Search Bot User 🔍 ⚓️ "
