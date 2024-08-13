@@ -60,6 +60,7 @@ To update the telebot script, you can use the following command:
 ```bash
 cd ~/telebot
 curl -sOL "https://raw.githubusercontent.com/Sarin-jacob/telebot/main/telebot.py"
+systemctl --user restart telebot
 ```
 ##### OR 
 execute the following command in the Telegram daemon channel:
