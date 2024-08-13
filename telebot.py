@@ -209,8 +209,11 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channelid)
-            search_url = f"tg://resolve?domain=ProSearchX1Bot&text={name.replace(' ', '%20').split('\n')[0]}"
             message=f"✅ **{name}**"
+            print(f'{name=}')
+            name=name.split('\n')[0]
+            search_url = f"tg://resolve?domain=ProSearchX1Bot&text={name.replace(' ', '%20')}"
+            print(f'{search_url=}')
             butt=[Button.url("Click to Search",search_url)]
             await bot_client.send_message(entity, message,buttons=butt)
         else:
