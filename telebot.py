@@ -107,6 +107,9 @@ api_id = TELEGRAM_DAEMON_API_ID
 api_hash = TELEGRAM_DAEMON_API_HASH
 channel_id = TELEGRAM_DAEMON_CHANNEL
 
+bot_client = TelegramClient('bot', api_id, api_hash)
+
+
 cods='''
 This script contains the following commands and their usage:
 
@@ -198,11 +201,13 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             ))
         
         return channel_id
-    
+    async def start_bot_client():
+        if not bot_client.is_connected():
+            await bot_client.start(bot_token=BOT_TOKEN)
+            
     async def newfile(name:str ,channelid=-1001847045854):
         if BOT_TOKEN: 
-            bot_client = TelegramClient('bot', api_id, api_hash)
-            await bot_client.start(bot_token=BOT_TOKEN)
+            await start_bot_client()
             entity = await bot_client.get_entity(channelid)
             search_url = f"tg://resolve?domain=ProSearchX1Bot&text={name.replace(' ', '%20')}"
             message=f"✅ **{name}**"
