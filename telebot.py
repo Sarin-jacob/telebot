@@ -212,12 +212,13 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             entity = await bot_client.get_entity(channelid)
             message=f"✅ **{name}**"
             print(f'{name=}')
-            name=name.split('#')[0]
+            name=name.split('#')[0].replace(' ', '%20').split('\n')[0]
             print(f'{name=}')
-            search_url = f"tg://resolve?domain={searchbot}&text={name.replace(' ', '%20').split('\n')[0]}"
+            search_url = f"tg://resolve?domain={searchbot}&text={name}"
             print(f'{search_url=}')
             butt=[Button.url("Click to Search",search_url)]
             await bot_client.send_message(entity, message,buttons=butt)
+            return name
         else:
             print("Bot Token not found")
             await msgo("Bot Token not found\nAdd Bot Token in telebot.cnf file\nBOT_TOKEN=your_bot_token")
@@ -277,14 +278,14 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output=''
                     prt=valve[4:]
                     for i in prt.split(','):
-                        await newfile(i,channelid=-1002219912103)
-                        output+=f"{i} added message Sent.\n"
+                        nm=await newfile(i,channelid=-1002219912103)
+                        output+=f"{nm} added message Sent.\n"
                 elif "ser" == command[:3]:
                     output=''
                     prt=valve[4:]
                     for i in prt.split(','):
-                        await newfile(i,channelid=-1002219912103,searchbot="ProWebSeriesBot")
-                        output+=f"{i} added message Sent.\n"
+                        nm=await newfile(i,channelid=-1002219912103,searchbot="ProWebSeriesBot")
+                        output+=f"{nm} added message Sent.\n"
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
                     channel_name ="Search Bot User 🔍 ⚓️ "
