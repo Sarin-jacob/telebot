@@ -120,7 +120,8 @@ This script contains the following commands and their usage:
 4. `sen:`: send a file to the sender. Usage: sen: <file_path>
 5. `delch`: delete channels with specific keywords. Usage: delch <keywords to be added, seperated by space>
 6. `sd:`: schedule a command to be sent multiple times. Usage: sd:<command> ev:<interval in minutes> fr:<times>
-7. `add <name year>`: sent movie added message with button to update channel. Usage: add <name>
+7. `mov <Moviename year>`: sent movie added message with button to update channel. Usage: mov <name>
+8. `ser <Seriesname season>`: sent series added message with button to update channel. Usage: ser <name>
 '''
 
 with TelegramClient(getSession(), api_id, api_hash).start() as client:
