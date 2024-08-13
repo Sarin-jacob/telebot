@@ -226,12 +226,12 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             print("Bot Token not found")
             await msgo("Bot Token not found\nAdd Bot Token in telebot.cnf file\nBOT_TOKEN=your_bot_token")
 
-    async def testbot():
-        if BOT_TOKEN: 
-            await start_bot_client()
-            @bot_client.on(events.NewMessage(pattern='/start'))
-            async def tester(event):
-                await msgo("testing:"+str(event.message.text),channel=-1002171035047)
+    # async def testbot():
+    #     if BOT_TOKEN: 
+    #         await start_bot_client()
+    #         @bot_client.on(events.NewMessage(pattern='/start'))
+    #         async def tester(event):
+    #             await msgo("testing:"+str(event.message.text),channel=-1002171035047)
 
 
     @client.on(events.NewMessage())
@@ -298,8 +298,10 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         nm=await newfile(i,channelid=-1001847045854,searchbot="ProWebSeriesBot")
                         output+=f"{nm} added message Sent.\n"
                 elif command=="test":
-                    await testbot()
-                    output="Testing"
+                    prt=valve[5:]
+                    nm=await newfile(prt,channelid=-100,searchbot="",strt=1)
+                    output+=f"{nm} added message Sent.\n"
+
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
                     channel_name ="Search Bot User 🔍 ⚓️ "
