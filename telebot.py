@@ -129,7 +129,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     saveSession(client.session)
     global peerChannel
     # peerChannel = PeerChannel(channel_id)
-    peerChannel = PeerChat(chat_id=-1002242409466)
+    peerChannel = PeerChannel(-1002242409466)
+    # peerChannel = PeerChat(chat_id=-1002242409466)
 
     async def clearchannels():
         # List of keywords to look for in group names
