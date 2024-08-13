@@ -265,7 +265,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output="Updated"
                 elif "add" == command[:3]:
                     prt=valve[4:]
-                    await newfile(prt)
+                    await newfile(prt,channelid="RockyBhayiX")
                     output=f"{prt} added message Sent."
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
