@@ -273,7 +273,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output="Updated"
                 elif "mov" == command[:3]:
                     prt=valve[4:]
-                    
+                    for i in prt.split(','):
                         await newfile(i,channelid=-1002219912103)
                         output=f"{prt} added message Sent."
                 elif "ser" == command[:3]:
