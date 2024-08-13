@@ -218,7 +218,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             print(f'{search_url=}')
             butt=[Button.url("Click to Search",search_url)]
             await bot_client.send_message(entity, message,buttons=butt)
-            return name
+            return name.replace('%20','')
         else:
             print("Bot Token not found")
             await msgo("Bot Token not found\nAdd Bot Token in telebot.cnf file\nBOT_TOKEN=your_bot_token")
