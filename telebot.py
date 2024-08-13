@@ -154,9 +154,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         await dialog.delete()
                         await msgo(f'Left group: {chat_name}')
 
-    async def msgo(mssg,hand=False):
+    async def msgo(mssg,hand=False,channel=peerChannel):
         # print(mssg)
-        entity = await client.get_entity(peerChannel)
+        entity = await client.get_entity(channel)
         chunk_size=4096
         chunks = [mssg[i:i+chunk_size] for i in range(0, len(mssg), chunk_size)]
         for chunk in chunks:
@@ -229,8 +229,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await start_bot_client()
             @bot_client.on(events.NewMessage(pattern='/start'))
             async def tester(event):
-                await msgo(str(event))
-                await msgo(str(event.message))
+                await msgo(str(event),channel=-1002171035047)
+                await msgo(str(event.message),channel=-1002171035047)
 
 
     @client.on(events.NewMessage())
