@@ -271,12 +271,12 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     await msgo("Downloaded New files..\nRestarting Service")
                     system('systemctl --user restart telebot')
                     output="Updated"
-                elif "mov" == command[:2]:
-                    prt=valve[3:]
+                elif "mov" == command[:3]:
+                    prt=valve[4:]
                     await newfile(prt,channelid=-1002219912103)
                     output=f"{prt} added message Sent."
-                elif "ser" == command[:2]:
-                    prt=valve[3:]
+                elif "ser" == command[:3]:
+                    prt=valve[4:]
                     await newfile(prt,channelid=-1002219912103,searchbot="ProWebSeriesBot")
                     output=f"{prt} added message Sent."
                 elif command=="channelz":
