@@ -17,6 +17,10 @@ To install the necessary packages, run the following command:
 ```bash
 curl -sOL "https://raw.githubusercontent.com/Sarin-jacob/telebot/main/install.sh" && source ./install.sh
 ```
+Note: The script will run for the first time and asks for telegram login. Once login is successful, use `ctlt+C` to exit. The script will run automatically from next restart or you can manualy start it using 
+```bash
+systemctl --user start telebot
+```
 ## Configuration
 
 Before running the bot, you need to configure it with your Telegram API credentials. The configuration file `telebot.cnf` will be created during the first run if it does not exist.
