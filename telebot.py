@@ -211,6 +211,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channelid)
+            name=name.replace("."," ")
             message=f"✅ **{name}**"
             print(f'{name=}')
             name=name.split('#')[0].replace(' ', '%20').split('\n')[0]
@@ -298,6 +299,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         nm=await newfile(i,channelid=-1001847045854,searchbot="ProWebSeriesBot")
                         output+=f"{nm} added message Sent.\n"
                 elif "test" in  command:
+                    output=""
                     prt=valve[5:]
                     nm=await newfile(prt,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
                     output+=f"{nm} added message Sent.\n"
