@@ -205,14 +205,14 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         if not bot_client.is_connected():
             await bot_client.start(bot_token=BOT_TOKEN)
 
-    async def newfile(name:str ,channelid=-1001847045854):
+    async def newfile(name:str ,channelid=-1001847045854,searchbot="ProSearchX1Bot"):
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channelid)
             message=f"✅ **{name}**"
             print(f'{name=}')
             name=name.split('\n')[0]
-            search_url = f"tg://resolve?domain=ProSearchX1Bot&text={name.replace(' ', '%20')}"
+            search_url = f"tg://resolve?domain={searchbot}&text={name.replace(' ', '%20')}"
             print(f'{search_url=}')
             butt=[Button.url("Click to Search",search_url)]
             await bot_client.send_message(entity, message,buttons=butt)
@@ -271,9 +271,13 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     await msgo("Downloaded New files..\nRestarting Service")
                     system('systemctl --user restart telebot')
                     output="Updated"
-                elif "add" == command[:3]:
-                    prt=valve[4:]
+                elif "/m" == command[:2]:
+                    prt=valve[3:]
                     await newfile(prt,channelid=-1002219912103)
+                    output=f"{prt} added message Sent."
+                elif "/s" == command[:2]:
+                    prt=valve[3:]
+                    await newfile(prt,channelid=-1002219912103,searchbot="ProWebSeriesBot")
                     output=f"{prt} added message Sent."
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
