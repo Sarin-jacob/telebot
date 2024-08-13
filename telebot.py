@@ -7,7 +7,7 @@ import unicodedata
 from telethon import TelegramClient,events,Button
 from telethon.sessions import StringSession
 from telethon.tl.functions.channels import CreateChannelRequest ,EditPhotoRequest
-from telethon.tl.types import InputChatUploadedPhoto,PeerChannel
+from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,PeerChat
 
 TELEGRAM_DAEMON_API_ID =None
 TELEGRAM_DAEMON_API_HASH =None
@@ -128,7 +128,8 @@ This script contains the following commands and their usage:
 with TelegramClient(getSession(), api_id, api_hash).start() as client:
     saveSession(client.session)
     global peerChannel
-    peerChannel = PeerChannel(channel_id)
+    # peerChannel = PeerChannel(channel_id)
+    peerChannel = PeerChat(chat_id=-1002242409466)
 
     async def clearchannels():
         # List of keywords to look for in group names
