@@ -279,13 +279,13 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output=''
                     prt=valve[4:]
                     for i in prt.split(','):
-                        nm=await newfile(i,channelid=-1002219912103)
+                        nm=await newfile(i,channelid=-1001847045854)
                         output+=f"{nm} added message Sent.\n"
                 elif "ser" == command[:3]:
                     output=''
                     prt=valve[4:]
                     for i in prt.split(','):
-                        nm=await newfile(i,channelid=-1002219912103,searchbot="ProWebSeriesBot")
+                        nm=await newfile(i,channelid=-1001847045854,searchbot="ProWebSeriesBot")
                         output+=f"{nm} added message Sent.\n"
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
