@@ -299,7 +299,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         output+=f"{nm} added message Sent.\n"
                 elif command=="test":
                     prt=valve[5:]
-                    nm=await newfile(prt,channelid=-1002171035047,searchbot="",strt=1)
+                    nm=await newfile(prt,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
                     output+=f"{nm} added message Sent.\n"
 
                 elif command=="channelz":
