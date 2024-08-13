@@ -204,12 +204,12 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     async def start_bot_client():
         if not bot_client.is_connected():
             await bot_client.start(bot_token=BOT_TOKEN)
-            
+
     async def newfile(name:str ,channelid=-1001847045854):
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channelid)
-            search_url = f"tg://resolve?domain=ProSearchX1Bot&text={name.replace(' ', '%20')}"
+            search_url = f"tg://resolve?domain=ProSearchX1Bot&text={name.replace(' ', '%20').split('\n')[0]}"
             message=f"✅ **{name}**"
             butt=[Button.url("Click to Search",search_url)]
             await bot_client.send_message(entity, message,buttons=butt)
