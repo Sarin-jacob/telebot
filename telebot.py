@@ -207,7 +207,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         if not bot_client.is_connected():
             await bot_client.start(bot_token=BOT_TOKEN)
 
-    async def newfile(name:str ,channelid=-1001847045854,searchbot="ProSearchX1Bot"):
+    async def newfile(name:str ,channelid=-1001847045854,searchbot="ProSearchX1Bot",strt=0):
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channelid)
@@ -216,10 +216,12 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             name=name.split('#')[0].replace(' ', '%20').split('\n')[0]
             print(f'{name=}')
             search_url = f"tg://resolve?domain={searchbot}&text={name}"
+            if strt==1:
+                search_url = f"https://t.me/{searchbot}?start=search_{name.replace('%20','_')}"
             print(f'{search_url=}')
             butt=[Button.url("Click to Search",search_url)]
             await bot_client.send_message(entity, message,buttons=butt)
-            return name.replace('%20',' ')
+            return name.replace('%20',' ').replace('_',' ')
         else:
             print("Bot Token not found")
             await msgo("Bot Token not found\nAdd Bot Token in telebot.cnf file\nBOT_TOKEN=your_bot_token")
@@ -230,7 +232,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             @bot_client.on(events.NewMessage(pattern='/start'))
             async def tester(event):
                 await msgo(str(event.message.message),channel=-1002171035047)
-                await msgo(str(event.message.text),channel=-1002171035047)
 
 
     @client.on(events.NewMessage())
