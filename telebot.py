@@ -213,7 +213,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             print(f'{name=}')
             name=name.split('#')[0]
             print(f'{name=}')
-            search_url = f"tg://resolve?domain={searchbot}&text={name.replace(' ', '%20').strip()}"
+            search_url = f"tg://resolve?domain={searchbot}&text={name.replace(' ', '%20').split('\n')[0]}"
             print(f'{search_url=}')
             butt=[Button.url("Click to Search",search_url)]
             await bot_client.send_message(entity, message,buttons=butt)
