@@ -272,15 +272,17 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     system('systemctl --user restart telebot')
                     output="Updated"
                 elif "mov" == command[:3]:
+                    output=''
                     prt=valve[4:]
                     for i in prt.split(','):
                         await newfile(i,channelid=-1002219912103)
-                        output=f"{prt} added message Sent."
+                        output+=f"{i} added message Sent."
                 elif "ser" == command[:3]:
+                    output=''
                     prt=valve[4:]
                     for i in prt.split(','):
                         await newfile(i,channelid=-1002219912103,searchbot="ProWebSeriesBot")
-                        output=f"{prt} added message Sent."
+                        output+=f"{i} added message Sent."
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
                     channel_name ="Search Bot User 🔍 ⚓️ "
