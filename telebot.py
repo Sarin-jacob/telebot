@@ -128,9 +128,7 @@ This script contains the following commands and their usage:
 with TelegramClient(getSession(), api_id, api_hash).start() as client:
     saveSession(client.session)
     global peerChannel
-    # peerChannel = PeerChannel(channel_id)
-    peerChannel = PeerChannel(-1002242409466)
-    # peerChannel = PeerChat(chat_id=-1002242409466)
+    peerChannel = PeerChannel(channel_id)
 
     async def clearchannels():
         # List of keywords to look for in group names
@@ -225,6 +223,15 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         else:
             print("Bot Token not found")
             await msgo("Bot Token not found\nAdd Bot Token in telebot.cnf file\nBOT_TOKEN=your_bot_token")
+
+    async def testbot(name:str ,searchbot="ProSearchX1Bot"):
+        if BOT_TOKEN: 
+            await start_bot_client()
+            @bot_client.on(events.NewMessage(pattern='/start'))
+            async def tester(event):
+                await msgo(str(event))
+                await msgo(str(event.message))
+
 
     @client.on(events.NewMessage())
     async def handler(event):
