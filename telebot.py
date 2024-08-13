@@ -231,7 +231,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await start_bot_client()
             @bot_client.on(events.NewMessage(pattern='/start'))
             async def tester(event):
-                await msgo(str(event.message.message),channel=-1002171035047)
+                await msgo("testing:"+str(event.message.message),channel=-1002171035047)
 
 
     @client.on(events.NewMessage())
