@@ -296,7 +296,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output=''
                     prt=valve[4:]
                     for i in prt.split(','):
-                        nm=await newfile(i,channelid=-1001847045854,searchbot="ProWebSeriesBot",strt=1)
+                        nm=await newfile(i,channelid=-1001847045854,searchbot="ProWebSeriesBot",strt=0)
                         output+=f"{nm} added message Sent.\n"
                 elif "test" in  command:
                     output=""
