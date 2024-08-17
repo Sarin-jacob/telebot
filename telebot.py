@@ -221,7 +221,10 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             if imdb:
                 # nm=name.replace('%20',' ')
                 # message=message.replace(nm,f"[{nm}](https://www.imdb.com/title/{imdb})")
-                message=message +f"\n**=> [IMDb Link](https://www.imdb.com/title/{imdb})**"
+                link_text ='IMDb Link'
+                link=f"\n\n**=> [{link_text}](https://www.imdb.com/title/{imdb})**"
+                width = max(len(line) for line in message.split('\n'))
+                message=f"{message}{link:^{width + len(link_text) + 5}}"
             search_url = f"tg://resolve?domain={searchbot}&text={name}"
             if strt==1:
                 search_url = f"tg://resolve?domain={searchbot}&start=search_{name.replace('%20','_')}"
@@ -269,7 +272,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             tn=query.replace('.',' ').split('\n')[0].split('#')[0]
             await bot_client.send_message(event.message.to_id, f"{tn} Added message sent",silent=True)
             del query_imdb_mapping[unique_id]
-            
+
     @client.on(events.NewMessage())
     async def handler(event):
         if event.to_id != peerChannel:
