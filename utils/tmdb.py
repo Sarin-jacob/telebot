@@ -57,7 +57,7 @@ class TMDB(object):
         post_data = {"query": query}
         if yr:
             query = query.replace(yr, "").strip()
-            post_data = {"query": query, "year": yr}
+            post_data = {"query": query, "first_air_date_year": yr}
         res = self._request_connection(path, post_data).json()
         return self.unify(res,tv=True)
     def to_imdb(self, tmdb_id,tv=False)->str|int:
