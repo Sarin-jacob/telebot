@@ -47,7 +47,7 @@ class TMDB(object):
             query = query.replace(yr, "").strip()
             post_data = {"query": query, "year": yr}
         res = self._request_connection(path, post_data).json()
-        return self.unify(self,res)
+        return self.unify(res)
     def search_tv(self, query:str)->dict:
         path = "/search/tv"
         query = clean_name(query)
@@ -57,14 +57,13 @@ class TMDB(object):
             query = query.replace(yr, "").strip()
             post_data = {"query": query, "year": yr}
         res = self._request_connection(path, post_data).json()
-        return self.unify(self,res,tv=True)
+        return self.unify(res,tv=True)
     def to_imdb(self, tmdb_id,tv=False)->str|int:
         path = f"/movie/{tmdb_id}/external_ids"
         if tv:
             path = f"/tv/{tmdb_id}/external_ids"
         res = self._request_connection(path)
         return res.json()["imdb_id"]
-    @property
     def unify(self,resp,tv=False)->dict:
         #initialise results dict with all elemets as list
         results = {"id": [], "title": [], "year": [], "popularity": [], "original_title": [],"imdb_id":[]}
