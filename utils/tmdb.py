@@ -9,7 +9,7 @@ class TMDB(object):
     def _request_connection(self, path, post_data=None):
         import requests
 
-        url = f"{self._base_url}{path}?{self._api_key}"
+        url = f"{self._base_url}{path}?api_key={self._api_key}"
         headers = {
                 "accept": "application/json"
                 # "Authorization": f"Bearer {self._api_key}"
