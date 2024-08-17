@@ -65,9 +65,12 @@ class TMDB(object):
             path = f"/tv/{tmdb_id}/external_ids"
         res = self._request_connection(path)
         return res.json()["imdb_id"]
-    def unify(self,resp,tv=False)->dict:
+    def unify(self,resp,tv=False)->list:
         #initialise results dict with all elemets as list
+        '''
         results = [("id", "title", "year", "popularity", "original_title","imdb_id")]
+        '''
+        results = []
         if tv:
             for item in resp['results']:
                 if item['first_air_date'] != '':
