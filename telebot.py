@@ -234,10 +234,11 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await msgo("Bot Token not found\nAdd Bot Token in telebot.cnf file\nBOT_TOKEN=your_bot_token")
 
     async def fet(query:str,tv=False):
+        tn=query.split('#')[0].split('\n')[0].replace('.',' ')
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channel_id)
-            res=tmdb.search_tv(query) if tv else tmdb.search_movie(query)
+            res=tmdb.search_tv(tn) if tv else tmdb.search_movie(tn)
             print(f"{res = }")
             filtered_data = [(title, year, imdb_id) for title, year, imdb_id in zip(res['title'], res["year"], res["imdb_id"]) if imdb_id is not None]
             print(f"{len(filtered_data) = } \n{res['title'] = }")
@@ -247,7 +248,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
                 return
             elif len(filtered_data) ==1:
-                tn=query.split('#')[0].split('\n')[0].replace('.',' ')
                 await bot_client.send_message(entity, tn,silent=True)
                 await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,link=f"https://www.imdb.com/title/{filtered_data[0][2]}")
                 return
