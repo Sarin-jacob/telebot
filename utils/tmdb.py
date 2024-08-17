@@ -73,7 +73,10 @@ class TMDB(object):
                 results["title"].append(item['name'])
                 results["popularity"].append(item['popularity'])
                 results["original_title"].append(item['original_name'])
-                yr=re.findall(r"\d{4}", item['first_air_date'])[0]
+                try
+                    yr=re.findall(r"\d{4}", item['first_air_date'])[0]
+                except:
+                    yr="0000"
                 results["year"].append(yr)
                 imdb_id=self.to_imdb(item['id'],tv=True)
                 results["imdb_id"].append(imdb_id)
