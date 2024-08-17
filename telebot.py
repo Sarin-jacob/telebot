@@ -213,7 +213,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     async def newfile(name:str ,channelid=-1001847045854,searchbot="ProSearchX1Bot",strt=0):
         if BOT_TOKEN: 
             await start_bot_client()
-            entity = await bot_client.get_entity(channelid)
+            entity = await bot_client.get_entity(channel_id)
             name=name.replace("."," ")
             message=f"✅ **{name}**"
             print(f'{name=}')
