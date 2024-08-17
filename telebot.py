@@ -361,7 +361,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output='Processing...'
                     prt=valve[4:]
                     for i in prt.split(','):
-                        a=await fet(i)
+                        a=await fet(i,tv=True)
                         output+=f"{a}\n"
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
