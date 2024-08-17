@@ -224,7 +224,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 link_text ='IMDb Link'
                 link=f"\n\n**=> [{link_text}](https://www.imdb.com/title/{imdb})**"
                 width = max(len(line) for line in message.split('\n'))
-                message=f"{message}{link:^{width +len(link)+30}}"
+                message=f"{message}{link:^52}"
+                # message=f"{message}{link:^{width +len(link)+2}}"
             search_url = f"tg://resolve?domain={searchbot}&text={name}"
             if strt==1:
                 search_url = f"tg://resolve?domain={searchbot}&start=search_{name.replace('%20','_')}"
