@@ -58,7 +58,6 @@ class TMDB(object):
             query = query.replace(yr, "").strip()
             post_data = {"query": query, "year": yr}
         res = self._request_connection(path, post_data).json()
-        print(res)
         return self.unify(res,tv=True)
     def to_imdb(self, tmdb_id,tv=False)->str|int:
         path = f"/movie/{tmdb_id}/external_ids"
