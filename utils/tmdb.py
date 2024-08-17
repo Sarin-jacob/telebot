@@ -41,8 +41,8 @@ class TMDB(object):
         return res.json()
     def search_movie(self, query:str)->dict:
         path = "/search/movie"
-        query = clean_name(query)
         yr=extract_last_year(query)
+        query = clean_name(query)
         post_data = {"query": query}
         if yr:
             query = query.replace(yr, "").strip()
@@ -51,8 +51,8 @@ class TMDB(object):
         return self.unify(res)
     def search_tv(self, query:str)->dict:
         path = "/search/tv"
-        query = clean_name(query)
         yr=extract_last_year(query)
+        query = clean_name(query)
         post_data = {"query": query}
         if yr:
             query = query.replace(yr, "").strip()
@@ -95,6 +95,7 @@ def clean_name(name):
     name = re.sub(r'\W+', ' ', name)
     # Remove any leading/trailing whitespaces
     name = re.sub(r"S\d{2}.*", "", name)
+    name=re.sub(r"(?<=[_\s.])\d{4}", "", name)
     name = name.strip()
     return name
 def extract_last_year(text):
