@@ -259,7 +259,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 buttons = [[Button.inline(f"{title} ({year})", data=f"https://www.imdb.com/title/{imdb_id}::{query}")]
                     for title, year, imdb_id in filtered_data]
             except Exception as e:
-                msgo(str(e))
+                await msgo(str(e))
             print(f"{buttons = }")
             await bot_client.send_message(entity, "Search Results:", buttons=buttons,silent=True)
 
