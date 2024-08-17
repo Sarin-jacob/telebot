@@ -41,15 +41,12 @@ class TMDB(object):
     def search_movie(self, query:str)->dict:
         path = "/search/movie"
         query = clean_name(query)
-        print("b4,extract year",query)
         yr=extract_last_year(query)
         post_data = {"query": query}
         if yr:
             query = query.replace(yr, "").strip()
             post_data = {"query": query, "year": yr}
-        print("after,extract year")
         res = self._request_connection(path, post_data).json()
-        print("res b4 unify",res)
         return self.unify(res)
     def search_tv(self, query:str)->dict:
         path = "/search/tv"
@@ -76,10 +73,7 @@ class TMDB(object):
                 results["title"].append(item['name'])
                 results["popularity"].append(item['popularity'])
                 results["original_title"].append(item['original_name'])
-                try:
-                    yr=re.findall(r"\d{4}", item['first_air_date'])[0]
-                except:
-                    yr="0000"
+                yr=re.findall(r"\d{4}", item['first_air_date'])[0]
                 results["year"].append(yr)
                 imdb_id=self.to_imdb(item['id'],tv=True)
                 results["imdb_id"].append(imdb_id)
@@ -89,7 +83,10 @@ class TMDB(object):
             results["title"].append(item['title'])
             results["popularity"].append(item['popularity'])
             results["original_title"].append(item['original_title'])
-            yr=re.findall(r"\d{4}", item['release_date'])[0]
+            if item['release_date'] == None:
+                results["year"].append("0000")
+            else:
+                yr=re.findall(r"\d{4}", item['release_date'])[0]
             results["year"].append(yr)
             imdb_id=self.to_imdb(item['id'])
             results["imdb_id"].append(imdb_id)
