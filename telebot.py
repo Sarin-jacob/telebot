@@ -236,7 +236,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await msgo("Bot Token not found\nAdd Bot Token in telebot.cnf file\nBOT_TOKEN=your_bot_token")
 
     async def fet(query:str,tv=False):
-        tn=query.replace('.',' ').split('\n')[0].split('#')[0]
+        tn=query.replace('.',' ').split('\n')[0].split('#')[0].strip()
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channel_id)
@@ -246,7 +246,24 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 await msgo(str(e))
             print(f"Searching for {tn}\nResults found: {len(res)}\n{res}")
             filtered_data = [i for i in res if i[5] and i[5]!='']
-            if len(filtered_data) == 0:
+            # Check for exact title match
+            exact_title_matches = [i for i in filtered_data if i[1].lower() == tn.lower()]
+            # If exact title matches found
+            if len(exact_title_matches) == 1:
+                await newfile(query, channelid=-1002171035047, searchbot="ProSearchTestBot", strt=1, imdb=exact_title_matches[0][5])
+                return f"added {tn}"
+            elif len(exact_title_matches) > 1:
+                # Check for exact title and year match
+                exact_title_year_matches = [i for i in exact_title_matches if f"({i[2]})" in tn]
+                if len(exact_title_year_matches) == 1:
+                    await newfile(query, channelid=-1002171035047, searchbot="ProSearchTestBot", strt=1, imdb=exact_title_year_matches[0][5])
+                    return f"added {tn}"
+                elif len(exact_title_year_matches) > 1:
+                    filtered_data = exact_title_year_matches
+                else:
+                    filtered_data = exact_title_matches
+
+            elif len(filtered_data) == 0:
                 await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
                 return f"No links found for {tn}"
             elif len(filtered_data) ==1:
