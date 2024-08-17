@@ -319,11 +319,11 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     prt=valve[5:]
                     # nm=await newfile(prt,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
                     # output+=f"{nm} added message Sent.\n"
-                    try:
-                        await fet(prt)
-                        output+="test done"
-                    except Exception as e:
-                        output+=str(e)
+                    # try:
+                    await fet(prt)
+                    output+="test done"
+                    # except Exception as e:
+                        # output+=str(e)
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
                     channel_name ="Search Bot User 🔍 ⚓️ "
