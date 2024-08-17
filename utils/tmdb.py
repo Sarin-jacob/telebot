@@ -9,14 +9,14 @@ class TMDB(object):
     def _request_connection(self, path, post_data=None):
         import requests
 
-        url = f"{self._base_url}{path}"
+        url = f"{self._base_url}{path}?{self._api_key}"
         headers = {
                 "accept": "application/json",
-                "Authorization": f"Bearer {self._api_key}"
+                # "Authorization": f"Bearer {self._api_key}"
                 }
         try:
             if post_data:
-                url = f"{url}?" + "&".join([f"{i}={j}" for i, j in post_data.items()])   
+                url = f"{url}&" + "&".join([f"{i}={j}" for i, j in post_data.items()])   
             res = requests.get(url=url, headers=headers, timeout=15)
             res.raise_for_status()
             res.json()
