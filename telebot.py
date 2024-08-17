@@ -247,7 +247,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 return
             elif len(filtered_data) ==1:
                 await bot_client.send_message(entity, "Unique Result Found",silent=True)
-                await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,link="https://www.imdb.com/title/{imdb_id}")
+                await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,link="https://www.imdb.com/title/{filtered_data[0][2]}")
                 return
             elif len(filtered_data) > 10:
                 filtered_data = filtered_data[:10]
