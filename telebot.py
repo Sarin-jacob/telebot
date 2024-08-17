@@ -219,14 +219,15 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             print(f'{name=}')
             name=name.split('#')[0].replace(' ', '%20').split('\n')[0]
             if link:
-                message=message.replace(name.replace('%20',' '),f"[{name}]({link})")
+                nm=name.replace('%20',' ')
+                message=message.replace(nm,f"[{nm}]({link})")
             print(f'{name=}')
             search_url = f"tg://resolve?domain={searchbot}&text={name}"
             if strt==1:
                 search_url = f"tg://resolve?domain={searchbot}&start=search_{name.replace('%20','_')}"
             print(f'{search_url=}')
             butt=[Button.url("Click to Search",search_url)]
-            await bot_client.send_message(entity, message,buttons=butt)
+            await bot_client.send_message(entity, message,buttons=butt,web_preview=False,silent=True)
             return name.replace('%20',' ').replace('_',' ')
         else:
             print("Bot Token not found")
