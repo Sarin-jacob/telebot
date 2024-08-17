@@ -237,8 +237,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             res=tmdb.search_tv(query) if tv else tmdb.search_movie(query)
             if len(set(res["imdb_id"])) > 3:
             # Create button markup
+                filtered_data = [(title, year, imdb_id) for title, year, imdb_id in zip(res["title"], res["year"], res["imdb_id"]) if imdb_id is not None]
                 buttons = [[Button.url(f"{title} ({year})", f"https://www.imdb.com/title/{imdb_id}")]
-                       for title, year, imdb_id in zip(res["title"], res["year"], res["imdb_id"])]
+                       for title, year, imdb_id in filtered_data]
             else:
                 #get index of non empty imdb_id
                 idx=[i for i, e in enumerate(res["imdb_id"]) if e != '']
