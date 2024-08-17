@@ -345,6 +345,11 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output+="test done"
                     # except Exception as e:
                         # output+=str(e)
+                elif "tez" == command[:3]:
+                    output=''
+                    prt=valve[4:]
+                    for i in prt.split(','):
+                        await fet(i)
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
                     channel_name ="Search Bot User 🔍 ⚓️ "
