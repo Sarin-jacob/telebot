@@ -11,7 +11,7 @@ class TMDB(object):
 
         url = f"{self._base_url}{path}?{self._api_key}"
         headers = {
-                "accept": "application/json",
+                "accept": "application/json"
                 # "Authorization": f"Bearer {self._api_key}"
                 }
         try:
