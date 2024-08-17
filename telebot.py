@@ -306,7 +306,10 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     # nm=await newfile(prt,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
                     # output+=f"{nm} added message Sent.\n"
                     tmdb=TMDB(TMDB_API_KEY)
-                    output+=tmdb.search_movie(prt)
+                    try:
+                        output+=str(tmdb.search_movie(prt))
+                    except Exception as e:
+                        output+=str(e)
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
                     channel_name ="Search Bot User 🔍 ⚓️ "
