@@ -259,7 +259,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             except Exception as e:
                 await msgo(str(e))
             await bot_client.send_message(entity, "Search Results:", buttons=buttons,silent=True)
-            return None
+            return '...'
 
     @bot_client.on(events.CallbackQuery())
     async def callback_handler(event):
