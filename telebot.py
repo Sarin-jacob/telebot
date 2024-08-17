@@ -249,7 +249,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             print(f"Searching for {tn}\nResults found: {len(res)}\n{res}")
             filtered_data = [i for i in res if i[5] and i[5]!='']
             # Check for exact title match
-            exact_title_matches = [i for i in filtered_data if i[1].lower() == tn.lower()]
+            jn=re.sub(r"(?<=[_\s.])\d{4}", "", tn)
+            exact_title_matches = [i for i in filtered_data if i[1].lower() == jn.lower()]
             # If exact title matches found
             if len(exact_title_matches) == 1:
                 await newfile(query, channelid=-1002171035047, searchbot="ProSearchTestBot", strt=1, imdb=exact_title_matches[0][5])
