@@ -8,7 +8,7 @@ from telethon import TelegramClient,events,Button
 from telethon.sessions import StringSession
 from telethon.tl.functions.channels import CreateChannelRequest ,EditPhotoRequest
 from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,PeerChat
-from utils.tmdb import TMDB
+from utils.tmdb import TMDB,clean_name
 import uuid
 
 TELEGRAM_DAEMON_API_ID =None
@@ -237,6 +237,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
 
     async def fet(query:str,tv=False):
         tn=query.replace('.',' ').split('\n')[0].split('#')[0].strip()
+        tn=clean_name(tn)
         await msgo(tn)
         if BOT_TOKEN: 
             await start_bot_client()
