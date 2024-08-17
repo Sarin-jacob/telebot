@@ -41,12 +41,15 @@ class TMDB(object):
     def search_movie(self, query:str)->dict:
         path = "/search/movie"
         query = clean_name(query)
+        print("b4,extract year",query)
         yr=extract_last_year(query)
         post_data = {"query": query}
         if yr:
             query = query.replace(yr, "").strip()
             post_data = {"query": query, "year": yr}
+        print("after,extract year")
         res = self._request_connection(path, post_data).json()
+        print("res b4 unify",res)
         return self.unify(res)
     def search_tv(self, query:str)->dict:
         path = "/search/tv"
