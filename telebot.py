@@ -246,7 +246,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 await bot_client.send_message(entity, "No results found",silent=True)
                 return
             elif len(filtered_data) ==1:
-                await bot_client.send_message(entity, f"{query.split('#')[0].replace(' ', '%20').split('\n')[0].replace('.',' ')}",silent=True)
+                tn=query.split('#')[0].replace(' ', '%20').split('\n')[0].replace('.',' ')
+                await bot_client.send_message(entity, tn,silent=True)
                 await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,link="https://www.imdb.com/title/{filtered_data[0][2]}")
                 return
             elif len(filtered_data) > 10:
