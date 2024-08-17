@@ -235,8 +235,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
 
     async def fet(query:str,tv=False):
         tn=query.replace('.',' ').split('\n')[0].split('#')[0]
-        await msgo(tn)
-        await msgo(query)
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channel_id)
@@ -257,8 +255,11 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             elif len(filtered_data) > 10:
                 filtered_data = filtered_data[:10]
             print()
-            buttons = [[Button.inline(f"{title} ({year})", data=f"https://www.imdb.com/title/{imdb_id}::{query}")]
+            try:
+                buttons = [[Button.inline(f"{title} ({year})", data=f"https://www.imdb.com/title/{imdb_id}::{query}")]
                     for title, year, imdb_id in filtered_data]
+            except Exception as e:
+                msgo(str(e))
             print(f"{buttons = }")
             await bot_client.send_message(entity, "Search Results:", buttons=buttons,silent=True)
 
