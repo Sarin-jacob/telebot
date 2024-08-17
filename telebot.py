@@ -256,8 +256,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 filtered_data = filtered_data[:10]
             print()
             try:
-                buttons = [[Button.inline(f"{title} ({year})", data=f"https://www.imdb.com/title/{imdb_id}::{query}")]
-                    for title, year, imdb_id in filtered_data]
+                buttons = [[Button.inline(f"{i[1]} ({i[2]})", data=f"https://www.imdb.com/title/{i[5]}::{query}")]
+                    for i in filtered_data]
             except Exception as e:
                 await msgo(str(e))
             print(f"{buttons = }")
