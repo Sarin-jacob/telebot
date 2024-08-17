@@ -216,16 +216,13 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             entity = await bot_client.get_entity(channelid)
             name=name.replace("."," ")
             message=f"✅ **{name}**"
-            print(f'{name=}')
             name=name.split('#')[0].replace(' ', '%20').split('\n')[0]
             if imdb:
                 nm=name.replace('%20',' ')
                 message=message.replace(nm,f"[{nm}](https://www.imdb.com/title/{imdb})")
-            print(f'{name=}')
             search_url = f"tg://resolve?domain={searchbot}&text={name}"
             if strt==1:
                 search_url = f"tg://resolve?domain={searchbot}&start=search_{name.replace('%20','_')}"
-            print(f'{search_url=}')
             butt=[Button.url("Click to Search",search_url)]
             await bot_client.send_message(entity, message,buttons=butt,link_preview=False,silent=True)
             return name.replace('%20',' ').replace('_',' ')
@@ -239,29 +236,22 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await start_bot_client()
             entity = await bot_client.get_entity(channel_id)
             res=tmdb.search_tv(tn) if tv else tmdb.search_movie(tn)
-            print(f"{res = }")
-
             filtered_data = [i for i in res if i[5] and i[5]!='']
-            print(f"{len(filtered_data) = } \n{filtered_data = }")
-
             if len(filtered_data) == 0:
-                await bot_client.send_message(entity, "No links found",silent=True)
                 await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
-                return
+                return f"No links found for {tn}"
             elif len(filtered_data) ==1:
-                await bot_client.send_message(entity, tn,silent=True)
-                await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,link=f"https://www.imdb.com/title/{filtered_data[0][2]}")
-                return
+                await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,imdb=filtered_data[0][5])
+                return  f"added {tn}"
             elif len(filtered_data) > 10:
                 filtered_data = filtered_data[:10]
-            print()
             try:
                 buttons = [[Button.inline(f"{i[1]} ({i[2]})", data=f"{i[5]}::{query}")]
                     for i in filtered_data]
             except Exception as e:
                 await msgo(str(e))
-            print(f"{buttons = }")
             await bot_client.send_message(entity, "Search Results:", buttons=buttons,silent=True)
+            return "Adding Added Message with links"
 
     @bot_client.on(events.CallbackQuery())
     async def callback_handler(event):
@@ -270,6 +260,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await event.answer("sending added message with link...")
             await newfile(lin[1],channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,imdb=lin[0])
             await event.delete()
+            tn=lin[1].replace('.',' ').split('\n')[0].split('#')[0]
+            await bot_client.send_message(event.message.to_id, f"{tn} Added message sent",silent=True)
         else:
             await event.answer("Invalid Button")
     @client.on(events.NewMessage())
@@ -349,12 +341,14 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output=''
                     prt=valve[4:]
                     for i in prt.split(','):
-                        await fet(i)
+                        a=await fet(i)
+                        output+=f"{a}\n"
                 elif "sez" == command[:3]:
                     output=''
                     prt=valve[4:]
                     for i in prt.split(','):
-                        await fet(i)
+                        a=await fet(i)
+                        output+=f"{a}\n"
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
                     channel_name ="Search Bot User 🔍 ⚓️ "
