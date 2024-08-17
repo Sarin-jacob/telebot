@@ -210,7 +210,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         if not bot_client.is_connected():
             await bot_client.start(bot_token=BOT_TOKEN)
 
-    async def newfile(name:str ,channelid=-1001847045854,searchbot="ProSearchX1Bot",strt=0,link:str|None=None):
+    async def newfile(name:str ,channelid=-1001847045854,searchbot="ProSearchX1Bot",strt=0,imdb:str|None=None):
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channelid)
@@ -218,9 +218,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             message=f"✅ **{name}**"
             print(f'{name=}')
             name=name.split('#')[0].replace(' ', '%20').split('\n')[0]
-            if link:
+            if imdb:
                 nm=name.replace('%20',' ')
-                message=message.replace(nm,f"[{nm}]({link})")
+                message=message.replace(nm,f"[{nm}](https://www.imdb.com/title/{imdb})")
             print(f'{name=}')
             search_url = f"tg://resolve?domain={searchbot}&text={name}"
             if strt==1:
@@ -256,7 +256,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 filtered_data = filtered_data[:10]
             print()
             try:
-                buttons = [[Button.inline(f"{i[1]} ({i[2]})", data=f"https://www.imdb.com/title/{i[5]}::{query}")]
+                buttons = [[Button.inline(f"{i[1]} ({i[2]})", data=f"{i[5]}::{query}")]
                     for i in filtered_data]
             except Exception as e:
                 await msgo(str(e))
