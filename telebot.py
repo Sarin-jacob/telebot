@@ -244,7 +244,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 res=tmdb.search_tv(tn) if tv else tmdb.search_movie(tn)
             except Exception as e:
                 await msgo(str(e))
-            await msgo(f"Searching for {tn}\nResults found: {len(res)}\n{res}")
+            print(f"Searching for {tn}\nResults found: {len(res)}\n{res}")
             filtered_data = [i for i in res if i[5] and i[5]!='']
             if len(filtered_data) == 0:
                 await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)

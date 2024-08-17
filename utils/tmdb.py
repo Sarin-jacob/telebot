@@ -6,7 +6,6 @@ class TMDB(object):
         if not self._api_key:
             raise tmdbError("API key not provided.")
         auth = self._request_connection("/authentication").json()
-        print(auth)
     def _request_connection(self, path, post_data=None):
         import requests
 
@@ -18,7 +17,7 @@ class TMDB(object):
         try:
             if post_data:
                 url = f"{url}&" + "&".join([f"{i}={j}" for i, j in post_data.items()])   
-            print(url)#Debugging
+            print("request url:",url)#Debugging
             res = requests.get(url=url, headers=headers, timeout=15)
             res.raise_for_status()
             res.json()
