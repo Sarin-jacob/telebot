@@ -235,7 +235,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await start_bot_client()
             entity = await bot_client.get_entity(channel_id)
             res=tmdb.search_tv(query) if tv else tmdb.search_movie(query)
-            if len(set(res["imdb_id"])) < 3:
+            if len(set(res["imdb_id"])) > 3:
             # Create button markup
                 buttons = [Button.url(f"{title} ({year})", f"https://www.imdb.com/title/{imdb_id}")
                        for title, year, imdb_id in zip(res["title"], res["year"], res["imdb_id"])]
@@ -243,7 +243,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 #get index of non empty imdb_id
                 idx=[i for i, e in enumerate(res["imdb_id"]) if e != '']
                 buttons = [Button.url(f"{res['title'][i]} ({res['year'][i]})", f"https://www.imdb.com/title/{res['imdb_id'][i]}") for i in idx]
-            await bot_client.send_message(entity, "Search Results:", buttons=buttons)
+            await bot_client.send_message(entity, "Search Results:", buttons=buttons,silent=True)
 
 
     @client.on(events.NewMessage())
@@ -251,7 +251,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         if event.to_id != peerChannel:
             return     
         try:    
-            if not event.media and event.message:
+            if not event.media and event.message and not event.message.silent:
                 command = event.message.message
                 print(command)
                 if command[0] == "/":
