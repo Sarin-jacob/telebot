@@ -235,7 +235,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
 
     async def fet(query:str,tv=False):
         tn=query.replace('.',' ').split('\n')[0].split('#')[0]
-        msgo(tn)
+        await msgo(tn)
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channel_id)
