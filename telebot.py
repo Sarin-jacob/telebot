@@ -306,7 +306,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     # nm=await newfile(prt,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
                     # output+=f"{nm} added message Sent.\n"
                     try:
-                        tmdb=TMDB(TMDB_API_KEY)
+                        # tmdb=TMDB(TMDB_API_KEY)
+                        tmdb=TMDB("1865f43a0549ca50d341dd9ab8b29f49")
                         output+=str(tmdb.search_movie(prt))
                     except Exception as e:
                         output+=str(e)
