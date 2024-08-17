@@ -9,6 +9,7 @@ from telethon.sessions import StringSession
 from telethon.tl.functions.channels import CreateChannelRequest ,EditPhotoRequest
 from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,PeerChat
 from utils.tmdb import TMDB
+import uuid
 
 TELEGRAM_DAEMON_API_ID =None
 TELEGRAM_DAEMON_API_HASH =None
@@ -111,7 +112,7 @@ channel_id = TELEGRAM_DAEMON_CHANNEL
 
 bot_client = TelegramClient('bot', api_id, api_hash)
 tmdb=TMDB(TMDB_API_KEY)
-
+query_imdb_mapping = {}
 
 cods='''
 This script contains the following commands and their usage:
@@ -247,24 +248,28 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             elif len(filtered_data) > 10:
                 filtered_data = filtered_data[:10]
             try:
-                buttons = [[Button.inline(f"{i[1]} ({i[2]})", data=f"{i[5]}::{query}")]
-                    for i in filtered_data]
+                buttons = []
+                for i in filtered_data:
+                    unique_id = str(uuid.uuid4())
+                    query_imdb_mapping[unique_id] = (query, i[5])
+                    buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=unique_id)])
             except Exception as e:
                 await msgo(str(e))
             await bot_client.send_message(entity, "Search Results:", buttons=buttons,silent=True)
-            return "Adding Added Message with links"
+            return "processsing"
 
     @bot_client.on(events.CallbackQuery())
     async def callback_handler(event):
         if event.data:
-            lin=event.data.decode().split("::")
-            await event.answer("sending added message with link...")
-            await newfile(lin[1],channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,imdb=lin[0])
+            unique_id = event.data.decode()
+            if unique_id in query_imdb_mapping:
+                query, imdb_id = query_imdb_mapping[unique_id]
+            await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,imdb=imdb_id)
             await event.delete()
-            tn=lin[1].replace('.',' ').split('\n')[0].split('#')[0]
+            tn=query.replace('.',' ').split('\n')[0].split('#')[0]
             await bot_client.send_message(event.message.to_id, f"{tn} Added message sent",silent=True)
-        else:
-            await event.answer("Invalid Button")
+            del query_imdb_mapping[unique_id]
+            
     @client.on(events.NewMessage())
     async def handler(event):
         if event.to_id != peerChannel:
