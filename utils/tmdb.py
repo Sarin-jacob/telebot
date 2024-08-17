@@ -18,6 +18,7 @@ class TMDB(object):
         try:
             if post_data:
                 url = f"{url}&" + "&".join([f"{i}={j}" for i, j in post_data.items()])   
+            print(url)#Debugging
             res = requests.get(url=url, headers=headers, timeout=15)
             res.raise_for_status()
             res.json()
