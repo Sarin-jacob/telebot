@@ -243,7 +243,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             print(f"{len(filtered_data) = } \n{res['title'] = }")
 
             if len(filtered_data) == 0:
-                await bot_client.send_message(entity, "No results found",silent=True)
+                await bot_client.send_message(entity, "No links found",silent=True)
+                await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
                 return
             elif len(filtered_data) ==1:
                 tn=query.split('#')[0].split('\n')[0].replace('.',' ')
