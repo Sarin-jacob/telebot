@@ -265,12 +265,12 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 else:
                     filtered_data = exact_title_matches
 
-            # elif len(filtered_data) == 0:
-            #     await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
-            #     return f"No links found for {tn}"
-            # elif len(filtered_data) ==1:
-            #     await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,imdb=filtered_data[0][5])
-            #     return  f"added {tn}"
+            elif len(filtered_data) == 0:
+                await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
+                return f"No links found for {tn}"
+            elif len(filtered_data) ==1:
+                await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,imdb=filtered_data[0][5])
+                return  f"added {tn}"
             elif len(filtered_data) > 10:
                 filtered_data = filtered_data[:10]
             try:
