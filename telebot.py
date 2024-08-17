@@ -164,7 +164,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         chunks = [mssg[i:i+chunk_size] for i in range(0, len(mssg), chunk_size)]
         for chunk in chunks:
             # print(chunk)     
-            lmsg= await client.send_message(entity, chunk,parse_mode='markdown',link_preview=False)
+            lmsg= await client.send_message(entity, chunk,parse_mode='markdown',link_preview=False,silent=True)
         if hand==True:
             await handler(events.NewMessage.Event(lmsg))
         return lmsg
@@ -237,6 +237,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             res=tmdb.search_tv(query) if tv else tmdb.search_movie(query)
 
             filtered_data = [(title, year, imdb_id) for title, year, imdb_id in zip(res["title"], res["year"], res["imdb_id"]) if imdb_id is not None]
+
             if len(filtered_data) == 0:
                 await bot_client.send_message(entity, "No results found",silent=True)
                 return
