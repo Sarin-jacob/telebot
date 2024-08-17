@@ -222,10 +222,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 # nm=name.replace('%20',' ')
                 # message=message.replace(nm,f"[{nm}](https://www.imdb.com/title/{imdb})")
                 link_text ='IMDb Link'
-                link=f"\n\n**=> [{link_text}](https://www.imdb.com/title/{imdb})**"
+                link=f"**=> [{link_text}](https://www.imdb.com/title/{imdb})**"
                 width = max(len(line) for line in message.split('\n'))
-                message=f"{message}{link:^52}"
-                # message=f"{message}{link:^{width +len(link)+2}}"
+                message=f"{message}\n\n{' '*((width +len(link)+2)/2)}{link}"
             search_url = f"tg://resolve?domain={searchbot}&text={name}"
             if strt==1:
                 search_url = f"tg://resolve?domain={searchbot}&start=search_{name.replace('%20','_')}"
