@@ -249,11 +249,18 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 return
             elif len(filtered_data) > 10:
                 filtered_data = filtered_data[:10]
-            buttons = [[Button.url(f"{title} ({year})", f"https://www.imdb.com/title/{imdb_id}")]
+            buttons = [[Button.inline(f"{title} ({year})", f"https://www.imdb.com/title/{imdb_id}::{query}")]
                     for title, year, imdb_id in filtered_data]
             await bot_client.send_message(entity, "Search Results:", buttons=buttons,silent=True)
 
-
+    @bot_client.on(events.CallbackQuery())
+    async def callback_handler(event):
+        if event.data:
+            lin=event.data.decode().split("::")
+            await event.answer("sending added message with link...")
+            await newfile(lin[1],channelid=-1002171035047,searchbot="ProSearchTestBot",strt=0,link=lin[0])
+        else:
+            await event.answer("Invalid Button")
     @client.on(events.NewMessage())
     async def handler(event):
         if event.to_id != peerChannel:
