@@ -224,10 +224,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 link_text ='IMDb Link'
                 link=f"** [{link_text}](https://www.imdb.com/title/{imdb})**"
                 width = max(len(line) for line in message.split('\n'))
-                try:
-                    await msgo(f":{' '*((width +len(link)+2)/2)}|{link}")
-                except Exception as e:
-                    await msgo(str(e))
                 message=f"{message}\n\n{' '*int((width +len(link_text)+2)/2)}{link}"
             search_url = f"tg://resolve?domain={searchbot}&text={name}"
             if strt==1:
