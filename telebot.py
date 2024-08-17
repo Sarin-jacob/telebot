@@ -8,6 +8,7 @@ from telethon import TelegramClient,events,Button
 from telethon.sessions import StringSession
 from telethon.tl.functions.channels import CreateChannelRequest ,EditPhotoRequest
 from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,PeerChat
+from utils.tmdb import TMDB
 
 TELEGRAM_DAEMON_API_ID =None
 TELEGRAM_DAEMON_API_HASH =None
@@ -57,6 +58,7 @@ if path.isfile(CONFIG_FILE):
     TELEGRAM_DAEMON_API_HASH = config.get('TELEGRAM_DAEMON_API_HASH')
     TELEGRAM_DAEMON_CHANNEL = int(config.get('TELEGRAM_DAEMON_CHANNEL'))
     BOT_TOKEN = config.get('BOT_TOKEN')
+    TMDB_API_KEY = config.get('TMDB_API_KEY')
 else:
     print("config file Not Found creating one....\n")
     TELEGRAM_DAEMON_API_ID = input("Enter Telegram API ID: ")
@@ -282,7 +284,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     await msgo("trying to sta..")
                     system('systemctl --user restart telebot')
                 elif command=="update":
-                    system('cd ~/telebot && curl -sOL "https://raw.githubusercontent.com/Sarin-jacob/telebot/main/telebot.py"')
+                    system('cd ~/telebot && git pull')
                     await msgo("Downloaded New files..\nRestarting Service")
                     system('systemctl --user restart telebot')
                     output="Updated"
@@ -301,9 +303,10 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 elif "test" in  command:
                     output=""
                     prt=valve[5:]
-                    nm=await newfile(prt,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
-                    output+=f"{nm} added message Sent.\n"
-
+                    # nm=await newfile(prt,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
+                    # output+=f"{nm} added message Sent.\n"
+                    tmdb=TMDB(TMDB_API_KEY)
+                    output+=tmdb.search_movie(prt)
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
                     channel_name ="Search Bot User 🔍 ⚓️ "

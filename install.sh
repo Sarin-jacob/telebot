@@ -1,14 +1,15 @@
 #!/bin/bash
 set +x
 # Create a directory named 'telebot' in the user's home directory
-mkdir -p ~/telebot
-
+# mkdir -p ~/telebot
+echo "Downloading files to ~/telebot.."
+cd ~
+git clone https://github.com/Sarin-jacob/telebot.git
 # Change the current directory to 'telebot'
 cd ~/telebot
 touch keywords.txt
-echo "Downloading files to ~/telebot.."
-curl -sOL "https://raw.githubusercontent.com/Sarin-jacob/telebot/main/telebot.py"
-curl -sOL "hhttps://raw.githubusercontent.com/Sarin-jacob/telebot/main/telebot.service"
+# curl -sOL "https://raw.githubusercontent.com/Sarin-jacob/telebot/main/telebot.py"
+# curl -sOL "hhttps://raw.githubusercontent.com/Sarin-jacob/telebot/main/telebot.service"
 # Copy the telebot.service file to the systemd user directory
 sudo cp ./telebot.service /etc/systemd/user/
 
