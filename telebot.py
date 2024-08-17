@@ -307,7 +307,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     # output+=f"{nm} added message Sent.\n"
                     try:
                         tmdb=TMDB(TMDB_API_KEY)
-                        output+=str(tmdb.search_movie(prt))
+                        output+=str(tmdb.search_tv(prt))
                     except Exception as e:
                         output+=str(e)
                 elif command=="channelz":
