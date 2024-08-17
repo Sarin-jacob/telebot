@@ -259,7 +259,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             except Exception as e:
                 await msgo(str(e))
             await bot_client.send_message(entity, "Search Results:", buttons=buttons,silent=True)
-            return "processsing"
+            return None
 
     @bot_client.on(events.CallbackQuery())
     async def callback_handler(event):
@@ -348,13 +348,13 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     # except Exception as e:
                         # output+=str(e)
                 elif "mez" == command[:3]:
-                    output=''
+                    output='Processing...'
                     prt=valve[4:]
                     for i in prt.split(','):
                         a=await fet(i)
                         output+=f"{a}\n"
                 elif "sez" == command[:3]:
-                    output=''
+                    output='Processing...'
                     prt=valve[4:]
                     for i in prt.split(','):
                         a=await fet(i)
