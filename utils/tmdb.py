@@ -83,7 +83,7 @@ class TMDB(object):
             results["title"].append(item['title'])
             results["popularity"].append(item['popularity'])
             results["original_title"].append(item['original_title'])
-            if item['release_date'] == None:
+            if item['release_date'] == '':
                 results["year"].append("0000")
             else:
                 yr=re.findall(r"\d{4}", item['release_date'])[0]
