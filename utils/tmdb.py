@@ -73,7 +73,7 @@ class TMDB(object):
                 results["title"].append(item['name'])
                 results["popularity"].append(item['popularity'])
                 results["original_title"].append(item['original_name'])
-                try
+                try:
                     yr=re.findall(r"\d{4}", item['first_air_date'])[0]
                 except:
                     yr="0000"
