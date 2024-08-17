@@ -268,7 +268,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         if event.data:
             lin=event.data.decode().split("::")
             await event.answer("sending added message with link...")
-            await newfile(lin[1],channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,link=lin[0])
+            await newfile(lin[1],channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,imdb=lin[0])
             await event.delete()
         else:
             await event.answer("Invalid Button")
