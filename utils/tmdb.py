@@ -1,3 +1,4 @@
+import re
 class TMDB(object):
     def __init__(self, api_key=None):
         self._api_key = api_key
@@ -66,29 +67,17 @@ class TMDB(object):
         return res.json()["imdb_id"]
     def unify(self,resp,tv=False)->dict:
         #initialise results dict with all elemets as list
-        results = {"id": [], "title": [], "year": [], "popularity": [], "original_title": [],"imdb_id":[]}
+        results = [("id", "title", "year", "popularity", "original_title","imdb_id")]
         if tv:
             for item in resp['results']:
-                results["id"].append(item['id'])
-                results["title"].append(item['name'])
-                results["popularity"].append(item['popularity'])
-                results["original_title"].append(item['original_name'])
-                yr=re.findall(r"\d{4}", item['first_air_date'])[0]
-                results["year"].append(yr)
-                imdb_id=self.to_imdb(item['id'],tv=True)
-                results["imdb_id"].append(imdb_id)
+                if item['first_air_date'] != '':
+                    yr=re.findall(r"\d{4}", item['first_air_date'])[0]
+                results.append((item['id'],item['name'],yr,item['popularity'],item['original_name'],self.to_imdb(item['id'],tv=True)))
             return results
         for item in resp['results']:
-            results["id"].append(item['id'])
-            results["title"].append(item['title'])
-            results["popularity"].append(item['popularity'])
-            results["original_title"].append(item['original_title'])
             if item['release_date'] != '':
                 yr=re.findall(r"\d{4}", item['release_date'])[0]
-            results["year"].append(yr)
-            imdb_id=self.to_imdb(item['id'])
-            results["imdb_id"].append(imdb_id)
-
+            results.append((item['id'], item['title'], yr, item['popularity'], item['original_title'], self.to_imdb(item['id'])))
         return results
 
 

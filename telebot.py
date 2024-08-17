@@ -241,7 +241,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             entity = await bot_client.get_entity(channel_id)
             res=tmdb.search_tv(tn) if tv else tmdb.search_movie(tn)
             print(f"{res = }")
-            filtered_data = [(title, year, imdb_id) for title, year, imdb_id in zip(res['title'], res["year"], res["imdb_id"]) if imdb_id is not None and imdb_id != '']
+            filtered_data = [(title, year, imdb_id) for title, year, imdb_id in zip(res[1], res[2], res[5]) if imdb_id is not None and imdb_id != '']
             print(f"{len(filtered_data) = } \n{filtered_data = }")
 
             if len(filtered_data) == 0:
