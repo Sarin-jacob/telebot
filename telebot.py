@@ -256,6 +256,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 filtered_data = filtered_data[:10]
             buttons = [[Button.inline(f"{title} ({year})", f"https://www.imdb.com/title/{imdb_id}::{query}")]
                     for title, year, imdb_id in filtered_data]
+            print(f"{buttons = }")
             await bot_client.send_message(entity, "Search Results:", buttons=buttons,silent=True)
 
     @bot_client.on(events.CallbackQuery())
