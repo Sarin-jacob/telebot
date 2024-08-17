@@ -234,7 +234,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await msgo("Bot Token not found\nAdd Bot Token in telebot.cnf file\nBOT_TOKEN=your_bot_token")
 
     async def fet(query:str,tv=False):
-        tn=query.split('#')[0].split('\n')[0].replace('.',' ')
+        tn=query.split('#')[0].split('\n',1)[0].replace('.',' ')
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channel_id)
