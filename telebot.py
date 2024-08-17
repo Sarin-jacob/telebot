@@ -238,7 +238,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     async def fet(query:str,tv=False):
         tn=query.replace('.',' ').split('\n')[0].split('#')[0].strip()
         tn=clean_name(tn)
-        await msgo(tn)
+        # await msgo(tn)
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channel_id)
@@ -250,6 +250,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             filtered_data = [i for i in res if i[5] and i[5]!='']
             # Check for exact title match
             jn=re.sub(r"(?<=[_\s.])\d{4}", "", tn)
+            await msgo(f"{jn=}{tn=}")
             exact_title_matches = [i for i in filtered_data if i[1].lower() == jn.lower()]
             # If exact title matches found
             if len(exact_title_matches) == 1:
