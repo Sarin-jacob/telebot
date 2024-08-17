@@ -218,9 +218,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             message=f"✅ **{name}**"
             print(f'{name=}')
             name=name.split('#')[0].replace(' ', '%20').split('\n')[0]
-            print(f'{name=}')
             if link:
-                name=f"[{name}]({link})"
+                message=message.replace(name.replace('%20',' '),f"[{name}]({link})")
+            print(f'{name=}')
             search_url = f"tg://resolve?domain={searchbot}&text={name}"
             if strt==1:
                 search_url = f"tg://resolve?domain={searchbot}&start=search_{name.replace('%20','_')}"
