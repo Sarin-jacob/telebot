@@ -4,6 +4,8 @@ class TMDB(object):
         self._base_url = 'https://api.themoviedb.org/3'
         if not self._api_key:
             raise tmdbError("API key not provided.")
+        auth = self._request_connection("/authentication").json()
+        print(auth)
     def _request_connection(self, path, post_data=None):
         import requests
 
