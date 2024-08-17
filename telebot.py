@@ -267,10 +267,11 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             unique_id = event.data.decode()
             if unique_id in query_imdb_mapping:
                 query, imdb_id = query_imdb_mapping[unique_id]
+            entity = await bot_client.get_entity(channel_id)
             await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,imdb=imdb_id)
             await event.delete()
             tn=query.replace('.',' ').split('\n')[0].split('#')[0]
-            await bot_client.send_message(event.message.to_id, f"{tn} Added message sent",silent=True)
+            await bot_client.send_message(entity, f"{tn} Added message sent",silent=True)
             del query_imdb_mapping[unique_id]
 
     @client.on(events.NewMessage())
