@@ -210,7 +210,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         if not bot_client.is_connected():
             await bot_client.start(bot_token=BOT_TOKEN)
 
-    async def newfile(name:str ,channelid=-1001847045854,searchbot="ProSearchX1Bot",strt=0):
+    async def newfile(name:str ,channelid=-1001847045854,searchbot="ProSearchX1Bot",strt=0,link:str|None=None):
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channelid)
@@ -219,6 +219,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             print(f'{name=}')
             name=name.split('#')[0].replace(' ', '%20').split('\n')[0]
             print(f'{name=}')
+            if link:
+                name=f"[{name}]({link})"
             search_url = f"tg://resolve?domain={searchbot}&text={name}"
             if strt==1:
                 search_url = f"tg://resolve?domain={searchbot}&start=search_{name.replace('%20','_')}"
