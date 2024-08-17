@@ -110,6 +110,7 @@ api_hash = TELEGRAM_DAEMON_API_HASH
 channel_id = TELEGRAM_DAEMON_CHANNEL
 
 bot_client = TelegramClient('bot', api_id, api_hash)
+tmdb=TMDB(TMDB_API_KEY)
 
 
 cods='''
@@ -229,12 +230,20 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             print("Bot Token not found")
             await msgo("Bot Token not found\nAdd Bot Token in telebot.cnf file\nBOT_TOKEN=your_bot_token")
 
-    # async def testbot():
-    #     if BOT_TOKEN: 
-    #         await start_bot_client()
-    #         @bot_client.on(events.NewMessage(pattern='/start'))
-    #         async def tester(event):
-    #             await msgo("testing:"+str(event.message.text),channel=-1002171035047)
+    async def fet(query:str,tv=False):
+        if BOT_TOKEN: 
+            await start_bot_client()
+            entity = await bot_client.get_entity(channelid)
+            res=tmdb.search_tv(query) if tv else tmdb.search_movie(query)
+            if len(set(res["imdb_id"])) < 3:
+            # Create button markup
+                buttons = [Button.url(f"{title} ({year})", f"https://www.imdb.com/title/{imdb_id}")
+                       for title, year, imdb_id in zip(res["title"], res["year"], res["imdb_id"])]
+            else:
+                #get index of non empty imdb_id
+                idx=[i for i, e in enumerate(res["imdb_id"]) if e != '']
+                buttons = [Button.url(f"{res['title'][i]} ({res['year'][i]})", f"https://www.imdb.com/title/{res['imdb_id'][i]}") for i in idx]
+            await bot_client.send_message(entity, "Search Results:", buttons=buttons)
 
 
     @client.on(events.NewMessage())
@@ -306,8 +315,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     # nm=await newfile(prt,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
                     # output+=f"{nm} added message Sent.\n"
                     try:
-                        tmdb=TMDB(TMDB_API_KEY)
-                        output+=str(tmdb.search_tv(prt))
+                        await fet(prt)
+                        output+="test done"
                     except Exception as e:
                         output+=str(e)
                 elif command=="channelz":
