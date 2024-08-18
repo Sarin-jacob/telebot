@@ -6,6 +6,6 @@ def search_files(query):
     dlist=[]
     moser=ia.search_movie(query)
     for i in moser:
-        dlist.append(i["title"],i["year"],i.movieID)
+        dlist.append((i["title"],i["year"],i.movieID))
     return dlist
 print(search_files('winter soldier'))
