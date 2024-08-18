@@ -224,6 +224,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         if tv:
             snp=re.compile(r"[sS]\d{2}([eE]\d{2})?")
             sinfo=snp.search(query)
+            sinfo = sinfo.group() if sinfo else None
         if len(filtered_data) == 0:
             await event.reply(f"No links found for {cn}")
             return f"No links found for {cn}"
