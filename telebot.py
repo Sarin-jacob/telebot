@@ -286,7 +286,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 unique_id = str(uuid.uuid4())
                 query_imdb_mapping[unique_id] = (tv, f"{i[1]} ({i[2]}) {sinfo if sinfo else ''}")
                 buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=f"req:{unique_id}")])
-                buttons.append([Button.inline(f"Close", data="none")])
+            buttons.append([Button.inline(f"Close", data="none")])
 
         except Exception as e:
             await msgo(str(e))
@@ -361,7 +361,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     unique_id = str(uuid.uuid4())
                     query_imdb_mapping[unique_id] = (query, i[5])
                     buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=f"add:{unique_id}")])
-                    buttons.append([Button.inline(f"Close", data="none")])
+                buttons.append([Button.inline(f"Close", data="none")])
             except Exception as e:
                 await msgo(str(e))
             await bot_client.send_message(entity, "Search Results:", buttons=buttons,silent=True)
