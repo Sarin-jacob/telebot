@@ -286,6 +286,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 unique_id = str(uuid.uuid4())
                 query_imdb_mapping[unique_id] = (tv, f"{i[1]} ({i[2]}) {sinfo if sinfo else ''}")
                 buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=f"req:{unique_id}")])
+                buttons.append([Button.inline(f"Close", data="none")])
+
         except Exception as e:
             await msgo(str(e))
         await event.reply("Search Results:", buttons=buttons)
@@ -359,6 +361,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     unique_id = str(uuid.uuid4())
                     query_imdb_mapping[unique_id] = (query, i[5])
                     buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=f"add:{unique_id}")])
+                    buttons.append([Button.inline(f"Close", data="none")])
             except Exception as e:
                 await msgo(str(e))
             await bot_client.send_message(entity, "Search Results:", buttons=buttons,silent=True)
@@ -368,6 +371,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     async def callback_handler(event):
         if event.data:
             unique_id = event.data.decode()
+            if unique_id == "none": return await event.delete() 
             data = unique_id.split(':')
             cmd=data[0]
             unique_id = data[1]
