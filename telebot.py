@@ -244,7 +244,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             try:
                 res=tmdb.search_tv(tn) if tv else tmdb.search_movie(tn)
             except Exception as e:
-                await msgo(str(e))
+                await msgo("Error: "+str(e))
             print(f"Searching for {tn}\nResults found: {len(res)}\n{res}")
             filtered_data = [i for i in res if i[5] and i[5]!='']
             if len(filtered_data) == 0:
@@ -297,7 +297,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await bot_client.send_message(entity, f"{tn} Added message sent",silent=True)
             del query_imdb_mapping[unique_id]
 
-    @bot_client.on(events.NewMessage(pattern='/request'))
+    @bot_client.on(events.NewMessage(pattern='/request (.+)'))
     async def request_handler(event):
         print("new event",event.message)
         query = event.pattern_match.group(1).strip()
