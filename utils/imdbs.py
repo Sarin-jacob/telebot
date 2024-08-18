@@ -3,14 +3,17 @@ ia=imdb.Cinemagoer()
 # test=ia.search_movie('winter soldier')
 # print(test[0:6])
 def search_files(query):
-    dlist=[]
+    mov=[]
+    ser=[]
     moser=ia.search_movie(query)
     for i in moser:
-        print(i.keys())
         try:
-            dlist.append((i["title"],i["year"],i["kind"],i.movieID))
+            temp=(i["title"],i["year"],i["kind"],i.movieID)
         except:
-            dlist.append((i["title"],i["kind"]))
-            print(f'{i["title"]} has no year, of {i["kind"]} kind')
-    return dlist
+            continue
+        if temp[2]==any('movie','tv movie','short'):
+            mov.append(temp)
+        elif temp[2]==any('tv series','tv mini series','tv special','tv short'):
+            ser.append(temp)
+    return mov, ser
 print(search_files('winter soldier'))
