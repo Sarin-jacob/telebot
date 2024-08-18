@@ -299,6 +299,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
 
     @bot_client.on(events.NewMessage(pattern='/request (.+)'))
     async def request_handler(event):
+        print("new event",event.message)
         query = event.pattern_match.group(1).strip()
         if query:
             output = await msgo(query)
