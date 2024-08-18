@@ -17,4 +17,8 @@ def search_files(query):
             ser.append(temp)
     return mov, ser
 a,b=search_files('winter soldier')
-print(a,'\n',b)
+for i in a:
+    print(i)
+print()
+for i in b:
+    print(i)
