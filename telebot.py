@@ -433,6 +433,13 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     g.close
                     if output=='':
                         output="Command Run Successful"
+                elif command=='reqs':
+                    output="Requested Movies:\n\n"
+                    for i in load_data(MOVIES_FILE_PATH):
+                        output+=f"`{i}`"
+                    output+="\n\nRequested TV Shows:\n\n"
+                    for i in load_data(TV_SHOWS_FILE_PATH):
+                        output+=f"`{i}`"
                 elif command=="roast":
                     await msgo("trying to sta..")
                     system('systemctl --user restart telebot')
