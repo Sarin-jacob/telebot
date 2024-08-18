@@ -11,9 +11,9 @@ def search_files(query):
             temp=(i["title"],i["year"],i["kind"],i.movieID)
         except:
             continue
-        if temp[2]==any('movie','tv movie','short'):
+        if temp[2] in ['movie', 'tv movie', 'short']:
             mov.append(temp)
-        elif temp[2]==any('tv series','tv mini series','tv special','tv short'):
+        elif temp[2] in ['tv series', 'tv mini series', 'tv special', 'tv short']:
             ser.append(temp)
     return mov, ser
 print(search_files('winter soldier'))
