@@ -8,8 +8,8 @@ def search_files(query):
     for i in moser:
         print(i.keys())
         try:
-            dlist.append((i["title"],i["year"],i.movieID))
+            dlist.append((i["title"],i["year"],i["kind"],i.movieID))
         except:
-            continue
+            dlist.append((i["title"],i["kind"]))
     return dlist
 print(search_files('winter soldier'))
