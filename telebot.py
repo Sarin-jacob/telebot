@@ -20,60 +20,9 @@ SESSION="telebot"
 MOVIES_FILE_PATH = 'movies.txt'
 TV_SHOWS_FILE_PATH = 'tv_shows.txt'
 
+from utils.funcs import read_config,sendHelloMessage,log_reply,log_edit,finddetails,load_data,save_data,add_entry
 
-def read_config(file_path):
-    config = {}
-    try:
-        with open(file_path, 'r') as file:
-            for line in file:
-                key, value = line.strip().split('=')
-                config[key.strip()] = value.strip()
-    except Exception as e:
-        print(f"Error reading config file: {e}")
-    return config
 
-async def sendHelloMessage(client, peerChannel):
-    entity = await client.get_entity(peerChannel)
-    print("Telebot Daemon running using Telethon ")
-    await client.send_message(entity, "Telebot is up n Running")
-
-async def log_reply(message, reply):
-    chunk_size=4096
-    chunks = [reply[i:i+chunk_size] for i in range(0, len(reply), chunk_size)]
-    for chunk in chunks:
-        print(chunk)
-        fm=await message.reply(chunk,link_preview=False)
-    return fm
-
-async def log_edit(message, reply):
-    print(reply)
-    await message.edit(reply)
-
-def finddetails(input_string):
-    pattern = r'(\w+):((?:\w+://)?.*?)\s*(?=\w+:|$)'
-    matches = re.findall(pattern, input_string)
-    return matches
-
-# Helper function to load data from a text file
-def load_data(file_path):
-    if path.exists(file_path):
-        with open(file_path, 'r') as file:
-            return file.readlines()
-    return []
-
-# Helper function to save data to a text file
-def save_data(file_path, data):
-    with open(file_path, 'w') as file:
-        file.writelines(data)
-
-# Function to add a new entry and save it in alphabetical order without duplicates
-def add_entry(file_path, entry):
-    data = load_data(file_path)
-    entry_with_newline = entry + '\n'
-    if entry_with_newline not in data:
-        data.append(entry_with_newline)
-        data.sort(key=lambda x: x.lower())
-        save_data(file_path, data)
 
 if path.isfile(CONFIG_FILE):
     print("Using Config File.\n")
@@ -255,22 +204,22 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await event.reply(f"No links found for {cn}")
             return f"No links found for {cn}"
         elif len(filtered_data) ==1:
-            con=f"{filtered_data[0][1]} ({filtered_data[0][2]}) {sinfo if sinfo else ''}"
+            con=f"{filtered_data[0][1]} {filtered_data[0][2]} {sinfo if sinfo else ''}"
             add_entry(filepath,con )
             await event.reply(f"Added {con}")
             return f"added {con}"
         jn=re.sub(r"(?<=[_\s.])\d{4}", "", cn).strip()
         exact_title_matches = [i for i in filtered_data if i[1].lower() == jn.lower()]
         if len(exact_title_matches) == 1:
-            con=f"{exact_title_matches[0][1]} ({exact_title_matches[0][2]}) {sinfo if sinfo else ''}"
+            con=f"{exact_title_matches[0][1]} {exact_title_matches[0][2]} {sinfo if sinfo else ''}"
             add_entry(filepath,con )
             await event.reply(f"Added {con}")
             return f"added {con}"
         elif len(exact_title_matches) > 1:
             # Check for exact title and year match
-            exact_title_year_matches = [i for i in exact_title_matches if f"({i[2]})" in cn]
+            exact_title_year_matches = [i for i in exact_title_matches if f"{i[2]}" in cn]
             if len(exact_title_year_matches) == 1:
-                con=f"{exact_title_year_matches[0][1]} ({exact_title_year_matches[0][2]}) {sinfo if sinfo else ''}"
+                con=f"{exact_title_year_matches[0][1]} {exact_title_year_matches[0][2]} {sinfo if sinfo else ''}"
                 add_entry(filepath,con )
                 await event.reply(f"Added {con}")
                 return f"added {con}"
@@ -284,7 +233,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             buttons = []
             for i in filtered_data:
                 unique_id = str(uuid.uuid4())
-                query_imdb_mapping[unique_id] = (tv, f"{i[1]} ({i[2]}) {sinfo if sinfo else ''}")
+                query_imdb_mapping[unique_id] = (tv, f"{i[1]} {i[2]} {sinfo if sinfo else ''}")
                 buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=f"req:{unique_id}")])
             buttons.append([Button.inline(f"Close", data="none")])
 
@@ -438,10 +387,10 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     if output=='':
                         output="Command Run Successful"
                 elif command=='reqs':
-                    output="Requested Movies:\n\n"
+                    output="Requested Movies:\n"
                     for i in load_data(MOVIES_FILE_PATH):
                         output+=f"`{i}`"
-                    output+="\n\nRequested TV Shows:\n\n"
+                    output+="\n\nRequested TV Shows:\n"
                     for i in load_data(TV_SHOWS_FILE_PATH):
                         output+=f"`{i}`"
                 elif command=="roast":
