@@ -297,6 +297,17 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await bot_client.send_message(entity, f"{tn} Added message sent",silent=True)
             del query_imdb_mapping[unique_id]
 
+    @bot_client.on(events.NewMessage(pattern='/request (.+)'))
+    async def request_handler(event):
+        if event.to_id != peerChannel:
+            return
+        query = event.pattern_match.group(1).strip()
+        if query:
+            output = await msgo(query)
+        else:
+            output = "Please provide a query after /request"
+        await event.reply(output)
+
     @client.on(events.NewMessage())
     async def handler(event):
         if event.to_id != peerChannel:
