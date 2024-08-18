@@ -7,7 +7,9 @@ def search_files(query):
     moser=ia.search_movie(query)
     for i in moser:
         print(i.keys())
-        dlist.append((i["title"],i["year"],i.movieID))
-
+        try:
+            dlist.append((i["title"],i["year"],i.movieID))
+        except:
+            continue
     return dlist
 print(search_files('winter soldier'))
