@@ -248,7 +248,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             buttons = []
             for i in filtered_data:
                 unique_id = str(uuid.uuid4())
-                query_imdb_mapping[unique_id] = (event, f"{i[1]} ({i[2]}){' '+sinfo if sinfo else ''}")
+                query_imdb_mapping[unique_id] = (event, f"{i[1]} ({i[2]}) {sinfo if sinfo else ''}")
                 buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=f"req:{unique_id}")])
         except Exception as e:
             await msgo(str(e))
