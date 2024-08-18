@@ -429,7 +429,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output='Processing...'
                     prt=valve[4:]
                     for i in prt.split(','):
-                        a=await fet(i,channelid=-1001847045854,searchbot="ProSearchTestBot",strt=1)
+                        a=await fet(i,channelid=-1001847045854,searchbot="ProSearchX1Bot",strt=1)
                         output+=f"{a}\n"
                 elif "ser" == command[:3]:
                     output='Processing...'
