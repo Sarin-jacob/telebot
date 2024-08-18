@@ -302,7 +302,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         print("new event",event.message)
         query = event.pattern_match.group(1).strip()
         if query:
-            output = await msgo(query)
+            output = f"got query: {query}"
         else:
             output = "Please provide a query after /request"
         await event.reply(output)
