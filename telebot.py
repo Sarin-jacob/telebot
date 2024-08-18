@@ -342,7 +342,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 del query_imdb_mapping[unique_id]
             elif cmd == "req":
                 if unique_id not  in query_imdb_mapping: return
-                event, query = query_imdb_mapping[unique_id]
+                oevent, query = query_imdb_mapping[unique_id]
                 await event.edit(f"Added request for {query}")
                 del query_imdb_mapping[unique_id]
 
