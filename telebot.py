@@ -241,7 +241,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await msgo(str(e))
         await event.reply("Search Results:", buttons=buttons)
 
-    async def newfile(name:str ,channelid=-1001847045854,searchbot="ProSearchX1Bot",strt=0,imdb:str|None=None):
+    async def newfile(name:str ,channelid=-1002171035047,searchbot="ProSearchX1Bot",strt=1,imdb:str|None=None):
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channelid)
@@ -265,8 +265,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             print("Bot Token not found")
             await msgo("Bot Token not found\nAdd Bot Token in telebot.cnf file\nBOT_TOKEN=your_bot_token")
 
-    async def fet(query:str,tv=False,channelid=-1002171035047):
-        searchbot="ProSearchTestBot"
+    async def fet(query:str,tv=False,channelid=-1002171035047,searchbot="ProSearchX1Bot",strt=1):
+        # searchbot="ProWebSeriesBot" if tv else "ProSearchX1Bot"
+        # strt= 0 if tv else 1
         tn=query.replace('.',' ').split('\n')[0].split('#')[0].strip()
         tn=clean_name(tn)
         if BOT_TOKEN: 
@@ -279,23 +280,23 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             print(f"Searching for {tn}\nResults found: {len(res)}\n{res}")
             filtered_data = [i for i in res if i[5] and i[5]!='']
             if len(filtered_data) == 0:
-                await newfile(query,channelid=channelid,searchbot=searchbot,strt=1)
+                await newfile(query,channelid=channelid,searchbot=searchbot,strt=strt)
                 return f"No links found for {tn}"
             elif len(filtered_data) ==1:
-                await newfile(query,channelid=channelid,searchbot=searchbot,strt=1,imdb=filtered_data[0][5])
+                await newfile(query,channelid=channelid,searchbot=searchbot,strt=strt,imdb=filtered_data[0][5])
                 return  f"added {tn}"
             # Check for exact title match
             jn=re.sub(r"(?<=[_\s.])\d{4}", "", tn).strip()
             exact_title_matches = [i for i in filtered_data if i[1].lower() == jn.lower()]
             # If exact title matches found
             if len(exact_title_matches) == 1:
-                await newfile(query, channelid=channelid, searchbot=searchbot, strt=1, imdb=exact_title_matches[0][5])
+                await newfile(query, channelid=channelid, searchbot=searchbot, strt=strt, imdb=exact_title_matches[0][5])
                 return f"added {tn}"
             elif len(exact_title_matches) > 1:
                 # Check for exact title and year match
                 exact_title_year_matches = [i for i in exact_title_matches if f"({i[2]})" in tn]
                 if len(exact_title_year_matches) == 1:
-                    await newfile(query, channelid=channelid, searchbot=searchbot, strt=1, imdb=exact_title_year_matches[0][5])
+                    await newfile(query, channelid=channelid, searchbot=searchbot, strt=strt, imdb=exact_title_year_matches[0][5])
                     return f"added {tn}"
                 elif len(exact_title_year_matches) > 1:
                     filtered_data = exact_title_year_matches
@@ -308,7 +309,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 buttons = []
                 for i in filtered_data:
                     unique_id = str(uuid.uuid4())
-                    query_imdb_mapping[unique_id] = (query, i[5])
+                    query_imdb_mapping[unique_id] = (query, i[5],tv)
                     buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=f"add:{unique_id}")])
                 buttons.append([Button.inline(f"Close", data="none")])
             except Exception as e:
@@ -326,9 +327,10 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             unique_id = data[1]
             if cmd == "add":
                 if unique_id not in query_imdb_mapping:return
-                query, imdb_id = query_imdb_mapping[unique_id]
+                query, imdb_id,tv = query_imdb_mapping[unique_id]
                 entity = await bot_client.get_entity(channel_id)
-                await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,imdb=imdb_id)
+                searchbot= "ProWebSeriesBot" if tv else "ProSearchX1Bot"
+                await newfile(query,channelid=-1001847045854,searchbot=searchbot,strt=1,imdb=imdb_id)
                 await event.delete()
                 tn=query.replace('.',' ').split('\n')[0].split('#')[0]
                 await bot_client.send_message(entity, f"{tn} Added message sent",silent=True)
@@ -401,13 +403,13 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     await msgo("Downloaded New files..\nRestarting Service")
                     system('systemctl --user restart telebot')
                     output="Updated"
-                elif "mov" == command[:3]:
+                elif "mez" == command[:3]:
                     output=''
                     prt=valve[4:]
                     for i in prt.split(','):
                         nm=await newfile(i,channelid=-1001847045854, strt=1)
                         output+=f"{nm} added message Sent.\n"
-                elif "ser" == command[:3]:
+                elif "sez" == command[:3]:
                     output=''
                     prt=valve[4:]
                     for i in prt.split(','):
@@ -423,17 +425,17 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output+="test done"
                     # except Exception as e:
                         # output+=str(e)
-                elif "mez" == command[:3]:
+                elif "mov" == command[:3]:
                     output='Processing...'
                     prt=valve[4:]
                     for i in prt.split(','):
-                        a=await fet(i)
+                        a=await fet(i,channelid=-1001847045854,searchbot="ProSearchTestBot",strt=1)
                         output+=f"{a}\n"
-                elif "sez" == command[:3]:
+                elif "ser" == command[:3]:
                     output='Processing...'
                     prt=valve[4:]
                     for i in prt.split(','):
-                        a=await fet(i,tv=True)
+                        a=await fet(i,tv=True,channelid=-1001847045854,searchbot="ProWebSeriesBot",strt=1)
                         output+=f"{a}\n"
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
