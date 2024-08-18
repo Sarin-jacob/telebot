@@ -111,6 +111,7 @@ api_hash = TELEGRAM_DAEMON_API_HASH
 channel_id = TELEGRAM_DAEMON_CHANNEL
 
 bot_client = TelegramClient('bot', api_id, api_hash)
+bot_client.start(bot_token=BOT_TOKEN)
 tmdb=TMDB(TMDB_API_KEY)
 query_imdb_mapping = {}
 
@@ -211,7 +212,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         if not bot_client.is_connected():
             await bot_client.start(bot_token=BOT_TOKEN)
     
-    start_bot_client()
 
     @bot_client.on(events.NewMessage(pattern='/req(tv|movie) (.+)'))
     async def request_handler(event):
@@ -222,7 +222,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         res=tmdb.search_tv(cn) if tv else tmdb.search_movie(cn)
         filtered_data = [i for i in res if i[5] and i[5]!='']
         if len(filtered_data) == 0:
-            pass
+            await event.reply(f"No links found for {cn}")
+            return f"No links found for {cn}"
         elif len(filtered_data) ==1:
             pass
         jn=re.sub(r"(?<=[_\s.])\d{4}", "", cn).strip()
@@ -244,8 +245,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             buttons = []
             for i in filtered_data:
                 unique_id = str(uuid.uuid4())
-                query_imdb_mapping[unique_id] = (query, i[5])
-                buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=unique_id)])
+                query_imdb_mapping[unique_id] = (event, f"{i[1]} ({i[2]})")
+                buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=f"req:{unique_id}")])
         except Exception as e:
             await msgo(str(e))
         await event.reply("Search Results:", buttons=buttons)
@@ -317,7 +318,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 for i in filtered_data:
                     unique_id = str(uuid.uuid4())
                     query_imdb_mapping[unique_id] = (query, i[5])
-                    buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=unique_id)])
+                    buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=f"add:{unique_id}")])
             except Exception as e:
                 await msgo(str(e))
             await bot_client.send_message(entity, "Search Results:", buttons=buttons,silent=True)
@@ -327,14 +328,23 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     async def callback_handler(event):
         if event.data:
             unique_id = event.data.decode()
-            if unique_id in query_imdb_mapping:
+            data = unique_id.split(':')
+            cmd=data[0]
+            unique_id = data[1]
+            if cmd == "add":
+                if unique_id not in query_imdb_mapping:return
                 query, imdb_id = query_imdb_mapping[unique_id]
-            entity = await bot_client.get_entity(channel_id)
-            await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,imdb=imdb_id)
-            await event.delete()
-            tn=query.replace('.',' ').split('\n')[0].split('#')[0]
-            await bot_client.send_message(entity, f"{tn} Added message sent",silent=True)
-            del query_imdb_mapping[unique_id]
+                entity = await bot_client.get_entity(channel_id)
+                await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,imdb=imdb_id)
+                await event.delete()
+                tn=query.replace('.',' ').split('\n')[0].split('#')[0]
+                await bot_client.send_message(entity, f"{tn} Added message sent",silent=True)
+                del query_imdb_mapping[unique_id]
+            elif cmd == "req":
+                if unique_id not  in query_imdb_mapping: return
+                event, query = query_imdb_mapping[unique_id]
+                await event.edit(f"Added request for {query}")
+                del query_imdb_mapping[unique_id]
 
 
 
