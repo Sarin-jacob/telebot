@@ -11,5 +11,6 @@ def search_files(query):
             dlist.append((i["title"],i["year"],i["kind"],i.movieID))
         except:
             dlist.append((i["title"],i["kind"]))
+            print(f'{i["title"]} has no year, of {i["kind"]} kind')
     return dlist
 print(search_files('winter soldier'))
