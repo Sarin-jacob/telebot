@@ -242,6 +242,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         res=tmdb.search_tv(cn) if tv else tmdb.search_movie(cn)
         filtered_data = [i for i in res if i[5] and i[5]!='']
         filepath=MOVIES_FILE_PATH
+        sinfo=None
         if tv:
             filepath=TV_SHOWS_FILE_PATH
             snp=re.compile(r"[sS]\d{2}([eE]\d{2})?")
