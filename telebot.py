@@ -297,7 +297,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await bot_client.send_message(entity, f"{tn} Added message sent",silent=True)
             del query_imdb_mapping[unique_id]
 
-    @bot_client.on(events.NewMessage(pattern='/request (.+)'))
+    @bot_client.on(events.NewMessage(pattern='/request'))
     async def request_handler(event):
         print("new event",event.message)
         query = event.pattern_match.group(1).strip()
