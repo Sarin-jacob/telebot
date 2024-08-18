@@ -94,7 +94,7 @@ def clean_name(name):
     # Remove any non-alphanumeric characters  
     name = re.sub(r'\W+', ' ', name)
     # Remove any leading/trailing whitespaces
-    name = re.sub(r"S\d{2}.*", "", name)
+    name = re.sub(r"[sS]\d{2}.*", "", name)
     name = name.strip()
     return name
 def extract_last_year(text):

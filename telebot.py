@@ -221,6 +221,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         cn=clean_name(query)
         res=tmdb.search_tv(cn) if tv else tmdb.search_movie(cn)
         filtered_data = [i for i in res if i[5] and i[5]!='']
+        if tv:
+            snp=re.compile(r"[sS]\d{2}([eE]\d{2})?")
+            sinfo=snp.search(query)
         if len(filtered_data) == 0:
             await event.reply(f"No links found for {cn}")
             return f"No links found for {cn}"
@@ -245,7 +248,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             buttons = []
             for i in filtered_data:
                 unique_id = str(uuid.uuid4())
-                query_imdb_mapping[unique_id] = (event, f"{i[1]} ({i[2]})")
+                query_imdb_mapping[unique_id] = (event, f"{i[1]} ({i[2]}){' '+sinfo if sinfo else ''}")
                 buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=f"req:{unique_id}")])
         except Exception as e:
             await msgo(str(e))
