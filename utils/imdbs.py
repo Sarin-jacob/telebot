@@ -16,4 +16,5 @@ def search_files(query):
         elif temp[2] in ['tv series', 'tv mini series', 'tv special', 'tv short']:
             ser.append(temp)
     return mov, ser
-print(search_files('winter soldier'))
+a,b=search_files('winter soldier')
+print(a,'\n',b)
