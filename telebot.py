@@ -17,6 +17,9 @@ TELEGRAM_DAEMON_CHANNEL=None
 TELEGRAM_DAEMON_SESSION_PATH=''
 CONFIG_FILE="telebot.cnf"
 SESSION="telebot"
+MOVIES_FILE_PATH = 'movies.txt'
+TV_SHOWS_FILE_PATH = 'tv_shows.txt'
+
 
 def read_config(file_path):
     config = {}
@@ -51,6 +54,23 @@ def finddetails(input_string):
     matches = re.findall(pattern, input_string)
     return matches
 
+def load_data(file_path):
+    if path.exists(file_path):
+        with open(file_path, 'r') as file:
+            return file.readlines()
+    return []
+
+# Helper function to save data to a text file
+def save_data(file_path, data):
+    with open(file_path, 'w') as file:
+        file.writelines(data)
+
+# Function to add a new entry and save it in alphabetical order
+def add_entry(file_path, entry):
+    data = load_data(file_path)
+    data.append(entry + '\n')
+    data.sort(key=lambda x: x.lower())
+    save_data(file_path, data)
 
 if path.isfile(CONFIG_FILE):
     print("Using Config File.\n")
@@ -221,7 +241,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         cn=clean_name(query)
         res=tmdb.search_tv(cn) if tv else tmdb.search_movie(cn)
         filtered_data = [i for i in res if i[5] and i[5]!='']
+        filepath=MOVIES_FILE_PATH
         if tv:
+            filepath=TV_SHOWS_FILE_PATH
             snp=re.compile(r"[sS]\d{2}([eE]\d{2})?")
             sinfo=snp.search(query)
             sinfo = sinfo.group() if sinfo else None
@@ -229,16 +251,25 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await event.reply(f"No links found for {cn}")
             return f"No links found for {cn}"
         elif len(filtered_data) ==1:
-            pass
+            con=f"{filtered_data[0][1]} ({filtered_data[0][2]}) {sinfo if sinfo else ''}"
+            add_entry(filepath,con )
+            await event.reply(f"Added {con}")
+            return f"added {con}"
         jn=re.sub(r"(?<=[_\s.])\d{4}", "", cn).strip()
         exact_title_matches = [i for i in filtered_data if i[1].lower() == jn.lower()]
         if len(exact_title_matches) == 1:
-            pass
+            con=f"{exact_title_matches[0][1]} ({exact_title_matches[0][2]}) {sinfo if sinfo else ''}"
+            add_entry(filepath,con )
+            await event.reply(f"Added {con}")
+            return f"added {con}"
         elif len(exact_title_matches) > 1:
             # Check for exact title and year match
             exact_title_year_matches = [i for i in exact_title_matches if f"({i[2]})" in cn]
             if len(exact_title_year_matches) == 1:
-                pass
+                con=f"{exact_title_year_matches[0][1]} ({exact_title_year_matches[0][2]}) {sinfo if sinfo else ''}"
+                add_entry(filepath,con )
+                await event.reply(f"Added {con}")
+                return f"added {con}"
             elif len(exact_title_year_matches) > 1:
                     filtered_data = exact_title_year_matches
             else:
@@ -249,7 +280,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             buttons = []
             for i in filtered_data:
                 unique_id = str(uuid.uuid4())
-                query_imdb_mapping[unique_id] = (event, f"{i[1]} ({i[2]}) {sinfo if sinfo else ''}")
+                query_imdb_mapping[unique_id] = (tv, f"{i[1]} ({i[2]}) {sinfo if sinfo else ''}")
                 buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=f"req:{unique_id}")])
         except Exception as e:
             await msgo(str(e))
@@ -279,7 +310,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             print("Bot Token not found")
             await msgo("Bot Token not found\nAdd Bot Token in telebot.cnf file\nBOT_TOKEN=your_bot_token")
 
-    async def fet(query:str,tv=False):
+    async def fet(query:str,tv=False,channelid=-1002171035047):
+        searchbot="ProSearchTestBot"
         tn=query.replace('.',' ').split('\n')[0].split('#')[0].strip()
         tn=clean_name(tn)
         if BOT_TOKEN: 
@@ -292,23 +324,23 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             print(f"Searching for {tn}\nResults found: {len(res)}\n{res}")
             filtered_data = [i for i in res if i[5] and i[5]!='']
             if len(filtered_data) == 0:
-                await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
+                await newfile(query,channelid=channelid,searchbot=searchbot,strt=1)
                 return f"No links found for {tn}"
             elif len(filtered_data) ==1:
-                await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,imdb=filtered_data[0][5])
+                await newfile(query,channelid=channelid,searchbot=searchbot,strt=1,imdb=filtered_data[0][5])
                 return  f"added {tn}"
             # Check for exact title match
             jn=re.sub(r"(?<=[_\s.])\d{4}", "", tn).strip()
             exact_title_matches = [i for i in filtered_data if i[1].lower() == jn.lower()]
             # If exact title matches found
             if len(exact_title_matches) == 1:
-                await newfile(query, channelid=-1002171035047, searchbot="ProSearchTestBot", strt=1, imdb=exact_title_matches[0][5])
+                await newfile(query, channelid=channelid, searchbot=searchbot, strt=1, imdb=exact_title_matches[0][5])
                 return f"added {tn}"
             elif len(exact_title_matches) > 1:
                 # Check for exact title and year match
                 exact_title_year_matches = [i for i in exact_title_matches if f"({i[2]})" in tn]
                 if len(exact_title_year_matches) == 1:
-                    await newfile(query, channelid=-1002171035047, searchbot="ProSearchTestBot", strt=1, imdb=exact_title_year_matches[0][5])
+                    await newfile(query, channelid=channelid, searchbot=searchbot, strt=1, imdb=exact_title_year_matches[0][5])
                     return f"added {tn}"
                 elif len(exact_title_year_matches) > 1:
                     filtered_data = exact_title_year_matches
@@ -346,8 +378,10 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 del query_imdb_mapping[unique_id]
             elif cmd == "req":
                 if unique_id not  in query_imdb_mapping: return
-                oevent, query = query_imdb_mapping[unique_id]
-                await event.edit(f"Added request for {query}")
+                tv, req = query_imdb_mapping[unique_id]
+                filepath= TV_SHOWS_FILE_PATH if tv else MOVIES_FILE_PATH
+                add_entry(filepath, req)
+                await event.edit(f"Added request for {req}")
                 del query_imdb_mapping[unique_id]
 
 
