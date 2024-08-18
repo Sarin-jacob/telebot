@@ -210,6 +210,45 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     async def start_bot_client():
         if not bot_client.is_connected():
             await bot_client.start(bot_token=BOT_TOKEN)
+    
+    start_bot_client()
+
+    @bot_client.on(events.NewMessage(pattern='/req(tv|movie) (.+)'))
+    async def request_handler(event):
+        print("new event",event.message.message)
+        tv=event.pattern_match.group(1).strip()=="tv"
+        query = event.pattern_match.group(2).strip()
+        cn=clean_name(query)
+        res=tmdb.search_tv(cn) if tv else tmdb.search_movie(cn)
+        filtered_data = [i for i in res if i[5] and i[5]!='']
+        if len(filtered_data) == 0:
+            pass
+        elif len(filtered_data) ==1:
+            pass
+        jn=re.sub(r"(?<=[_\s.])\d{4}", "", cn).strip()
+        exact_title_matches = [i for i in filtered_data if i[1].lower() == jn.lower()]
+        if len(exact_title_matches) == 1:
+            pass
+        elif len(exact_title_matches) > 1:
+            # Check for exact title and year match
+            exact_title_year_matches = [i for i in exact_title_matches if f"({i[2]})" in cn]
+            if len(exact_title_year_matches) == 1:
+                pass
+            elif len(exact_title_year_matches) > 1:
+                    filtered_data = exact_title_year_matches
+            else:
+                filtered_data = exact_title_matches
+        elif len(filtered_data) > 10:
+            filtered_data = filtered_data[:10]
+        try:
+            buttons = []
+            for i in filtered_data:
+                unique_id = str(uuid.uuid4())
+                query_imdb_mapping[unique_id] = (query, i[5])
+                buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=unique_id)])
+        except Exception as e:
+            await msgo(str(e))
+        await event.reply("Search Results:", buttons=buttons)
 
     async def newfile(name:str ,channelid=-1001847045854,searchbot="ProSearchX1Bot",strt=0,imdb:str|None=None):
         if BOT_TOKEN: 
@@ -297,15 +336,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await bot_client.send_message(entity, f"{tn} Added message sent",silent=True)
             del query_imdb_mapping[unique_id]
 
-    @bot_client.on(events.NewMessage(pattern='/request (.+)'))
-    async def request_handler(event):
-        print("new event",event.message)
-        query = event.pattern_match.group(1).strip()
-        if query:
-            output = f"got query: {query}"
-        else:
-            output = "Please provide a query after /request"
-        await event.reply(output)
+
 
     @client.on(events.NewMessage())
     async def handler(event):
