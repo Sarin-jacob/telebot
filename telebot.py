@@ -247,6 +247,12 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 await msgo(str(e))
             print(f"Searching for {tn}\nResults found: {len(res)}\n{res}")
             filtered_data = [i for i in res if i[5] and i[5]!='']
+            if len(filtered_data) == 0:
+                await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
+                return f"No links found for {tn}"
+            elif len(filtered_data) ==1:
+                await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,imdb=filtered_data[0][5])
+                return  f"added {tn}"
             # Check for exact title match
             jn=re.sub(r"(?<=[_\s.])\d{4}", "", tn).strip()
             exact_title_matches = [i for i in filtered_data if i[1].lower() == jn.lower()]
@@ -265,12 +271,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 else:
                     filtered_data = exact_title_matches
 
-            elif len(filtered_data) == 0:
-                await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
-                return f"No links found for {tn}"
-            elif len(filtered_data) ==1:
-                await newfile(query,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1,imdb=filtered_data[0][5])
-                return  f"added {tn}"
             elif len(filtered_data) > 10:
                 filtered_data = filtered_data[:10]
             try:
