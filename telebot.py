@@ -54,6 +54,7 @@ def finddetails(input_string):
     matches = re.findall(pattern, input_string)
     return matches
 
+# Helper function to load data from a text file
 def load_data(file_path):
     if path.exists(file_path):
         with open(file_path, 'r') as file:
@@ -65,12 +66,14 @@ def save_data(file_path, data):
     with open(file_path, 'w') as file:
         file.writelines(data)
 
-# Function to add a new entry and save it in alphabetical order
+# Function to add a new entry and save it in alphabetical order without duplicates
 def add_entry(file_path, entry):
     data = load_data(file_path)
-    data.append(entry + '\n')
-    data.sort(key=lambda x: x.lower())
-    save_data(file_path, data)
+    entry_with_newline = entry + '\n'
+    if entry_with_newline not in data:
+        data.append(entry_with_newline)
+        data.sort(key=lambda x: x.lower())
+        save_data(file_path, data)
 
 if path.isfile(CONFIG_FILE):
     print("Using Config File.\n")
