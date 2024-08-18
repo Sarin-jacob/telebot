@@ -198,7 +198,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         query=event.pattern_match.group(1).strip()
         cn=clean_name(query)
         mv, sr = search_files(cn)
-        print(f"{cn = } {mv = } {sr = }")
+        print(f"{cn = } {mv = } {sr = } type = {type(mv)}")
         filtered_data = mv.extend(sr)
         snp=re.compile(r"[sS]\d{2}([eE]\d{2})?")
         sinfo=snp.search(query)
