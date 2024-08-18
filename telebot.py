@@ -237,7 +237,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             for i in filtered_data:
                 unique_id = str(uuid.uuid4())
                 query_imdb_mapping[unique_id] = (movie_or_tv(i[0]), f"{i[1]} {i[2]} {sinfo if sinfo else ''}")
-                buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=f"req:{unique_id}")])
+                buttons.append([Button.inline(f"{i[1]} ({i[2]}) [{i[0]}]", data=f"req:{unique_id}")])
             buttons.append([Button.inline(f"Close", data="none")])
 
         except Exception as e:
