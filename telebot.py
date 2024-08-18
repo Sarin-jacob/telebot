@@ -192,9 +192,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             return True
         return None
     
-    @bot_client.on(events.NewMessage(pattern='/request (.+)'))
+    @bot_client.on(events.NewMessage(pattern='/request( |@ProSearchUpdaterBot )(.+)'))
     async def request_handler(event):
-        query=event.pattern_match.group(1).strip()
+        query=event.pattern_match.group(2).strip()
         cn=clean_name(query)
         mv, sr = search_files(cn)
         filtered_data = mv + sr
