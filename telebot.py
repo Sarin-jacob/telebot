@@ -422,16 +422,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     for i in prt.split(','):
                         nm=await newfile(i,channelid=-1001847045854,searchbot="ProWebSeriesBot",strt=0)
                         output+=f"{nm} added message Sent.\n"
-                elif "test" in  command:
-                    output=""
-                    prt=valve[5:]
-                    # nm=await newfile(prt,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
-                    # output+=f"{nm} added message Sent.\n"
-                    # try:
-                    await fet(prt)
-                    output+="test done"
-                    # except Exception as e:
-                        # output+=str(e)
                 elif "mov" == command[:3]:
                     prt=valve[4:]
                     if command[3]=="i":
@@ -472,6 +462,16 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     msg=await client.iter_messages(-1002171035047)
                     firstmg=msg[-1]
                     await firstmg.edit(txtm)
+                elif "test" in  command:
+                    output=""
+                    prt=valve[5:]
+                    # nm=await newfile(prt,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
+                    # output+=f"{nm} added message Sent.\n"
+                    # try:
+                    await fet(prt)
+                    output+="test done"
+                    # except Exception as e:
+                        # output+=str(e)
                 elif "sd:" in command:
                     mat=dict(finddetails(valve))
                     sd,ev,fr=mat.get("Sd") or mat.get("sd"),mat.get("ev"),mat.get("fr",1)
