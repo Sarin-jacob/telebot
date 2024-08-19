@@ -433,6 +433,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     # except Exception as e:
                         # output+=str(e)
                 elif "mov" == command[:3]:
+                    if command[3]==1:
+                        msgo("I worky\n now do rest f the code")
+                        return
                     output='Processing...'
                     prt=valve[4:]
                     for i in prt.split(','):
