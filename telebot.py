@@ -101,6 +101,7 @@ This script contains the following commands and their usage:
 7. `mov <Moviename year>`: sent movie added message with button to update channel. Usage: mov <name>
 8. `ser <Seriesname season>`: sent series added message with button to update channel. Usage: ser <name>
 9. `update`: update the telebot script. Usage: update
+10. `comm <commands>`: change the bot commands. Usage: comm <command1:use,command2:use...>
 '''
 
 with TelegramClient(getSession(), api_id, api_hash).start() as client:
