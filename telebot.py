@@ -192,7 +192,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             return True
         return None
     
-    @bot_client.on(events.NewMessage(pattern='/(request|movie|series)( |@ProSearchUpdaterBot )(.+)'))
+    @bot_client.on(events.NewMessage(pattern='/(request|movie|tv)( |@ProSearchUpdaterBot )(.+)'))
     async def request_handler(event):
         ty=event.pattern_match.group(1)
         query=event.pattern_match.group(3).strip()
