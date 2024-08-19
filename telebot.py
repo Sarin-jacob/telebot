@@ -460,9 +460,17 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     try:
                         await msgo("tetsing latest")
                         txtm='⭕️ Latest HD Releases. \n〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️\n'
+                        serm=txtm
+                        with open("latest_movies_file.txt", 'r') as f:
+                            for i in f.readlines():
+                                txtm+=f"{i}"
+                        with open("latest_tv_file.txt", 'r') as f:
+                            for i in f.readlines():
+                                serm+=f"{i}"
                         msg=await client.get_messages(-1002171035047,ids=2)
-                        await msgo(f"got message:,{msg.message=}")
                         await msg.edit(txtm)
+                        msg=await client.get_messages(-1002171035047,ids=3)
+                        await msg.edit(serm)
                     except Exception as e:
                         output=str(e)
                 elif "test" in  command:
