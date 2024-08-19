@@ -234,7 +234,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             buttons = []
             for i in filtered_data:
                 unique_id = str(uuid.uuid4())
-                query_imdb_mapping[unique_id] = (movie_or_tv(i[0]), f"{i[1]} {i[2]} {sinfo if sinfo else ''}")
+                query_imdb_mapping[unique_id] = (movie_or_tv(i[0]), f"{i[1]} {i[2]} {sinfo if sinfo else ''}",event.sender_id)
                 buttons.append([Button.inline(f"{i[1]} ({i[2]}) [{i[0]}]", data=f"req:{unique_id}")])
             buttons.append([Button.inline(f"Close", data="none")])
 
@@ -337,7 +337,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 del query_imdb_mapping[unique_id]
             elif cmd == "req":
                 if unique_id not  in query_imdb_mapping: return
-                tv, req = query_imdb_mapping[unique_id]
+                tv, req,op = query_imdb_mapping[unique_id]
+                if event.sender_id != op: return
                 filepath= TV_SHOWS_FILE_PATH if tv else MOVIES_FILE_PATH
                 add_entry(filepath, req)
                 await event.edit(f"Added request for {req}")
