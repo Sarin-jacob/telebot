@@ -469,7 +469,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 elif command=="latest":
                     await msgo("tetsing latest")
                     txtm='⭕️ Latest HD Releases. \n〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️\n'
-                    msg=await client.iter_messages(-1001847045854)
+                    msg=await client.iter_messages(-1002171035047)
                     firstmg=msg[-1]
                     await firstmg.edit(txtm)
                 elif "sd:" in command:
