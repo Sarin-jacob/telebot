@@ -7,7 +7,8 @@ import unicodedata
 from telethon import TelegramClient,events,Button
 from telethon.sessions import StringSession
 from telethon.tl.functions.channels import CreateChannelRequest ,EditPhotoRequest
-from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,PeerChat
+from telethon.tl.functions.bots import SetBotCommandsRequest
+from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,BotCommand, BotCommandScopeDefault
 from utils.imdbs import search_files
 from utils.tmdb import TMDB,clean_name
 import uuid
@@ -153,17 +154,22 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             # Use the send_message function with the schedule parameter
             lo=await client.send_message(entty, command, schedule=scheduled_time)
     async def change_commands(commands=None):
-        cmds=[
-            ('request','Request a movie or tv show'),
-            ('movie','Request a movie'),
-            ('tv','Request a tv show')
+        cmds = [
+            ('request', 'Request a movie or tv show'),
+            ('movie', 'Request a movie'),
+            ('tv', 'Request a tv show')
         ]
         if commands:
             commands = commands.split(',')
-            commands=[(i.split(':')[0],i.split(':')[1]) for i in commands]
+            commands = [(i.split(':')[0], i.split(':')[1]) for i in commands]
         else:
             commands = cmds
-        await bot_client.set_commands(commands)
+
+        await bot_client(SetBotCommandsRequest(
+            scope=BotCommandScopeDefault(),
+            lang_code='en',
+            commands=[BotCommand(command=cmd, description=desc) for cmd, desc in commands]
+        ))
     
     async def Bots2Channel(channel_name, profile_pic, bot_list):
         # Create the channel
