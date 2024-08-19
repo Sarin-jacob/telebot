@@ -433,19 +433,26 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     # except Exception as e:
                         # output+=str(e)
                 elif "mov" == command[:3]:
-                    if command[3]=="i":
-                        await msgo("I worky\n now do rest f the code")
-                        return
-                    output='Processing...'
                     prt=valve[4:]
+                    if command[3]=="i":
+                        prt=prt[1:]
+                    output='Processing...'
                     for i in prt.split(','):
                         a=await fet(i,channelid=-1001847045854,searchbot="ProSearchX1Bot",strt=1)
+                        if command[3]=="i":
+                            with open("latest_movies_file.txt", 'a') as f:
+                                f.write(f"{prt}\n")
                         output+=f"{a}\n"
                 elif "ser" == command[:3]:
                     output='Processing...'
                     prt=valve[4:]
+                    if command[3]=="i":
+                        prt=prt[1:]
                     for i in prt.split(','):
                         a=await fet(i,tv=True,channelid=-1001847045854,searchbot="ProWebSeriesBot",strt=1)
+                        if command[3]=="i":
+                            with open("latest_tv_file.txt", 'a') as f:
+                                f.write(f"{prt}\n")
                         output+=f"{a}\n"
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
@@ -459,6 +466,11 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                                 'GroupProSearchBot']
                     ids=await Bots2Channel(channel_name,profile_pic,bot_list)
                     output=f"Bots added to channel `-100{ids}`"
+                elif command=="latest":
+                    txtm='⭕️ Latest HD Releases. \n〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️\n'
+                    msg=await client.iter_messages(-1001847045854)
+                    firstmg=msg[-1]
+                    await firstmg.edit(txtm)
                 elif "sd:" in command:
                     mat=dict(finddetails(valve))
                     sd,ev,fr=mat.get("Sd") or mat.get("sd"),mat.get("ev"),mat.get("fr",1)
