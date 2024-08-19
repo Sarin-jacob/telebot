@@ -467,6 +467,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     ids=await Bots2Channel(channel_name,profile_pic,bot_list)
                     output=f"Bots added to channel `-100{ids}`"
                 elif command=="latest":
+                    await msgo("tetsing latest")
                     txtm='⭕️ Latest HD Releases. \n〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️\n'
                     msg=await client.iter_messages(-1001847045854)
                     firstmg=msg[-1]
