@@ -1,6 +1,5 @@
-import imdb
-
-# print(test[0:6])
+from imdb import Cinemagoer
+ia = Cinemagoer()
 def search_files(query):
     mov=[]
     ser=[]
