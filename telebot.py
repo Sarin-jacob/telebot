@@ -325,12 +325,12 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await bot_client.send_message(entity, "Search Results:", buttons=buttons,silent=True)
             return '...'
     async def latester(msg,tv=False):
-        head='⭕️ Latest HD Releases. \n〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️\n\n'
+        head='⭕️ Latest HD Releases. \n〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️'
         mssg=await client.get_messages(-1002060127817,ids=3) if tv else await client.get_messages(-1002060127817,ids=2) 
         if len(mssg.text + f"✅ **{msg}**\n\n")>4096:
             mesg=head+f"\n\n✅ **{msg}**"
         else:
-            mesg=mssg.text+f"\n\n✅ **{msg}**"  
+            mesg=+f"\n\n✅ **{msg}**\n\n"+ mssg.text.replace(head,'') 
         await mssg.edit(mesg)
 
     @bot_client.on(events.CallbackQuery())
