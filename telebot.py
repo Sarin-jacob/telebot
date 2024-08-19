@@ -455,9 +455,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         with open("latest_tv_file.txt", 'r') as f:
                             for i in f.readlines():
                                 serm+=f"{i}"
-                        msg=await client.get_messages(-1002171035047,ids=2)
+                        msg=await client.get_messages(-1002060127817,ids=2)
                         await msg.edit(txtm)
-                        msg=await client.get_messages(-1002171035047,ids=3)
+                        msg=await client.get_messages(-1002060127817,ids=3)
                         await msg.edit(serm)
                     except Exception as e:
                         output=str(e)
