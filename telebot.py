@@ -317,6 +317,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     unique_id = str(uuid.uuid4())
                     query_imdb_mapping[unique_id] = (query, i[3],tv)
                     buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=f"add:{unique_id}")])
+                query_imdb_mapping["none"] = (query, None,tv)
+                buttons.append([Button.inline(f"No Link", data="add:none")])
                 buttons.append([Button.inline(f"Close", data="none")])
             except Exception as e:
                 await msgo(str(e))
@@ -336,7 +338,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 query, imdb_id,tv = query_imdb_mapping[unique_id]
                 entity = await bot_client.get_entity(channel_id)
                 searchbot= "ProWebSeriesBot" if tv else "ProSearchX1Bot"
-                await newfile(query,channelid=-1001847045854,searchbot=searchbot,strt=1,imdb=imdb_id)
+                await newfile(query,channelid=-1001847045854,searchbot=searchbot,strt=1,imdb=imdb_id) 
                 await event.delete()
                 tn=query.replace('.',' ').split('\n')[0].split('#')[0]
                 await bot_client.send_message(entity, f"{tn} Added message sent",silent=True)
@@ -459,6 +461,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         await msg.edit(txtm)
                         msg=await client.get_messages(-1002060127817,ids=3)
                         await msg.edit(serm)
+                        system('rm latest*.txt')
                     except Exception as e:
                         output=str(e)
                 elif "test" in  command:
