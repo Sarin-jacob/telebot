@@ -461,7 +461,11 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         await msg.edit(txtm)
                         msg=await client.get_messages(-1002060127817,ids=3)
                         await msg.edit(serm)
-                        system('rm latest*.txt')
+                        # system('rm latest*.txt')
+                        with open("latest_movies_file.txt", 'w') as f:
+                            f.write("")
+                        with open("latest_tv_file.txt", 'w') as f:
+                            f.write("")
                     except Exception as e:
                         output=str(e)
                 elif "test" in  command:
