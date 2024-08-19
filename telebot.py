@@ -354,7 +354,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             elif cmd == "req":
                 if unique_id not  in query_imdb_mapping: return
                 tv, req,op = query_imdb_mapping[unique_id]
-                if event.sender_id != op: return event.answer("You are not the sender of this request", alert=True)
+                if event.sender_id != op: 
+                    event.answer("You are not the sender of this request")
+                    return 
                 filepath= TV_SHOWS_FILE_PATH if tv else MOVIES_FILE_PATH
                 add_entry(filepath, req)
                 await event.edit(f"Added request for {req}")
