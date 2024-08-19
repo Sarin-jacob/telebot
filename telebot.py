@@ -461,7 +461,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         await msgo("tetsing latest")
                         txtm='⭕️ Latest HD Releases. \n〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️\n'
                         msg=await client.get_messages(-1002171035047)
-                        firstmg=msg[-1]
+                        firstmg=msg[0]
                         await firstmg.edit(txtm)
                     except Exception as e:
                         output=str(e)
