@@ -328,9 +328,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         head='⭕️ Latest HD Releases. \n〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️\n'
         mssg=await client.get_messages(-1002060127817,ids=3) if tv else await client.get_messages(-1002060127817,ids=2) 
         if len(mssg.text + f"✅ **{msg}**\n\n")>4096:
-            mesg=head+f"\n\n✅ **{msg}**"
+            mesg=head+f"\n✅ **{msg}**"
         else:
-            mesg=head+f"\n\n✅ **{msg}**\n\n"+ mssg.text.replace(head,'') 
+            mesg=head+f"\n✅ **{msg}**\n\n"+ mssg.text.replace(head,'') 
         await mssg.edit(mesg)
 
     @bot_client.on(events.CallbackQuery())
