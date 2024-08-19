@@ -330,7 +330,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         if len(mssg.text + f"✅ **{msg}**\n\n")>4096:
             mesg=head+f"\n\n✅ **{msg}**"
         else:
-            mesg=+f"\n\n✅ **{msg}**\n\n"+ mssg.text.replace(head,'') 
+            mesg=head+f"\n\n✅ **{msg}**\n\n"+ mssg.text.replace(head,'') 
         await mssg.edit(mesg)
 
     @bot_client.on(events.CallbackQuery())
