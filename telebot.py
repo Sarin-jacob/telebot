@@ -464,7 +464,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 elif "test" in  command:
                     output=""
                     prt=valve[5:]
-                    if command[5]=="i":
+                    if command[4]=="i":
                         with open("latest_tv_file.txt", 'a') as f:
                             f.write(f"{prt}\n")
                         with open("latest_movies_file.txt", 'a') as f:
