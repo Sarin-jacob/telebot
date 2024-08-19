@@ -410,18 +410,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     await msgo("Downloaded New files..\nRestarting Service")
                     system('systemctl --user restart telebot')
                     output="Updated"
-                elif "mez" == command[:3]:
-                    output=''
-                    prt=valve[4:]
-                    for i in prt.split(','):
-                        nm=await newfile(i,channelid=-1001847045854, strt=1)
-                        output+=f"{nm} added message Sent.\n"
-                elif "sez" == command[:3]:
-                    output=''
-                    prt=valve[4:]
-                    for i in prt.split(','):
-                        nm=await newfile(i,channelid=-1001847045854,searchbot="ProWebSeriesBot",strt=0)
-                        output+=f"{nm} added message Sent.\n"
                 elif "mov" == command[:3]:
                     prt=valve[4:]
                     if command[3]=="i":
@@ -431,7 +419,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         a=await fet(i,channelid=-1001847045854,searchbot="ProSearchX1Bot",strt=1)
                         if command[3]=="i":
                             with open("latest_movies_file.txt", 'a') as f:
-                                f.write(f"{prt}\n")
+                                f.write(f"✅ **{i}**\n")
                         output+=f"{a}\n"
                 elif "ser" == command[:3]:
                     output='Processing...'
@@ -442,7 +430,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         a=await fet(i,tv=True,channelid=-1001847045854,searchbot="ProWebSeriesBot",strt=1)
                         if command[3]=="i":
                             with open("latest_tv_file.txt", 'a') as f:
-                                f.write(f"{prt}\n")
+                                f.write(f"✅ **{i}**\n")
                         output+=f"{a}\n"
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
@@ -476,6 +464,11 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 elif "test" in  command:
                     output=""
                     prt=valve[5:]
+                    if command[5]=="i":
+                        with open("latest_tv_file.txt", 'a') as f:
+                            f.write(f"{prt}\n")
+                        with open("latest_movies_file.txt", 'a') as f:
+                            f.write(f"{prt}\n")
                     # nm=await newfile(prt,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
                     # output+=f"{nm} added message Sent.\n"
                     # try:
