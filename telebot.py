@@ -463,7 +463,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         msg=await client.get_messages(-1002171035047)
                         firstmg=msg[3]
                         await firstmg.edit(txtm)
-                        await client.edit_message(-1002171035047,msg[2].id,txtm)
+                        await client.edit_message(-1002171035047,msg[2].id," wojvv")
                     except Exception as e:
                         output=str(e)
                 elif "test" in  command:
