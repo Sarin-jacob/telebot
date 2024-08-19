@@ -192,29 +192,35 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             return True
         return None
     
-    @bot_client.on(events.NewMessage(pattern='/request( |@ProSearchUpdaterBot )(.+)'))
+    @bot_client.on(events.NewMessage(pattern='/(request|movie|series)( |@ProSearchUpdaterBot )(.+)'))
     async def request_handler(event):
-        query=event.pattern_match.group(2).strip()
+        ty=event.pattern_match.group(1)
+        query=event.pattern_match.group(3).strip()
         cn=clean_name(query)
-        mv, sr = search_files(cn)
-        filtered_data = mv + sr
+        if ty=="request":
+            mv, sr = search_files(cn)
+            filtered_data = mv + sr
+        elif ty=="movie":
+            filtered_data,_=search_files(cn)
+        elif ty=="series":
+            _,filtered_data=search_files(cn)
         snp=re.compile(r"[sS]\d{2}([eE]\d{2})?")
         sinfo=snp.search(query)
         sinfo = sinfo.group() if sinfo else None
         if len(filtered_data) == 0:
             await event.reply(f"No movie/tv found for {cn}")
-            return f"No links found for {cn}"
+            return f"No entry found for {cn}"
         elif len(filtered_data) ==1:
             con=f"{filtered_data[0][1]} {filtered_data[0][2]} {sinfo if sinfo else ''}"
             add_entry(TV_SHOWS_FILE_PATH,con) if movie_or_tv(filtered_data[0][0]) else add_entry(MOVIES_FILE_PATH,con) 
-            await event.reply(f"Added {con}")
+            await event.reply(f"Request added: {con}")
             return f"added {con}"
         jn=re.sub(r"(?<=[_\s.])\d{4}", "", cn).strip()
         exact_title_matches = [i for i in filtered_data if i[1].lower() == jn.lower()]
         if len(exact_title_matches) == 1:
             con=f"{exact_title_matches[0][1]} {exact_title_matches[0][2]} {sinfo if sinfo else ''}"
             add_entry(TV_SHOWS_FILE_PATH,con) if movie_or_tv(exact_title_matches[0][0]) else add_entry(MOVIES_FILE_PATH,con) 
-            await event.reply(f"Added {con}")
+            await event.reply(f"Request added: {con}")
             return f"added {con}"
         elif len(exact_title_matches) > 1:
             # Check for exact title and year match
@@ -222,7 +228,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             if len(exact_title_year_matches) == 1:
                 con=f"{exact_title_year_matches[0][1]} {exact_title_year_matches[0][2]} {sinfo if sinfo else ''}"
                 add_entry(TV_SHOWS_FILE_PATH,con) if movie_or_tv(exact_title_year_matches[0][0]) else add_entry(MOVIES_FILE_PATH,con) 
-                await event.reply(f"Added {con}")
+                await event.reply(f"Request added: {con}")
                 return f"added {con}"
             elif len(exact_title_year_matches) > 1:
                     filtered_data = exact_title_year_matches
@@ -338,9 +344,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             elif cmd == "req":
                 if unique_id not  in query_imdb_mapping: return
                 tv, req,op = query_imdb_mapping[unique_id]
-                if event.sender_id != op: 
-                    event.answer("You are not the sender of this request")
-                    return
+                if event.sender_id != op: return event.answer("You are not the sender of this request")
                 filepath= TV_SHOWS_FILE_PATH if tv else MOVIES_FILE_PATH
                 add_entry(filepath, req)
                 await event.edit(f"Added request for {req}")
