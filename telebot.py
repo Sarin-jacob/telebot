@@ -461,7 +461,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         await msgo("tetsing latest")
                         txtm='⭕️ Latest HD Releases. \n〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️\n'
                         msg=await client.get_messages(-1002171035047,ids=2)
-                        await msgo(f"got message:{msg[0].id},{msg=}")
+                        await msgo(f"got message:,{msg.message=}")
                         firstmg=msg[0]
                         await firstmg.edit(txtm)
                         await client.edit_message(-1002171035047,msg[2].id," wojvv")
