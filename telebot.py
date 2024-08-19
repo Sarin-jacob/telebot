@@ -324,6 +324,14 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 await msgo(str(e))
             await bot_client.send_message(entity, "Search Results:", buttons=buttons,silent=True)
             return '...'
+    async def latester(msg,tv=False):
+        head='⭕️ Latest HD Releases. \n〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️\n\n'
+        mssg=await client.get_messages(-1002060127817,ids=3) if tv else await client.get_messages(-1002060127817,ids=2) 
+        if len(mssg.text + f"✅ **{msg}**\n\n")>4096:
+            mesg=head+f"✅ **{msg}**\n\n"
+        else:
+            mesg=mssg.text+f"✅ **{msg}**\n\n"  
+        await mssg.edit(mesg)
 
     @bot_client.on(events.CallbackQuery())
     async def callback_handler(event):
@@ -414,25 +422,19 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output="Updated"
                 elif "mov" == command[:3]:
                     prt=valve[4:]
-                    if command[3]=="i":
-                        prt=prt[1:]
+                    if command[3]=="i" :prt=prt[1:]
                     output='Processing...'
                     for i in prt.split(','):
                         a=await fet(i,channelid=-1001847045854,searchbot="ProSearchX1Bot",strt=1)
-                        if command[3]=="i":
-                            with open("latest_movies_file.txt", 'a') as f:
-                                f.write(f"✅ **{i}**\n")
+                        if command[3]=="i": await latester(i)
                         output+=f"{a}\n"
                 elif "ser" == command[:3]:
                     output='Processing...'
                     prt=valve[4:]
-                    if command[3]=="i":
-                        prt=prt[1:]
+                    if command[3]=="i":prt=prt[1:]
                     for i in prt.split(','):
                         a=await fet(i,tv=True,channelid=-1001847045854,searchbot="ProWebSeriesBot",strt=1)
-                        if command[3]=="i":
-                            with open("latest_tv_file.txt", 'a') as f:
-                                f.write(f"✅ **{i}**\n")
+                        if command[3]=="i":await latester(i,tv=True)
                         output+=f"{a}\n"
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
@@ -449,7 +451,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 elif command=="latest":
                     try:
                         await msgo("tetsing latest")
-                        txtm='⭕️ Latest HD Releases. \n〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️\n'
+                        txtm='⭕️ Latest HD Releases. \n〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️\n\n'
+
                         serm=txtm
                         with open("latest_movies_file.txt", 'r') as f:
                             for i in f.readlines():
