@@ -151,6 +151,18 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             scheduled_time = datetime.now() + timedelta(minutes=ev * i) - timedelta(hours=5, minutes=30)
             # Use the send_message function with the schedule parameter
             lo=await client.send_message(entty, command, schedule=scheduled_time)
+    async def change_commands(commands=None):
+        cmds=[
+            ('request','Request a movie or tv show'),
+            ('movie','Request a movie'),
+            ('tv','Request a tv show')
+        ]
+        if commands:
+            commands = commands.split(',')
+            commands=[(i.split(':')[0],i.split(':')[1]) for i in commands]
+        else:
+            commands = cmds
+        await bot_client.set_commands(commands)
     
     async def Bots2Channel(channel_name, profile_pic, bot_list):
         # Create the channel
@@ -450,29 +462,10 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                                 'GroupProSearchBot']
                     ids=await Bots2Channel(channel_name,profile_pic,bot_list)
                     output=f"Bots added to channel `-100{ids}`"
-                elif command=="latest":
-                    try:
-                        await msgo("tetsing latest")
-                        txtm='⭕️ Latest HD Releases. \n〰️〰️〰️〰️〰️〰️〰️〰️〰️〰️\n\n'
-
-                        serm=txtm
-                        with open("latest_movies_file.txt", 'r') as f:
-                            for i in f.readlines():
-                                txtm+=f"{i}"
-                        with open("latest_tv_file.txt", 'r') as f:
-                            for i in f.readlines():
-                                serm+=f"{i}"
-                        msg=await client.get_messages(-1002060127817,ids=2)
-                        await msg.edit(txtm)
-                        msg=await client.get_messages(-1002060127817,ids=3)
-                        await msg.edit(serm)
-                        # system('rm latest*.txt')
-                        with open("latest_movies_file.txt", 'w') as f:
-                            f.write("")
-                        with open("latest_tv_file.txt", 'w') as f:
-                            f.write("")
-                    except Exception as e:
-                        output=str(e)
+                elif "comm"in command[:4]:
+                    cmds=None if command[4:].strip()=="" else command[4:].strip() 
+                    await change_commands(cmds)
+                    output="Commands Changed"
                 elif "test" in  command:
                     output=""
                     prt=valve[5:]
