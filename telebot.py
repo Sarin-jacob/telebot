@@ -470,18 +470,13 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 elif "test" in  command:
                     output=""
                     prt=valve[5:]
-                    if command[4]=="i":
-                        with open("latest_tv_file.txt", 'a') as f:
-                            f.write(f"✅ **{prt}**\n")
-                        with open("latest_movies_file.txt", 'a') as f:
-                            f.write(f"✅ **{prt}**\n")
+                    
                     # nm=await newfile(prt,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
                     # output+=f"{nm} added message Sent.\n"
-                    # try:
-                    await fet(prt)
-                    output+="test done"
-                    # except Exception as e:
-                        # output+=str(e)
+                    try:
+                        await change_commands()
+                    except Exception as e:
+                        output+=str(e)
                 elif "sd:" in command:
                     mat=dict(finddetails(valve))
                     sd,ev,fr=mat.get("Sd") or mat.get("sd"),mat.get("ev"),mat.get("fr",1)
