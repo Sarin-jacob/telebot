@@ -466,9 +466,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     prt=valve[5:]
                     if command[4]=="i":
                         with open("latest_tv_file.txt", 'a') as f:
-                            f.write(f"✅ **{i}**\n")
+                            f.write(f"✅ **{prt}**\n")
                         with open("latest_movies_file.txt", 'a') as f:
-                            f.write(f"✅ **{i}**\n")
+                            f.write(f"✅ **{prt}**\n")
                     # nm=await newfile(prt,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
                     # output+=f"{nm} added message Sent.\n"
                     # try:
