@@ -375,6 +375,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             elif cmd == "req":
                 if unique_id not  in query_imdb_mapping: return
                 tv, req,op = query_imdb_mapping[unique_id]
+                print(f"Request for {req} by {op} clicked by {event.sender_id}")
                 if event.sender_id != op: 
                     event.answer("You are not the sender of this request")
                     return 
