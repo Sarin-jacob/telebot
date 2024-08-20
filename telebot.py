@@ -397,7 +397,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     command = command[1:]
                 valve=command
                 command = command.lower()
-                output = "Unknown command"
+                output = valve
                 if command == "cmd":
                     output = cods
                 elif command[:4]=="sen:":
