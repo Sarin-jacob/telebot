@@ -416,7 +416,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     # await queue.task_done()
                     await clearchannels()
                     output="cleared"
-                elif "cmdr," in command:
+                elif "cmdr," in command[:5]:
                     if 'cmdr,' in valve:
                         cmdr=valve.split('cmdr, ')[-1]
                     else:
@@ -473,7 +473,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     cmds=None if command[4:].strip()=="" else command[4:].strip() 
                     await change_commands(cmds)
                     output="Commands Changed"
-                elif "test" in  command:
+                elif "test" in  command[:4]:
                     output=""
                     prt=valve[5:]
                     
