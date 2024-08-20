@@ -286,6 +286,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             search_url = f"tg://resolve?domain={searchbot}&text={name}"
             if strt==1:
                 search_url = f"tg://resolve?domain={searchbot}&start=search_{name.replace('%20','_')}"
+            await msgo(f'{search_url}')
             butt=[Button.url("Click to Search",search_url)]
             await bot_client.send_message(entity, message,buttons=butt,link_preview=False,silent=True)
             return name.replace('%20',' ').replace('_',' ')
