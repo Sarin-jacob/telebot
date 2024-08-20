@@ -7,7 +7,7 @@ After=network-online.target network.target
 Type=simple
 WorkingDirectory=%h/telebot
 ExecStart=/usr/bin/python ./telebot.py
-Restart=on-abort
+Restart=on-faliure
 
 [Install]
 WantedBy=multi-user.target

@@ -445,19 +445,17 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output="Updated"
                 elif "mov" == command[:3]:
                     prt=valve[4:]
-                    if command[3]=="i" :prt=prt[1:]
                     output='Processing...'
-                    for i in prt.split(','):
+                    for i in prt.split('/'):
                         a=await fet(i,channelid=-1001847045854,searchbot="ProSearchX1Bot",strt=1)
-                        if command[3]=="i": await latester(i)
+                        await latester(i)
                         output+=f"{a}\n"
                 elif "ser" == command[:3]:
                     output='Processing...'
                     prt=valve[4:]
-                    if command[3]=="i":prt=prt[1:]
-                    for i in prt.split(','):
+                    for i in prt.split('/'):
                         a=await fet(i,tv=True,channelid=-1001847045854,searchbot="ProWebSeriesBot",strt=1)
-                        if command[3]=="i":await latester(i,tv=True)
+                        await latester(i,tv=True)
                         output+=f"{a}\n"
                 elif command=="channelz":
                     profile_pic = "0c5b070bd2ea83f9163cd.jpg"
