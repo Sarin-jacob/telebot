@@ -254,7 +254,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     filtered_data = exact_title_year_matches
             else:
                 filtered_data = exact_title_matches
-        elif len(filtered_data) > 10:
+        if len(filtered_data) > 10:
             filtered_data = filtered_data[:10]
         print("after setting to 10",filtered_data)
         try:
