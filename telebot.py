@@ -480,7 +480,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     # nm=await newfile(prt,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
                     # output+=f"{nm} added message Sent.\n"
                     try:
-                        await change_commands()
+                        # await change_commands()
+                        await fet(prt)
                     except Exception as e:
                         output+=str(e)
                 elif "sd:" in command:
