@@ -377,7 +377,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 tv, req,op = query_imdb_mapping[unique_id]
                 print(f"Request for {req} by {op} clicked by {event.sender_id}")
                 if event.sender_id != op: 
-                    event.answer("You are not the sender of this request")
+                    await event.answer("You are not the sender of this request")
                     return 
                 filepath= TV_SHOWS_FILE_PATH if tv else MOVIES_FILE_PATH
                 add_entry(filepath, req)
