@@ -223,7 +223,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             filtered_data,_=search_files(cn)
         elif ty=="tv":
             _,filtered_data=search_files(cn)
-        print("initial filered data",filtered_data)
         snp=re.compile(r"[sS]\d{2}([eE]\d{2})?")
         sinfo=snp.search(query)
         sinfo = sinfo.group() if sinfo else None
@@ -256,7 +255,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 filtered_data = exact_title_matches
         if len(filtered_data) > 10:
             filtered_data = filtered_data[:10]
-        print("after setting to 10",filtered_data)
         try:
             buttons = []
             for i in filtered_data:
@@ -376,7 +374,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 if unique_id not  in query_imdb_mapping: return
                 tv, req,op = query_imdb_mapping[unique_id]
                 print(f"Request for {req} by {op} clicked by {event.sender_id}")
-                if event.sender_id != op: 
+                if (event.is_channel and event.chat_id != op) or (not event.is_channel and event.sender_id != op):
                     await event.answer("You are not the sender of this request")
                     return 
                 filepath= TV_SHOWS_FILE_PATH if tv else MOVIES_FILE_PATH
