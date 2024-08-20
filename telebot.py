@@ -223,6 +223,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             filtered_data,_=search_files(cn)
         elif ty=="series":
             _,filtered_data=search_files(cn)
+        print("initial filered data",filtered_data)
         snp=re.compile(r"[sS]\d{2}([eE]\d{2})?")
         sinfo=snp.search(query)
         sinfo = sinfo.group() if sinfo else None
@@ -255,6 +256,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 filtered_data = exact_title_matches
         elif len(filtered_data) > 10:
             filtered_data = filtered_data[:10]
+        print("after setting to 10",filtered_data)
         try:
             buttons = []
             for i in filtered_data:
