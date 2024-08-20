@@ -221,7 +221,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             filtered_data = mv + sr
         elif ty=="movie":
             filtered_data,_=search_files(cn)
-        elif ty=="series":
+        elif ty=="tv":
             _,filtered_data=search_files(cn)
         print("initial filered data",filtered_data)
         snp=re.compile(r"[sS]\d{2}([eE]\d{2})?")
