@@ -8,7 +8,8 @@ def search_files(query):
     for i in moser:
         try:
             temp=(i["kind"],i["title"],i["year"],i.movieID,i["genres"])
-        except:
+        except Exception as e:
+            print(e)
             continue
         if temp[0] in ['movie', 'tv movie', 'short']:
             mov.append(temp)
