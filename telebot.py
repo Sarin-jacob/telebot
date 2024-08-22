@@ -274,7 +274,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             name=name.replace("."," ")
             message=f"✅ **{name}**"
             name=name.split('#')[0].replace(' ', '%20').split('\n')[0]
-            if len(imdb)>0:
+            if imdb and len(imdb)>0:
                 # nm=name.replace('%20',' ')
                 # message=message.replace(nm,f"[{nm}](https://www.imdb.com/title/{imdb})")
                 link_text ='IMDb Link'
