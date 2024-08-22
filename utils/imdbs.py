@@ -7,7 +7,7 @@ def search_files(query):
     moser=ia.search_movie(query)
     for i in moser:
         try:
-            temp=(i["kind"],i["title"],i["year"],i.movieID)
+            temp=(i["kind"],i["title"],i["year"],i.movieID,i["genres"])
         except:
             continue
         if temp[0] in ['movie', 'tv movie', 'short']:
