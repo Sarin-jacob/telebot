@@ -279,7 +279,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 # message=message.replace(nm,f"[{nm}](https://www.imdb.com/title/{imdb})")
                 link_text ='IMDB info'
                 link=f"** [{link_text}](https://www.imdb.com/title/tt{imdb[0]})**"
-                message=f"{message}\n\n⭐️ {link}\n📽**Genere:** {imdb[1]}"
+                message=f"{message}\n\n⭐️ {link}\n📽**Genere:** _{imdb[1]}_"
             search_url = f"tg://resolve?domain={searchbot}&text={name}"
             if strt==1:
                 search_url = f"tg://resolve?domain={searchbot}&start=search_{name.replace('%20','_')}"
