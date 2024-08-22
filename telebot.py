@@ -12,6 +12,7 @@ from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,BotCommand, Bot
 from utils.imdbs import search_files,gen4mId
 from utils.tmdb import TMDB,clean_name
 import uuid
+import traceback
 
 
 TELEGRAM_DAEMON_API_ID =None
@@ -306,7 +307,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 filtered_data=sr if tv else mv
                 await msgo(filtered_data[0])
             except Exception as e:
-                await msgo("Error: "+str(e))
+                await msgo("Error: "+str(e)+"\n",traceback.format_exc())
             if len(filtered_data) == 0:
                 await newfile(query,channelid=channelid,searchbot=searchbot,strt=strt)
                 return f"No links found for {tn}"
