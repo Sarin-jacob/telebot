@@ -9,9 +9,10 @@ from telethon.sessions import StringSession
 from telethon.tl.functions.channels import CreateChannelRequest ,EditPhotoRequest
 from telethon.tl.functions.bots import SetBotCommandsRequest
 from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,BotCommand, BotCommandScopeDefault
-from utils.imdbs import search_files
+from utils.imdbs import search_files,gen4mId
 from utils.tmdb import TMDB,clean_name
 import uuid
+
 
 TELEGRAM_DAEMON_API_ID =None
 TELEGRAM_DAEMON_API_HASH =None
@@ -267,7 +268,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await msgo(str(e))
         await event.reply("Search Results:", buttons=buttons)
 
-    async def newfile(name:str ,channelid=-1002171035047,searchbot="ProSearchX1Bot",strt=1,imdb:list|None=None):
+    async def newfile(name:str ,channelid=-1002171035047,searchbot="ProSearchX1Bot",strt=1,imdb:str|None=None):
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channelid)
@@ -277,9 +278,10 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             if imdb:
                 # nm=name.replace('%20',' ')
                 # message=message.replace(nm,f"[{nm}](https://www.imdb.com/title/{imdb})")
+                gen=gen4mId(imdb)
                 link_text ='IMDB info'
-                link=f"** [{link_text}](https://www.imdb.com/title/tt{imdb[0]})**"
-                message=f"{message}\n\n⭐️ {link}\n📽 **Genre:** `{imdb[1]}`"
+                link=f"** [{link_text}](https://www.imdb.com/title/tt{imdb})**"
+                message=f"{message}\n\n⭐️ {link}\n📽 **Genre:** `{gen}`"
             search_url = f"tg://resolve?domain={searchbot}&text={name}"
             if strt==1:
                 search_url = f"tg://resolve?domain={searchbot}&start=search_{name.replace('%20','_')}"
@@ -308,20 +310,20 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 await newfile(query,channelid=channelid,searchbot=searchbot,strt=strt)
                 return f"No links found for {tn}"
             elif len(filtered_data) ==1:
-                await newfile(query,channelid=channelid,searchbot=searchbot,strt=strt,imdb=[filtered_data[0][3],filtered_data[0][4]])
+                await newfile(query,channelid=channelid,searchbot=searchbot,strt=strt,imdb=filtered_data[0][3])
                 return  f"added {tn}"
             # Check for exact title match
             jn=re.sub(r"(?<=[_\s.])\d{4}", "", tn).strip()
             exact_title_matches = [i for i in filtered_data if i[1].lower() == jn.lower()]
             # If exact title matches found
             if len(exact_title_matches) == 1:
-                await newfile(query, channelid=channelid, searchbot=searchbot, strt=strt, imdb=[exact_title_matches[0][3],exact_title_matches[0][4]])
+                await newfile(query, channelid=channelid, searchbot=searchbot, strt=strt, imdb=exact_title_matches[0][3])
                 return f"added {tn}"
             elif len(exact_title_matches) > 1:
                 # Check for exact title and year match
                 exact_title_year_matches = [i for i in exact_title_matches if f"({i[2]})" in tn]
                 if len(exact_title_year_matches) == 1:
-                    await newfile(query, channelid=channelid, searchbot=searchbot, strt=strt, imdb=[exact_title_year_matches[0][3],exact_title_year_matches[0][4]])
+                    await newfile(query, channelid=channelid, searchbot=searchbot, strt=strt, imdb=exact_title_year_matches[0][3])
                     return f"added {tn}"
                 elif len(exact_title_year_matches) > 1:
                     filtered_data = exact_title_year_matches
@@ -334,7 +336,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 buttons = []
                 for i in filtered_data:
                     unique_id = str(uuid.uuid4())
-                    query_imdb_mapping[unique_id] = (query, i[3],tv,i[4])
+                    query_imdb_mapping[unique_id] = (query, i[3],tv)
                     buttons.append([Button.inline(f"{i[1]} ({i[2]})", data=f"add:{unique_id}")])
                 query_imdb_mapping["none"] = (query, None,tv)
                 buttons.append([Button.inline(f"No Link", data="add:none")])
@@ -362,10 +364,10 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             unique_id = data[1]
             if cmd == "add":
                 if unique_id not in query_imdb_mapping:return
-                query, imdb_id,tv,gen = query_imdb_mapping[unique_id]
+                query, imdb_id,tv = query_imdb_mapping[unique_id]
                 entity = await bot_client.get_entity(channel_id)
                 searchbot= "ProWebSeriesBot" if tv else "ProSearchX1Bot"
-                await newfile(query,channelid=-1001847045854,searchbot=searchbot,strt=1,imdb=[imdb_id,gen]) 
+                await newfile(query,channelid=-1001847045854,searchbot=searchbot,strt=1,imdb=imdb_id) 
                 await event.delete()
                 tn=query.replace('.',' ').split('\n')[0].split('#')[0]
                 await bot_client.send_message(entity, f"{tn} Added message sent",silent=True)
