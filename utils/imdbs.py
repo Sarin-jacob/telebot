@@ -23,9 +23,8 @@ def search_files(query):
     return mov, ser
 def gen4mId(id):
     tem=ia.get_movie(id)
-    if tem.get("genres"):
-        return ", ".join(tem["genres"])
-
+    gen=", ".join(tem["genres"])
+    return gen if gen!='None' else None
 if __name__ == "__main__":
     print(search_files("The Matrix"))
     # print(search_files("The Simpsons"))
