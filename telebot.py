@@ -267,7 +267,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await msgo(str(e))
         await event.reply("Search Results:", buttons=buttons)
 
-    async def newfile(name:str ,channelid=-1002171035047,searchbot="ProSearchX1Bot",strt=1,imdb:str|None=None):
+    async def newfile(name:str ,channelid=-1002171035047,searchbot="ProSearchX1Bot",strt=1,imdb:tuple|None=None):
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channelid)
