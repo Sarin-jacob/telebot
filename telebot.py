@@ -483,6 +483,14 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         await fet(prt)
                     except Exception as e:
                         output+=str(e)
+                elif "lest" in  command[:4]:
+                    output=""
+                    prt=valve[5:]
+                    try:
+                        # await change_commands()
+                        await fet(prt,tv=True)
+                    except Exception as e:
+                        output+=str(e)
                 elif "sd:" in command:
                     mat=dict(finddetails(valve))
                     sd,ev,fr=mat.get("Sd") or mat.get("sd"),mat.get("ev"),mat.get("fr",1)
