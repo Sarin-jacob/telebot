@@ -15,13 +15,13 @@ def search_files(query):
     for i in moser:
         try:
             tv=movie_or_tv(i["kind"])
-            lo.append((i.movieID, tv, i["kind"]))
+            lo.append((i.movieID, tv, i["kind"],i["title"],i["year"]))
         except:
             continue
     for i in lo:
         try:
             tem=ia.get_movie(i[0]) 
-            temp=(i[2],tem["title"],tem["year"],i[0],", ".join(tem["genres"]))
+            temp=(i[2],i[3],i[5],i[0],", ".join(tem["genres"]))
         except:
             continue
         if i[1]:
