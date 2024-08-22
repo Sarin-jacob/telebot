@@ -267,7 +267,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await msgo(str(e))
         await event.reply("Search Results:", buttons=buttons)
 
-    async def newfile(name:str ,channelid=-1002171035047,searchbot="ProSearchX1Bot",strt=1,imdb:tuple|None=None):
+    async def newfile(name:str ,channelid=-1002171035047,searchbot="ProSearchX1Bot",strt=1,imdb:list|None=None):
         if BOT_TOKEN: 
             await start_bot_client()
             entity = await bot_client.get_entity(channelid)
@@ -307,20 +307,20 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 await newfile(query,channelid=channelid,searchbot=searchbot,strt=strt)
                 return f"No links found for {tn}"
             elif len(filtered_data) ==1:
-                await newfile(query,channelid=channelid,searchbot=searchbot,strt=strt,imdb=(filtered_data[0][3],filtered_data[0][4]))
+                await newfile(query,channelid=channelid,searchbot=searchbot,strt=strt,imdb=[filtered_data[0][3],filtered_data[0][4]])
                 return  f"added {tn}"
             # Check for exact title match
             jn=re.sub(r"(?<=[_\s.])\d{4}", "", tn).strip()
             exact_title_matches = [i for i in filtered_data if i[1].lower() == jn.lower()]
             # If exact title matches found
             if len(exact_title_matches) == 1:
-                await newfile(query, channelid=channelid, searchbot=searchbot, strt=strt, imdb=(exact_title_matches[0][3],exact_title_matches[0][4]))
+                await newfile(query, channelid=channelid, searchbot=searchbot, strt=strt, imdb=[exact_title_matches[0][3],exact_title_matches[0][4]])
                 return f"added {tn}"
             elif len(exact_title_matches) > 1:
                 # Check for exact title and year match
                 exact_title_year_matches = [i for i in exact_title_matches if f"({i[2]})" in tn]
                 if len(exact_title_year_matches) == 1:
-                    await newfile(query, channelid=channelid, searchbot=searchbot, strt=strt, imdb=(exact_title_year_matches[0][3],exact_title_year_matches[0][3]))
+                    await newfile(query, channelid=channelid, searchbot=searchbot, strt=strt, imdb=[exact_title_year_matches[0][3],exact_title_year_matches[0][4]])
                     return f"added {tn}"
                 elif len(exact_title_year_matches) > 1:
                     filtered_data = exact_title_year_matches
@@ -364,7 +364,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 query, imdb_id,tv,gen = query_imdb_mapping[unique_id]
                 entity = await bot_client.get_entity(channel_id)
                 searchbot= "ProWebSeriesBot" if tv else "ProSearchX1Bot"
-                await newfile(query,channelid=-1001847045854,searchbot=searchbot,strt=1,imdb=(imdb_id,gen)) 
+                await newfile(query,channelid=-1001847045854,searchbot=searchbot,strt=1,imdb=[imdb_id,gen]) 
                 await event.delete()
                 tn=query.replace('.',' ').split('\n')[0].split('#')[0]
                 await bot_client.send_message(entity, f"{tn} Added message sent",silent=True)
