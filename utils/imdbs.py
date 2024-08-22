@@ -1,21 +1,27 @@
 # from imdb import Cinemagoer
 import imdb
 ia = imdb.Cinemagoer()
+def movie_or_tv(query):
+    if query in ['movie', 'tv movie', 'short']:
+        return False
+    elif query in ['tv series', 'tv mini series', 'tv special', 'tv short']:
+        return True
+    return None
 def search_files(query):
     mov=[]
     ser=[]
     moser=ia.search_movie(query)
     for i in moser:
         try:
-            temp=(i["kind"],i["title"],i["year"],i.movieID)
-            print(i.keys())
-        except Exception as e:
-            print(e)
+            tv=movie_or_tv(i["kind"])
+        except:
             continue
-        if temp[0] in ['movie', 'tv movie', 'short']:
-            mov.append(temp)
-        elif temp[0] in ['tv series', 'tv mini series', 'tv special', 'tv short']:
+        tem=ia.get_movie(i.movieID)
+        temp=(tem["kind"],tem["title"],tem["year"],tem.movieID,tem["genres"])
+        if tv:
             ser.append(temp)
+        else:
+            mov.append(temp)
     return mov, ser
 
 if __name__ == "__main__":
