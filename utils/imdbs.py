@@ -10,15 +10,21 @@ def movie_or_tv(query):
 def search_files(query):
     mov=[]
     ser=[]
+    lo=[]
     moser=ia.search_movie(query)
     for i in moser:
         try:
             tv=movie_or_tv(i["kind"])
-            tem=ia.get_movie(i.movieID) 
-            temp=(tem["kind"],tem["title"],tem["year"],tem.movieID,tem["genres"])
+            lo.append((i.movieID, tv, i["kind"]))
         except:
             continue
-        if tv:
+    for i in lo:
+        try:
+            tem=ia.get_movie(i[0]) 
+            temp=(i[2],tem["title"],tem["year"],i[0],tem["genres"])
+        except:
+            continue
+        if i[1]:
             ser.append(temp)
         else:
             mov.append(temp)
