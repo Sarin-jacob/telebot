@@ -305,9 +305,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             try:
                 mv,sr=search_files(tn)
                 filtered_data=sr if tv else mv
-                await msgo(filtered_data[0])
             except Exception as e:
-                await msgo("Error: "+str(e)+"\n",traceback.format_exc())
+                await msgo("XXError: "+str(e)+"\n",traceback.format_exc())
             if len(filtered_data) == 0:
                 await newfile(query,channelid=channelid,searchbot=searchbot,strt=strt)
                 return f"No links found for {tn}"
