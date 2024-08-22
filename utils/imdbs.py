@@ -32,7 +32,7 @@ def search_files(query):
 
 if __name__ == "__main__":
     print(search_files("The Matrix"))
-    print(search_files("The Simpsons"))
-    print(search_files("The Big Bang Theory"))
-    print(search_files("The Office"))
-    print(search_files("ready player one"))
+    # print(search_files("The Simpsons"))
+    # print(search_files("The Big Bang Theory"))
+    # print(search_files("The Office"))
+    # print(search_files("ready player one"))
