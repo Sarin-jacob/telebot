@@ -7,7 +7,7 @@ def search_files(query):
     moser=ia.search_movie(query)
     for i in moser:
         try:
-            temp=(i["kind"],i["title"],i["year"],i.movieID,i["genres"])
+            temp=(i["kind"],i["title"],i["year"],i.movieID)
         except Exception as e:
             print(e)
             continue
