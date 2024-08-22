@@ -15,9 +15,9 @@ def search_files(query):
         try:
             tv=movie_or_tv(i["kind"])
             tem=ia.get_movie(i.movieID) 
+            temp=(tem["kind"],tem["title"],tem["year"],tem.movieID,tem["genres"])
         except:
             continue
-        temp=(tem["kind"],tem["title"],tem["year"],tem.movieID,tem["genres"])
         if tv:
             ser.append(temp)
         else:
