@@ -21,7 +21,7 @@ def search_files(query):
     for i in lo:
         try:
             tem=ia.get_movie(i[0]) 
-            temp=(i[2],tem["title"],tem["year"],i[0],tem["genres"])
+            temp=(i[2],tem["title"],tem["year"],i[0],", ".join(tem["genres"]))
         except:
             continue
         if i[1]:
