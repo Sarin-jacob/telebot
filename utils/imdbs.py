@@ -25,7 +25,8 @@ def gen4mId(id):
     tem=ia.get_movie(id)
     if tem.get("genres"):
         gen=", ".join(tem["genres"])
-    return gen if gen!='None' else None
+        return gen if gen!='None' else None
+    return None
 if __name__ == "__main__":
     print(search_files("The Matrix"))
     # print(search_files("The Simpsons"))
