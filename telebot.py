@@ -234,11 +234,11 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     async def update_progress(sent, total, file_name, sm, last_message, last_update_time):
         # Calculate progress
         progress = sent / total * 100
-        sent_size = naturalsize(sent, binary=True)
-        total_size = naturalsize(total, binary=True)
+        sent_size = humanize.naturalsize(sent, binary=True)
+        total_size = humanize.naturalsize(total, binary=True)
 
         # Create a progress bar with better visuals
-        progress_bar_length = 20  # Length of the progress bar
+        progress_bar_length = 20
         filled_length = int(progress_bar_length * sent / total)
         progress_bar = '█' * filled_length + '░' * (progress_bar_length - filled_length)
 
@@ -262,62 +262,75 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await sm.edit(final_message)
             last_message[0] = final_message
 
-    async def up_bird(links:list,channelid=-1002171035047):
-        cap="Uploaded by ProSearch Bot"#can use fstring for more info
-        thumb="thumb.jpg"
-        fnms=[]
+    async def up_bird(links: list, channelid=-1002171035047):
+        cap = "Uploaded by ProSearch Bot"
+        thumb = "thumb.jpg"
+        fnms = []
+        
+        await msgo("Starting file download...")
         await con_warp()
         for i in links:
             try:
-                fl=shot_bird(i)
+                fl = shot_bird(i)
                 fnms.append(fl)
+                await msgo(f"Downloaded file: {fl}")
             except Exception as e:
-                await msgo("Couldnt Download\nError: "+str(e))
+                await msgo("Could not download file\nError: " + str(e))
                 return
-        print(f"before dis warp,\n{fnms=}")
+
+        await msgo("All files downloaded. Preparing for upload...")
         await dis_warp()
-        print(f"after dis warp,\n")
-        sm=await msgo("All files Downloaded\nUploading Files...")
+
+        sm = await msgo("Uploading files...")
+
         try:
-            if len(fnms)>0:
+            if len(fnms) > 0:
                 for fl in fnms:
                     if path.isfile(fl):
                         last_message = ['']
                         last_update_time = [datetime.now()]
-                        await uploood(fl,sm,channelid,last_message,last_update_time,caption=cap,thumb=thumb)                    
+                        await msgo(f"Starting upload for file: {fl}")
+                        await uploood(fl, sm, channelid, last_message, last_update_time, caption=f"{fl}\n{cap}", thumb=thumb)
+                        await msgo(f"File uploaded and removed: {fl}")
                         system(f'rm {fl}')
                     else:
                         await msgo(f"Error: {fl} not found!!")
         except Exception as e:
-            await msgo("Error: "+str(e))
+            await msgo("Error: " + str(e))
 
-
-    async def uploood(fl,sm,channelid,last_message,last_update_time,caption=None,thumb=None):
+    async def uploood(fl, sm, channelid, last_message, last_update_time, caption=None, thumb=None):
         async def progress_callback(sent, total):
             await update_progress(sent, total, fl, sm, last_message, last_update_time)
-        with open(fl, "rb") as out:
-            res = await fupload_file(client, out, progress_callback=progress_callback)
-            
-            # Get file attributes and MIME type
-            attributes, mime_type = get_attributes(fl)
-            thumb_file = InputFile(thumb) if thumb and path.isfile(thumb) else None
 
-            # Prepare the media with additional data
-            media = InputMediaUploadedDocument(
-                file=res,
-                mime_type=mime_type,
-                attributes=attributes,
-                thumb=thumb_file,            # Add thumbnail
-                force_file=True         # Force document mode
-            )
+        try:
+            await msgo(f"Opening file for upload: {fl}")
+            with open(fl, "rb") as out:
+                await msgo("File opened successfully.")
+                res = await client.upload_file(out, progress_callback=progress_callback)
+                
+                await msgo("File uploaded successfully.")
+                
+                attributes, mime_type = get_attributes(fl)
+                thumb_file = InputFile(thumb) if thumb and path.isfile(thumb) else None
 
-            # Send the file to the specified channel with a caption
-            await client.send_file(
-                entity=channelid,
-                file=media,
-                caption=caption
-            )        
+                media = InputMediaUploadedDocument(
+                    file=res,
+                    mime_type=mime_type,
+                    attributes=attributes,
+                    thumb=thumb_file,
+                    force_file=True
+                )
 
+                await msgo("Preparing to send file to channel...")
+                await client.send_file(
+                    entity=channelid,
+                    file=media,
+                    caption=caption
+                )
+                await msgo(f"File sent to channel {channelid} successfully.")
+
+        except Exception as e:
+            await msgo("Upload error: " + str(e))
     def movie_or_tv(query):
         if query in ['movie', 'tv movie', 'short']:
             return False
