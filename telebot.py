@@ -231,7 +231,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
 
     async def up_bird(links:list,channelid=-1002171035047):
         cap="Uploaded by ProSearch Bot"#can use fstring for more info
-        thumb="0c5b070bd2ea83f9163cd.jpg"
+        thumb="thumb.jpg"
         fnms=[]
         await con_warp()
         for i in links:
