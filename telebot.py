@@ -118,7 +118,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         if res!=0:
             await msgo("Error Connecting Warp")
             while res!=0:
-                sleep(2)
+                await sleep(2)
                 res=system('warp-cli connect')
                 if res==0:
                     await msgo("Connected Warp")
@@ -128,7 +128,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         if res!=0:
             await msgo("Error Disconnecting Warp")
             while res!=0:
-                sleep(2)
+                await sleep(2)
                 res=system('warp-cli disconnect')
                 if res==0:
                     await msgo("Disconnected Warp")
