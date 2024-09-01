@@ -306,7 +306,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await msgo(f"Opening file for upload: {fl}")
             with open(fl, "rb") as out:
                 await msgo("File opened successfully.")
-                res = await client.upload_file(out, progress_callback=progress_callback)
+                res = await fupload_file(client,out, progress_callback=progress_callback)
                 
                 await msgo("File uploaded successfully.")
                 
