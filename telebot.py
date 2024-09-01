@@ -501,6 +501,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     prt=valve[4:]
                     prts=prt.split(',')
                     prts=list(prts)
+                    await msgo("Connecting to Warp")
                     system('warp-cli connect')
                     await msgo("Connected to Warp")
                     await up_bird(prts)
