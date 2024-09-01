@@ -280,8 +280,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 return
 
         await msgo("All files downloaded. Preparing for upload...")
-        await dis_warp()
-        await retry_connection()
         sm = await msgo("Uploading files...")
 
         try:
@@ -298,31 +296,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         await msgo(f"Error: {fl} not found!!")
         except Exception as e:
             await msgo("Error: " + str(e))
+        await dis_warp()
 
-    async def retry_connection( max_retries=5, delay=5):
-        attempt = 0
-        while attempt < max_retries:
-            try:
-                if not client.is_connected():
-                    # Try to connect
-                    await client.connect()
-                    
-                if await client.is_user_authorized():
-                    return True
-                
-                await client.start()  # or any other connection method
-
-            except (ConnectionResetError, FloodWaitError, RpcCallFailError) as e:
-                await msgo(f"Attempt {attempt + 1}/{max_retries}\nFailed: {e}")
-                attempt += 1
-                await asyncio.sleep(delay)
-            except Exception as e:
-                await msgo(f"Unexpected error: {e}")
-                attempt += 1
-                await asyncio.sleep(delay)
-
-        return False
-    
     async def uploood(fl, sm, channelid, last_message, last_update_time, caption=None, thumb=None):
         async def progress_callback(sent, total):
             await update_progress(sent, total, fl, sm, last_message, last_update_time)
