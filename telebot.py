@@ -14,7 +14,7 @@ from utils.tmdb import TMDB,clean_name
 from utils.reald import shot_bird
 import uuid
 import traceback
-from ayscio import sleep
+from asyncio import sleep
 
 TELEGRAM_DAEMON_API_ID =None
 TELEGRAM_DAEMON_API_HASH =None
