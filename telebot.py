@@ -228,13 +228,15 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     async def start_bot_client():
         if not bot_client.is_connected():
             await bot_client.start(bot_token=BOT_TOKEN)
-    async def update_progress(sent, total, file_name, sm, last_message):
+    async def update_progress(sent, total, file_name, sm, last_message, last_update_time):
         progress = int(sent / total * 100)
         progress_bar = '█' * (progress // 10) + '░' * (10 - progress // 10)
         progress_message = f"Uploading {file_name}...\n[{progress_bar}] {progress}%"
-        if progress_message != last_message[0]:
+        current_time = datetime.now()
+        if current_time - last_update_time[0] >= timedelta(seconds=5) and progress_message != last_message[0]:
             await sm.edit(progress_message)
             last_message[0] = progress_message
+            last_update_time[0] = current_time
 
     async def up_bird(links:list,channelid=-1002171035047):
         cap="Uploaded by ProSearch Bot"#can use fstring for more info
@@ -257,8 +259,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 for fl in fnms:
                     if path.isfile(fl):
                         last_message = ['']
+                        last_update_time = [datetime.now()]
                         await client.send_file(channelid,fl,caption="{fl}\n{cap}",thumb=thumb,force_document=True,
-                                               progress_callback=lambda sent, total: asyncio.create_task(update_progress(sent, total, fl, sm, last_message)))
+                                              progress_callback=lambda sent, total: asyncio.create_task(update_progress(sent, total, fl, sm, last_message, last_update_time)))
                         system(f'rm {fl}')
                     else:
                         await msgo(f"Error: {fl} not found!!")
