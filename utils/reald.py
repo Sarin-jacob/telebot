@@ -44,10 +44,19 @@ def merge_chunks(filename, dir, num_chunks):
 def shot_bird(link, dir=None, num_chunks=4):
     dir = dir if dir else "."
     ba = rd.unrestrict.link(link=link).json()
-    print(f"Downloading: {ba['filename']} \n Size: {ba['size']}\nlink: {ba['download']}")
+    print(f"Downloading: {ba['filename']} \n Size: {ba['filesize']}\nlink: {ba['download']}")
     ln = ba["download"].replace("http://", "https://")
     
-    file_size = int(ba['size'])
+    file_size = int(ba['filesize'])
+    if file_size == 0:
+        print(f"File size is zero for {ba['filename']}. Downloading as a single chunk.")
+        response = get(ln, stream=True)
+        file_path = f"{dir}/{ba['filename']}"
+        with open(file_path, "wb") as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                if chunk:
+                    f.write(chunk)
+        return file_path
     chunk_size = file_size // num_chunks
     
     with ThreadPoolExecutor(max_workers=num_chunks) as executor:
