@@ -12,7 +12,7 @@ from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,BotCommand, Bot
 from utils.imdbs import search_files,gen4mId
 from utils.tmdb import TMDB,clean_name
 from utils.reald import shot_bird
-from utils.fasttelethon import upload_file
+from utils.fasttelethon import fupload_file
 from humanize import naturalsize
 from telethon.utils import get_attributes
 import uuid
@@ -296,17 +296,18 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         async def progress_callback(sent, total):
             await update_progress(sent, total, fl, sm, last_message, last_update_time)
         with open(fl, "rb") as out:
-            res = await upload_file(client, out, progress_callback=progress_callback)
+            res = await fupload_file(client, out, progress_callback=progress_callback)
             
             # Get file attributes and MIME type
             attributes, mime_type = get_attributes(fl)
+            thumb_file = InputFile(thumb) if thumb and path.isfile(thumb) else None
 
             # Prepare the media with additional data
             media = InputMediaUploadedDocument(
                 file=res,
                 mime_type=mime_type,
                 attributes=attributes,
-                thumb=thumb,            # Add thumbnail
+                thumb=thumb_file,            # Add thumbnail
                 force_file=True         # Force document mode
             )
 

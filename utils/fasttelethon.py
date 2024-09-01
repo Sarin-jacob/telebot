@@ -299,7 +299,7 @@ async def download_file(client: TelegramClient,
     return out
 
 
-async def upload_file(client: TelegramClient,
+async def fupload_file(client: TelegramClient,
                       file: BinaryIO,
                       progress_callback: callable = None,
 
