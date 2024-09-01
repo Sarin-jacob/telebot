@@ -212,6 +212,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 fl=shot_bird(i)
                 if path.isfile(fl):
                     await client.send_file(channelid,fl)
+                    system(f'rm {fl}')
                 else:
                     await msgo(f"Error: {fl} not found!!")
             except Exception as e:
