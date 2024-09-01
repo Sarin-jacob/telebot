@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from os import path, system, getenv
 import re
 import unicodedata
-from telethon import TelegramClient,events,Button
+from telethon import TelegramClient,events,Button,InputFile
 from telethon.sessions import StringSession
 from telethon.tl.functions.channels import CreateChannelRequest ,EditPhotoRequest
 from telethon.tl.functions.bots import SetBotCommandsRequest
