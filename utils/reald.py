@@ -16,8 +16,7 @@ try:
 except Exception as e:
     a="Error"
     ba=f"{e}"
-finally:
-    os.system("warp-cli disconnect")
+
 with open("reald.txt", "w") as f:
     if a and ba:
         f.write(f"Youtube: {a}\n1Fichier: {ba}")
