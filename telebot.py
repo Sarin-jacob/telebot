@@ -532,10 +532,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     prt=valve[4:]
                     prts=prt.split(',')
                     prts=list(prts)
-                    system('warp-cli connect')
-                    await msgo("Connected to Warp")
                     await up_bird(prts)
-                    dis_warp()
                     output="Uploaded N Disconnected Warp"
                 elif "lest" in  command[:4]:
                     output=""
