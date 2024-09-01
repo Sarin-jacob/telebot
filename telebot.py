@@ -268,7 +268,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         thumb = "thumb.jpg"
         fnms = []
         
-        await con_warp()
         for i in links:
             try:
                 fl = shot_bird(i)
@@ -292,7 +291,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         await msgo(f"Error: {fl} not found!!")
         except Exception as e:
             await msgo("Error: " + str(e))
-        await dis_warp()
 
     async def uploood(fl, sm, channelid, last_message, last_update_time, caption=None, thumb=None):
         async def progress_callback(sent, total):
@@ -602,7 +600,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     prt=valve[4:]
                     prts=prt.split(',')
                     prts=list(prts)
+                    await con_warp()
                     await up_bird(prts)
+                    await dis_warp()
                     output="Uploaded N Disconnected Warp"
                 elif "lest" in  command[:4]:
                     output=""
