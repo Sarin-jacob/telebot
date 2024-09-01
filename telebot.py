@@ -249,7 +249,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             if len(fnms)>0:
                 for fl in fnms:
                     if path.isfile(fl):
-                        await client.send_file(channelid,fl,cap,thumb=thumb,force_document=True)
+                        await client.send_file(channelid,fl,caption=cap,thumb=thumb,force_document=True)
                         system(f'rm {fl}')
                     else:
                         await msgo(f"Error: {fl} not found!!")
