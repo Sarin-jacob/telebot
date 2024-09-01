@@ -330,7 +330,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 await msgo(f"File sent to channel {channelid} successfully.")
 
         except Exception as e:
-            await msgo("Upload error: " + str(e))
+            await msgo("Upload error: " + str(e)) 
     def movie_or_tv(query):
         if query in ['movie', 'tv movie', 'short']:
             return False
