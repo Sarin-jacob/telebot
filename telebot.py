@@ -268,13 +268,11 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         thumb = "thumb.jpg"
         fnms = []
         
-        await msgo("Starting file download...")
         await con_warp()
         for i in links:
             try:
                 fl = shot_bird(i)
                 fnms.append(fl)
-                await msgo(f"Downloaded file: {fl}")
             except Exception as e:
                 await msgo("Could not download file\nError: " + str(e))
                 return
@@ -288,9 +286,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     if path.isfile(fl):
                         last_message = ['']
                         last_update_time = [datetime.now()]
-                        await msgo(f"Starting upload for file: {fl}")
-                        await uploood(fl, sm, channelid, last_message, last_update_time, caption=f"{fl}\n{cap}", thumb=thumb)
-                        await msgo(f"File uploaded and removed: {fl}")
+                        await uploood(fl, sm, channelid, last_message, last_update_time, caption=f"{fl.split("/")[-1]}\n{cap}", thumb=thumb)
                         system(f'rm {fl}')
                     else:
                         await msgo(f"Error: {fl} not found!!")
@@ -303,27 +299,19 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await update_progress(sent, total, fl, sm, last_message, last_update_time)
 
         try:
-            await msgo(f"Opening file for upload: {fl}")
             with open(fl, "rb") as out:
-                await msgo("File opened successfully.")
                 res = await fupload_file(client,out, progress_callback=progress_callback)
                 
-                await msgo("File uploaded successfully.")
                 
                 attributes, mime_type = get_attributes(fl)
                 # thumb = InputFile(thumb) if thumb and path.isfile(thumb) else None
 
-                media = InputMediaUploadedDocument(
-                    file=res,
-                    mime_type=mime_type,
-                    attributes=attributes,
-                    thumb=thumb,
-                    force_file=True
-                )
-
+                
                 await msgo("Preparing to send file to channel...")
                 await client.send_file(
                     entity=channelid,
+                    attributes=attributes,
+                    force_document=True,
                     file=res,
                     thumb=thumb,
                     caption=caption
