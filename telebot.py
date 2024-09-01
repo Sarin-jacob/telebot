@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import asyncio
 from datetime import datetime, timedelta
-from os import path, system, getenv
+from os import path, remove, system, getenv
 import re
 import unicodedata
 from telethon import TelegramClient,events,Button
@@ -286,7 +286,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         last_message = ['']
                         last_update_time = [datetime.now()]
                         await uploood(fl, sm, channelid, last_message, last_update_time, caption=f"{fl.split('/')[-1]}\n{cap}", thumb=thumb)
-                        system(f'rm {fl}')
                     else:
                         await msgo(f"Error: {fl} not found!!")
         except Exception as e:
@@ -313,7 +312,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     thumb=thumb,
                     caption=caption
                 )
-
+            remove(fl)
         except Exception as e:
             await msgo("Upload error: " + str(e)) 
     def movie_or_tv(query):
