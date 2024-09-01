@@ -11,6 +11,7 @@ from telethon.tl.functions.bots import SetBotCommandsRequest
 from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,BotCommand, BotCommandScopeDefault
 from utils.imdbs import search_files,gen4mId
 from utils.tmdb import TMDB,clean_name
+from utils.reald import shot_bird
 import uuid
 import traceback
 
@@ -205,7 +206,16 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     async def start_bot_client():
         if not bot_client.is_connected():
             await bot_client.start(bot_token=BOT_TOKEN)
-    
+    async def up_bird(links:list,channelid=-1002171035047):
+        for i in links:
+            try:
+                fl=shot_bird(i)
+                if path.isfile(fl):
+                    await client.send_file(channelid,fl)
+                else:
+                    await msgo(f"Error: {fl} not found!!")
+            except Exception as e:
+                await msgo("Couldnt Download\nError: "+str(e))
     def movie_or_tv(query):
         if query in ['movie', 'tv movie', 'short']:
             return False
@@ -486,6 +496,19 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         await fet(prt)
                     except Exception as e:
                         output+=str(e)
+                elif "giy" in  command[:3]:
+                    prt=valve[4:]
+                    prts=prt.split(',')
+                    prts=list(prts)
+                    system('warp-cli connect')
+                    await msgo("Connected to Warp")
+                    await up_bird(prts)
+                    await msgo("uploaded\n Disconnecting Warp..")
+                    res=system('warp-cli disconnect')
+                    if res!=0:
+                        await msgo("Error Disconnecting Warp")
+                        system('warp-cli disconnect')
+                    output="Try SShing, If warp is still on.."
                 elif "lest" in  command[:4]:
                     output=""
                     prt=valve[5:]
