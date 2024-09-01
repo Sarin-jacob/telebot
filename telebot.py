@@ -240,7 +240,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 fnms.append(fl)
             except Exception as e:
                 await msgo("Couldnt Download\nError: "+str(e))
+        print(f"before dis warp,\n{fnms=}")
         await dis_warp()
+        print(f"after dis warp,\n")
         sm=await msgo("All files Downloaded\nUploading Files...")
         if len(fnms)>0:
             for fl in fnms:
