@@ -244,13 +244,16 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         await dis_warp()
         print(f"after dis warp,\n")
         sm=await msgo("All files Downloaded\nUploading Files...")
-        if len(fnms)>0:
-            for fl in fnms:
-                if path.isfile(fl):
-                    await client.send_file(channelid,fl,cap,thumb=thumb,force_document=True)
-                    system(f'rm {fl}')
-                else:
-                    await msgo(f"Error: {fl} not found!!")
+        try:
+            if len(fnms)>0:
+                for fl in fnms:
+                    if path.isfile(fl):
+                        await client.send_file(channelid,fl,cap,thumb=thumb,force_document=True)
+                        system(f'rm {fl}')
+                    else:
+                        await msgo(f"Error: {fl} not found!!")
+        except Exception as e:
+            await msgo("Error: "+str(e))
 
     def movie_or_tv(query):
         if query in ['movie', 'tv movie', 'short']:
