@@ -9,6 +9,6 @@ def shot_bird(link,dir=None):
     print("Downloading: {ba['filename']} \n Size: {ba['size']}\nlink: {ba['download']}")
     ln = ba["download"].replace("http://", "https://")
     bt=get(ln,stream=True)
-    with open(f"/{ba['filename']}","wb") as f:
+    with open(f"{dir}/{ba['filename']}","wb") as f:
         f.write(bt.content)
     return f"{dir}/{ba['filename']}"

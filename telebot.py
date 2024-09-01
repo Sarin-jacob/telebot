@@ -14,7 +14,7 @@ from utils.tmdb import TMDB,clean_name
 from utils.reald import shot_bird
 import uuid
 import traceback
-
+from ayscio import sleep
 
 TELEGRAM_DAEMON_API_ID =None
 TELEGRAM_DAEMON_API_HASH =None
@@ -501,15 +501,18 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     prt=valve[4:]
                     prts=prt.split(',')
                     prts=list(prts)
-                    await msgo("Connecting to Warp")
                     system('warp-cli connect')
                     await msgo("Connected to Warp")
                     await up_bird(prts)
-                    await msgo("uploaded\n Disconnecting Warp..")
+                    await msgo("Uploaded\nDisconnecting Warp..")
                     res=system('warp-cli disconnect')
                     if res!=0:
                         await msgo("Error Disconnecting Warp")
-                        system('warp-cli disconnect')
+                        while res!=0:
+                            sleep(2)
+                            res=system('warp-cli disconnect')
+                            if res==0:
+                                await msgo("Disconnected Warp")
                     output="Try SShing, If warp is still on.."
                 elif "lest" in  command[:4]:
                     output=""
