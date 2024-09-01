@@ -76,7 +76,10 @@ def getSession():
 
 def normalize_string(s):
     return unicodedata.normalize('NFKD', s).encode('ascii', 'ignore').decode('ascii').lower()
-
+async def run_parallel(func, *args):
+    loop = asyncio.get_running_loop()
+    task = loop.create_task(func(*args))
+    return task
 def saveSession(session):
     if TELEGRAM_DAEMON_SESSION_PATH is not None:
         sessionPath = path.join(TELEGRAM_DAEMON_SESSION_PATH, stringSessionFilename)
@@ -601,7 +604,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     prts=list(prts)
                     # await con_warp()
                     # await up_bird(prts)
-                    asyncio.create_task(up_bird(prts))
+                    await run_parallel(up_bird,prts)
                     # await dis_warp()
                     output="Uploaded N Disconnected Warp"
                 elif "lest" in  command[:4]:
