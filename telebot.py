@@ -234,8 +234,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     async def update_progress(sent, total, file_name, sm, last_message, last_update_time):
         # Calculate progress
         progress = sent / total * 100
-        sent_size = humanize.naturalsize(sent, binary=True)
-        total_size = humanize.naturalsize(total, binary=True)
+        sent_size = naturalsize(sent, binary=True)
+        total_size = naturalsize(total, binary=True)
 
         # Create a progress bar with better visuals
         progress_bar_length = 20
