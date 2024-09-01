@@ -15,6 +15,7 @@ from utils.reald import shot_bird
 from utils.fasttelethon import fupload_file
 from humanize import naturalsize
 from telethon.utils import get_attributes
+from telethon.errors import FloodWaitError, RpcCallFailError
 import uuid
 import traceback
 from asyncio import sleep
@@ -280,7 +281,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
 
         await msgo("All files downloaded. Preparing for upload...")
         await dis_warp()
-
+        await retry_connection()
         sm = await msgo("Uploading files...")
 
         try:
@@ -298,6 +299,21 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         except Exception as e:
             await msgo("Error: " + str(e))
 
+    async def retry_connection( max_retries=5, delay=5):
+        attempt = 0
+        while attempt < max_retries:
+            try:
+                # Try to connect
+                await client.connect()
+                if await client.is_user_authorized():
+                    return True
+                await client.start()  # or any other connection method
+            except (ConnectionResetError, FloodWaitError, RpcCallFailError) as e:
+                print(f"Attempt {attempt + 1}/{max_retries}\nfailed: {e}")
+                attempt += 1
+                await asyncio.sleep(delay)
+        return False
+    
     async def uploood(fl, sm, channelid, last_message, last_update_time, caption=None, thumb=None):
         async def progress_callback(sent, total):
             await update_progress(sent, total, fl, sm, last_message, last_update_time)
