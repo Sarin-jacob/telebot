@@ -303,15 +303,24 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         attempt = 0
         while attempt < max_retries:
             try:
-                # Try to connect
-                await client.connect()
+                if not client.is_connected():
+                    # Try to connect
+                    await client.connect()
+                    
                 if await client.is_user_authorized():
                     return True
+                
                 await client.start()  # or any other connection method
+
             except (ConnectionResetError, FloodWaitError, RpcCallFailError) as e:
-                print(f"Attempt {attempt + 1}/{max_retries}\nfailed: {e}")
+                print(f"Attempt {attempt + 1}/{max_retries}\nFailed: {e}")
                 attempt += 1
                 await asyncio.sleep(delay)
+            except Exception as e:
+                print(f"Unexpected error: {e}")
+                attempt += 1
+                await asyncio.sleep(delay)
+
         return False
     
     async def uploood(fl, sm, channelid, last_message, last_update_time, caption=None, thumb=None):
