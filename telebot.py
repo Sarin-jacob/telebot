@@ -294,7 +294,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         except Exception as e:
             await msgo("Error: " + str(e))
 
-    async def uploood(fl, sm, channelid, last_message, last_update_time, caption=None, thumb=None):
+    async def uploood(fl, sm, channelid=-1002171035047, last_message=[''], last_update_time=[datetime.now()], caption=None, thumb=None):
         async def progress_callback(sent, total):
             await update_progress(sent, total, fl, sm, last_message, last_update_time)
 
@@ -607,6 +607,15 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     await run_parallel(up_bird,prts)
                     # await dis_warp()
                     output="Uploaded N Disconnected Warp"
+                elif "upp" in  command[:3]:
+                    prt=valve[4:]
+                    prts=prt.split(',')
+                    prts=list(prts)
+                    msg=await msgo("Uploading Files...")
+                    for i in prts:
+                        await uploood(i,msg)
+                    output="Uploaded"
+
                 elif "lest" in  command[:4]:
                     output=""
                     prt=valve[5:]
