@@ -4,11 +4,11 @@ from datetime import datetime, timedelta
 from os import path, system, getenv
 import re
 import unicodedata
-from telethon import TelegramClient,events,Button,InputFile
+from telethon import TelegramClient,events,Button
 from telethon.sessions import StringSession
 from telethon.tl.functions.channels import CreateChannelRequest ,EditPhotoRequest
 from telethon.tl.functions.bots import SetBotCommandsRequest
-from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,BotCommand, BotCommandScopeDefault, InputMediaUploadedDocument
+from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,BotCommand, BotCommandScopeDefault, InputMediaUploadedDocument,InputFile
 from utils.imdbs import search_files,gen4mId
 from utils.tmdb import TMDB,clean_name
 from utils.reald import shot_bird
