@@ -327,13 +327,13 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 await msgo("File uploaded successfully.")
                 
                 attributes, mime_type = get_attributes(fl)
-                thumb_file = InputFile(thumb) if thumb and path.isfile(thumb) else None
+                # thumb = InputFile(thumb) if thumb and path.isfile(thumb) else None
 
                 media = InputMediaUploadedDocument(
                     file=res,
                     mime_type=mime_type,
                     attributes=attributes,
-                    thumb=thumb_file,
+                    thumb=thumb,
                     force_file=True
                 )
 
