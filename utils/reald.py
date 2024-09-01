@@ -44,15 +44,22 @@ def merge_chunks(filename, dir, num_chunks):
             os.remove(chunk_path)
 
 def shot_bird(link, dir=None, num_chunks=4):
-    print(f"Generating link for: {link}")
     dir = dir if dir else "."
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-    try:
-        ba = rd.unrestrict.link(link=link).json()
-    except Exception as e:
-        print(f"Failed to generate download link for {link}. Error: {e}")
-        return None
+    if "download.real-debrid.com" in link:
+        print("Direct download link detected. Skipping real-debrid.")
+        ba=dict()
+        r = get(link, allow_redirects=True, stream=True)
+        ba['download']=link
+        ba['filename']=link.split("/")[-1]
+        ba['filesize']=int(r.headers.get("Content-Length", 0))  
+        return
+    else:
+        print(f"Generating link for: {link}")
+        try:
+            ba = rd.unrestrict.link(link=link).json()
+        except Exception as e:
+            print(f"Failed to generate download link for {link}. Error: {e}")
+            return None
     print(f"Download link generated: {ba['download']}")
     print(f"Downloading: {ba['filename']} \n Size: {ba['filesize']}\nlink: {ba['download']}")
     ln = ba["download"].replace("http://", "https://")
