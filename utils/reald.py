@@ -52,7 +52,6 @@ def shot_bird(link, dir=None, num_chunks=4):
         ba['download']=link
         ba['filename']=link.split("/")[-1]
         ba['filesize']=int(r.headers.get("Content-Length", 0))  
-        return
     else:
         print(f"Generating link for: {link}")
         try:
