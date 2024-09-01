@@ -93,7 +93,7 @@ channel_id = TELEGRAM_DAEMON_CHANNEL
 
 bot_client = TelegramClient('bot', api_id, api_hash)
 bot_client.start(bot_token=BOT_TOKEN)
-tmdb=TMDB(TMDB_API_KEY)
+# tmdb=TMDB(TMDB_API_KEY)
 query_imdb_mapping = {}
 
 cods='''
