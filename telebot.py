@@ -286,7 +286,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     if path.isfile(fl):
                         last_message = ['']
                         last_update_time = [datetime.now()]
-                        await uploood(fl, sm, channelid, last_message, last_update_time, caption=f"{fl.split("/")[-1]}\n{cap}", thumb=thumb)
+                        await uploood(fl, sm, channelid, last_message, last_update_time, caption=f"{fl.split('/')[-1]}\n{cap}", thumb=thumb)
                         system(f'rm {fl}')
                     else:
                         await msgo(f"Error: {fl} not found!!")
