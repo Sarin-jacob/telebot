@@ -48,8 +48,11 @@ def shot_bird(link, dir=None, num_chunks=4):
     dir = dir if dir else "."
     if not os.path.exists(dir):
         os.makedirs(dir)
-    
-    ba = rd.unrestrict.link(link=link).json()
+    try:
+        ba = rd.unrestrict.link(link=link).json()
+    except Exception as e:
+        print(f"Failed to generate download link for {link}. Error: {e}")
+        return None
     print(f"Download link generated: {ba['download']}")
     print(f"Downloading: {ba['filename']} \n Size: {ba['filesize']}\nlink: {ba['download']}")
     ln = ba["download"].replace("http://", "https://")
