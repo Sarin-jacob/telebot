@@ -8,10 +8,17 @@ except ImportError:
     print("run `pip install rdapi`")
     exit(1)
 rd = RD()
-os.system("warp-cli connect")
-time.sleep(5)
-a=rd.unrestrict.link(link="https://www.youtube.com/watch?v=xvFZjo5PgG0").json()
-ba=rd.unrestrict.link(link="https://1fichier.com/?ophpf2bhyp7cqgu0zmik").json()
-os.system("warp-cli disconnect")
+try:
+    os.system("warp-cli connect")
+    time.sleep(5)
+    a=rd.unrestrict.link(link="https://www.youtube.com/watch?v=xvFZjo5PgG0").json()
+    ba=rd.unrestrict.link(link="https://1fichier.com/?ophpf2bhyp7cqgu0zmik").json()
+except Exception as e:
+    a="Error"
+    ba=f"{e}"
+finally:
+    os.system("warp-cli disconnect")
 with open("reald.txt", "w") as f:
-    f.write(f"Youtube: {a}\n1Fichier: {ba}")
+    if a and ba:
+        f.write(f"Youtube: {a}\n1Fichier: {ba}")
+        
