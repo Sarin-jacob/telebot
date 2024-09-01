@@ -2,11 +2,7 @@ import os
 import time
 from dotenv import load_dotenv
 load_dotenv()
-try:
-    from rdapi import RD
-except ImportError:
-    print("run `pip install rdapi`")
-    exit(1)
+from rdapi import RD
 rd = RD()
 try:
     os.system("warp-cli connect")
@@ -16,7 +12,6 @@ try:
 except Exception as e:
     a="Error"
     ba=f"{e}"
-
 with open("reald.txt", "w") as f:
     if a and ba:
         f.write(f"Youtube: {a}\n1Fichier: {ba}")
