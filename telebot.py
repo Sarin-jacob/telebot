@@ -307,7 +307,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 # thumb = InputFile(thumb) if thumb and path.isfile(thumb) else None
 
                 
-                await msgo("Preparing to send file to channel...")
                 await client.send_file(
                     entity=channelid,
                     attributes=attributes,
@@ -316,7 +315,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     thumb=thumb,
                     caption=caption
                 )
-                await msgo(f"File sent to channel {channelid} successfully.")
 
         except Exception as e:
             await msgo("Upload error: " + str(e)) 
