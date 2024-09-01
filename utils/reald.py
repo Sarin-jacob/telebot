@@ -44,11 +44,13 @@ def merge_chunks(filename, dir, num_chunks):
             os.remove(chunk_path)
 
 def shot_bird(link, dir=None, num_chunks=4):
+    print(f"Generating link for: {link}")
     dir = dir if dir else "."
     if not os.path.exists(dir):
         os.makedirs(dir)
     
     ba = rd.unrestrict.link(link=link).json()
+    print(f"Download link generated: {ba['download']}")
     print(f"Downloading: {ba['filename']} \n Size: {ba['filesize']}\nlink: {ba['download']}")
     ln = ba["download"].replace("http://", "https://")
     
