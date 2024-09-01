@@ -600,7 +600,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     prts=prt.split(',')
                     prts=list(prts)
                     # await con_warp()
-                    await up_bird(prts)
+                    # await up_bird(prts)
+                    asyncio.create_task(up_bird(prts))
                     # await dis_warp()
                     output="Uploaded N Disconnected Warp"
                 elif "lest" in  command[:4]:
