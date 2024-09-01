@@ -8,10 +8,13 @@ from telethon import TelegramClient,events,Button
 from telethon.sessions import StringSession
 from telethon.tl.functions.channels import CreateChannelRequest ,EditPhotoRequest
 from telethon.tl.functions.bots import SetBotCommandsRequest
-from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,BotCommand, BotCommandScopeDefault
+from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,BotCommand, BotCommandScopeDefault, InputMediaUploadedDocument
 from utils.imdbs import search_files,gen4mId
 from utils.tmdb import TMDB,clean_name
 from utils.reald import shot_bird
+from utils.fasttelethon import upload_file
+from humanize import naturalsize
+from telethon.utils import get_attributes
 import uuid
 import traceback
 from asyncio import sleep
@@ -229,14 +232,35 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         if not bot_client.is_connected():
             await bot_client.start(bot_token=BOT_TOKEN)
     async def update_progress(sent, total, file_name, sm, last_message, last_update_time):
-        progress = int(sent / total * 100)
-        progress_bar = '█' * (progress // 10) + '░' * (10 - progress // 10)
-        progress_message = f"Uploading {file_name}...\n[{progress_bar}] {progress}%"
+        # Calculate progress
+        progress = sent / total * 100
+        sent_size = naturalsize(sent, binary=True)
+        total_size = naturalsize(total, binary=True)
+
+        # Create a progress bar with better visuals
+        progress_bar_length = 20  # Length of the progress bar
+        filled_length = int(progress_bar_length * sent / total)
+        progress_bar = '█' * filled_length + '░' * (progress_bar_length - filled_length)
+
+        # Format the progress message with file size and progress percentage
+        progress_message = (
+            f"Uploading {file_name}...\n"
+            f"[{progress_bar}] {progress:.2f}%\n"
+            f"{sent_size} of {total_size}"
+        )
+
+        # Check if 5 seconds have passed since the last update
         current_time = datetime.now()
         if current_time - last_update_time[0] >= timedelta(seconds=5) and progress_message != last_message[0]:
             await sm.edit(progress_message)
             last_message[0] = progress_message
             last_update_time[0] = current_time
+
+        # Edit the final message when upload is complete
+        if sent >= total:
+            final_message = f"Finished uploading {file_name} ({total_size})"
+            await sm.edit(final_message)
+            last_message[0] = final_message
 
     async def up_bird(links:list,channelid=-1002171035047):
         cap="Uploaded by ProSearch Bot"#can use fstring for more info
@@ -260,13 +284,38 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     if path.isfile(fl):
                         last_message = ['']
                         last_update_time = [datetime.now()]
-                        await client.send_file(channelid,fl,caption="{fl}\n{cap}",thumb=thumb,force_document=True,
-                                              progress_callback=lambda sent, total: asyncio.create_task(update_progress(sent, total, fl, sm, last_message, last_update_time)))
+                        await uploood(fl,sm,channelid,last_message,last_update_time,caption=cap,thumb=thumb)                    
                         system(f'rm {fl}')
                     else:
                         await msgo(f"Error: {fl} not found!!")
         except Exception as e:
             await msgo("Error: "+str(e))
+
+
+    async def uploood(fl,sm,channelid,last_message,last_update_time,caption=None,thumb=None):
+        async def progress_callback(sent, total):
+            await update_progress(sent, total, fl, sm, last_message, last_update_time)
+        with open(fl, "rb") as out:
+            res = await upload_file(client, out, progress_callback=progress_callback)
+            
+            # Get file attributes and MIME type
+            attributes, mime_type = get_attributes(fl)
+
+            # Prepare the media with additional data
+            media = InputMediaUploadedDocument(
+                file=res,
+                mime_type=mime_type,
+                attributes=attributes,
+                thumb=thumb,            # Add thumbnail
+                force_file=True         # Force document mode
+            )
+
+            # Send the file to the specified channel with a caption
+            await client.send_file(
+                entity=channelid,
+                file=media,
+                caption=caption
+            )        
 
     def movie_or_tv(query):
         if query in ['movie', 'tv movie', 'short']:
