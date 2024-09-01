@@ -10,6 +10,8 @@ except ImportError:
 rd = RD()
 os.system("warp-cli connect")
 time.sleep(5)
-print(rd.unrestrict.link(link="https://www.youtube.com/watch?v=xvFZjo5PgG0").json())
-print(rd.unrestrict.link(link="https://1fichier.com/?ophpf2bhyp7cqgu0zmik").json())
+a=rd.unrestrict.link(link="https://www.youtube.com/watch?v=xvFZjo5PgG0").json()
+ba=rd.unrestrict.link(link="https://1fichier.com/?ophpf2bhyp7cqgu0zmik").json()
 os.system("warp-cli disconnect")
+with open("reald.txt", "w") as f:
+    f.write(f"Youtube: {a}\n1Fichier: {ba}")
