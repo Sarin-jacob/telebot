@@ -113,6 +113,26 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     global peerChannel
     peerChannel = PeerChannel(channel_id)
 
+    async def con_warp():
+        res=system('warp-cli connect')
+        if res!=0:
+            await msgo("Error Connecting Warp")
+            while res!=0:
+                sleep(2)
+                res=system('warp-cli connect')
+                if res==0:
+                    await msgo("Connected Warp")
+
+    async def dis_warp():
+        res=system('warp-cli disconnect')
+        if res!=0:
+            await msgo("Error Disconnecting Warp")
+            while res!=0:
+                sleep(2)
+                res=system('warp-cli disconnect')
+                if res==0:
+                    await msgo("Disconnected Warp")
+
     async def clearchannels():
         # List of keywords to look for in group names
         ndel=[] #list of channels/groups to never delete
@@ -206,17 +226,28 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     async def start_bot_client():
         if not bot_client.is_connected():
             await bot_client.start(bot_token=BOT_TOKEN)
+
     async def up_bird(links:list,channelid=-1002171035047):
+        cap="Uploaded by ProSearch Bot"#can use fstring for more info
+        thumb="0c5b070bd2ea83f9163cd.jpg"
+        fnms=[]
+        await con_warp()
         for i in links:
             try:
                 fl=shot_bird(i)
+                fnms.append(fl)
+            except Exception as e:
+                await msgo("Couldnt Download\nError: "+str(e))
+        await dis_warp()
+        sm=await msgo("All files Downloaded\nUploading Files...")
+        if len(fnms)>0:
+            for fl in fnms:
                 if path.isfile(fl):
-                    await client.send_file(channelid,fl)
+                    await client.send_file(channelid,fl,cap,thumb=thumb,force_document=True)
                     system(f'rm {fl}')
                 else:
                     await msgo(f"Error: {fl} not found!!")
-            except Exception as e:
-                await msgo("Couldnt Download\nError: "+str(e))
+
     def movie_or_tv(query):
         if query in ['movie', 'tv movie', 'short']:
             return False
@@ -504,16 +535,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     system('warp-cli connect')
                     await msgo("Connected to Warp")
                     await up_bird(prts)
-                    await msgo("Uploaded\nDisconnecting Warp..")
-                    res=system('warp-cli disconnect')
-                    if res!=0:
-                        await msgo("Error Disconnecting Warp")
-                        while res!=0:
-                            sleep(2)
-                            res=system('warp-cli disconnect')
-                            if res==0:
-                                await msgo("Disconnected Warp")
-                    output="Try SShing, If warp is still on.."
+                    dis_warp()
+                    output="Uploaded N Disconnected Warp"
                 elif "lest" in  command[:4]:
                     output=""
                     prt=valve[5:]
