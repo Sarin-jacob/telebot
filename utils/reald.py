@@ -10,4 +10,4 @@ def shot_bird(link,dir=None):
     bt=get({ba["download"]},stream=True)
     with open(f"/{ba['filename']}","wb") as f:
         f.write(bt.content)
-    return f"{dir}/{ba["filename"]}"
+    return f"{dir}/{ba['filename']}"
