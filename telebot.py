@@ -324,7 +324,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 await msgo("Preparing to send file to channel...")
                 await client.send_file(
                     entity=channelid,
-                    file=media,
+                    file=res,
+                    thumb=thumb,
                     caption=caption
                 )
                 await msgo(f"File sent to channel {channelid} successfully.")
