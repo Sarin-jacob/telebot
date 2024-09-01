@@ -313,11 +313,11 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 await client.start()  # or any other connection method
 
             except (ConnectionResetError, FloodWaitError, RpcCallFailError) as e:
-                print(f"Attempt {attempt + 1}/{max_retries}\nFailed: {e}")
+                await msgo(f"Attempt {attempt + 1}/{max_retries}\nFailed: {e}")
                 attempt += 1
                 await asyncio.sleep(delay)
             except Exception as e:
-                print(f"Unexpected error: {e}")
+                await msgo(f"Unexpected error: {e}")
                 attempt += 1
                 await asyncio.sleep(delay)
 
