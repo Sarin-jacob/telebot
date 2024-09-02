@@ -287,7 +287,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 if isinstance(extt, list):
                     fnms[i]=None
                     fnms.extend(extt)
-                fnms[i]=extt
+                else:
+                    fnms[i]=extt
         await msgo(f"Files to be uploaded: {fnms}")
         sm = await msgo("Uploading files...")
 
