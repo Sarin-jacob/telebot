@@ -22,6 +22,7 @@ RUN git config --global --add safe.directory /usr/src/app && \
     # echo "warp ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/warp && \
 USER warp
 RUN mkdir -p /home/warp/.local/share/warp && \
-    echo -n 'yes' > /home/warp/.local/share/warp/accepted-tos.txt
+    echo -n 'yes' > /home/warp/.local/share/warp/accepted-tos.txt && \
+    chown -R warp:warp /usr/src/app /home/warp
 # Set ENTRYPOINT to run your Python script
 ENTRYPOINT ["/usr/src/app/start.sh"]
