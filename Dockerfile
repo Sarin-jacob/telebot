@@ -16,9 +16,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 # Start the Cloudflare WARP service
 RUN git config --global --add safe.directory /usr/src/app && \
-    useradd -m -s /bin/bash warp && \
-    echo "warp ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/warp && \
     chmod +x /usr/src/app/start.sh
+    # useradd -m -s /bin/bash warp && \
+    # echo "warp ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/warp && \
 USER warp
 RUN mkdir -p /home/warp/.local/share/warp && \
     echo -n 'yes' > /home/warp/.local/share/warp/accepted-tos.txt
