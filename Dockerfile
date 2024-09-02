@@ -18,7 +18,13 @@ RUN apt-get update && \
 RUN warp-svc & \
     sleep 5 && \
     warp-cli --accept-tos registration new
+    
+# Script to start warp-svc and wait until it is ready
+COPY start-warp.sh /usr/src/app/start-warp.sh
+RUN chmod +x /usr/src/app/start-warp.sh
+
 # Set CMD to start warp-svc and connect using warp-cli
-CMD ["sh", "-c", "warp-svc & sleep 5 && warp-cli --accept-tos connect"]
+CMD ["/usr/src/app/start-warp.sh"]
+
 # Set ENTRYPOINT to run your Python script
 ENTRYPOINT ["python", "telebot.py"]
