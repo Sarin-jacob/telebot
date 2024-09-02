@@ -17,7 +17,8 @@ RUN apt-get update && \
 # Start the Cloudflare WARP service
 RUN warp-svc & \
     sleep 5 && \
-    warp-cli --accept-tos registration new && \
-    warp-cli --accept-tos connect
-# Run the application
+    warp-cli --accept-tos registration new
+# Set CMD to start warp-svc and connect using warp-cli
+CMD ["sh", "-c", "warp-svc & sleep 5 && warp-cli --accept-tos connect"]
+# Set ENTRYPOINT to run your Python script
 ENTRYPOINT ["python", "telebot.py"]
