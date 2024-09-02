@@ -22,6 +22,6 @@ RUN apt-get update && \
     echo -n 'yes' > /home/warp/.local/share/warp/accepted-tos.txt && \
     chown -R warp:warp /usr/src/app /home/warp
     # echo "warp ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/warp && \
-USER warp
+# USER warp
 # Set ENTRYPOINT to run your Python script
 ENTRYPOINT ["./start.sh"]
