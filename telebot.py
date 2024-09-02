@@ -278,22 +278,11 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             except Exception as e:
                 await msgo("Could not download file\nError: " + str(e))
                 return
-        await msgo(f"Downloaded files:{fnms}")
         await msgo("All files downloaded. Preparing for upload...")
-        # for i,j in enumerate(fnms):
-        #     extt=extract_file(j)
-        #     #if file is archived
-        #     if extt:
-        #         if isinstance(extt, list):
-        #             fnms[i]=None
-        #             fnms.extend(extt)
-        #         else:
-        #             fnms[i]=extt
+
         processed_files = []
         for j in fnms:
-            await msgo(f"Processing file: {j}")
             extt = extract_file(j)
-            await msgo(f"Extracted files for {j}:\n{extt}")
             if extt:
                 if isinstance(extt, list):
                     processed_files.extend(extt)
@@ -302,7 +291,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             else:
                 processed_files.append(j)
         fnms = processed_files
-        await msgo(f"Files to be uploaded: {fnms}")
+        await msgo(f"Files to be uploaded: \n{'\n'.join(fnms)}")
         sm = await msgo("Uploading files...")
 
         try:
@@ -310,7 +299,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 for fl in fnms:
                     if fl ==None:continue
                     if path.isfile(fl):
-                        await uploood(fl, sm, channelid, caption=f"{fl.split('/')[-1]}\n{cap}", thumb=thumb)
+                        await uploood(fl, sm, channelid, caption=f"{fl.split('/')[1]}\n{cap}", thumb=thumb)
                     else:
                         await msgo(f"Error: {fl} not found!!")
                 #remove empty dirs if any in dir folder
