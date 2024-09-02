@@ -15,7 +15,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 # Start the Cloudflare WARP service
-COPY start.sh /usr/src/app/
+COPY ./start.sh /usr/src/app/
 RUN git config --global --add safe.directory /usr/src/app && \
     chmod +x /usr/src/app/start.sh && \
     useradd -m -s /bin/bash warp
@@ -24,4 +24,4 @@ USER warp
 RUN mkdir -p /home/warp/.local/share/warp && \
     echo -n 'yes' > /home/warp/.local/share/warp/accepted-tos.txt
 # Set ENTRYPOINT to run your Python script
-ENTRYPOINT ["start.sh"]
+ENTRYPOINT ["./start.sh"]
