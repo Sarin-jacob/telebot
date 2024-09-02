@@ -1,9 +1,7 @@
 FROM python:3.10-slim
-# Set the working directory in the container
-WORKDIR /usr/src/app
 # Copy the requirements file into the container
 COPY libs.txt ./
-COPY ./start.sh /usr/src/app/entry/
+COPY ./start.sh /start.sh
 # Install any needed packages specified in libs.txt
 RUN pip install --no-cache-dir -r libs.txt
 # Install additional dependencies
@@ -17,10 +15,12 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     git config --global --add safe.directory /usr/src/app && \
     useradd -m -s /bin/bash warp && \
-    chmod a+x /usr/src/app/entry/start.sh && \
+    chmod a+x /start.sh && \
     mkdir -p /home/warp/.local/share/warp && \
     echo -n 'yes' > /home/warp/.local/share/warp/accepted-tos.txt && \
     echo "warp ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/warp
 USER warp
+# Set the working directory in the container
+WORKDIR /usr/src/app
 # Set ENTRYPOINT to run your Python script
-ENTRYPOINT ["/usr/src/app/entry/start.sh"]
+ENTRYPOINT ["/start.sh"]
