@@ -1,15 +1,10 @@
-# Use an official Python runtime as a parent image
 FROM python:3.9-slim
-
 # Set the working directory in the container
 WORKDIR /usr/src/app
-
 # Copy the requirements file into the container
 COPY libs.txt ./
-
 # Install any needed packages specified in libs.txt
 RUN pip install --no-cache-dir -r libs.txt
-
 # Install additional dependencies
 RUN apt-get update && \
     apt-get install -y unar unzip ffmpeg git gnupg curl lsb-release && \
@@ -19,11 +14,10 @@ RUN apt-get update && \
     apt-get install -y cloudflare-warp && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
 # Start the Cloudflare WARP service
-RUN service warp-svc start && \
+RUN /usr/lib/cloudflare-warp/warp-svc & \
+    sleep 5 && \
     warp-cli register && \
     warp-cli connect
-
 # Run the application
 ENTRYPOINT ["python", "bot.py"]
