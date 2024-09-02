@@ -1,9 +1,11 @@
 from os import path,remove,listdir
 import re
-import zipfile
-import rarfile
-import tarfile
-
+try:
+    import zipfile
+    import rarfile
+    import tarfile
+except ImportError:
+    print("Please install the required packages: rarfile, zipfile, and tarfile")
 def extract_file(file_path):
     extt = file_path.split('.')[-1].lower()
     folder_path = path.dirname(file_path)

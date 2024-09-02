@@ -1,0 +1,6 @@
+telethon
+humanize
+rd-api-py
+cryptg
+mautrix
+rarfile
