@@ -5,3 +5,4 @@ cryptg
 mautrix
 rarfile
 langcodes
+cinemagoer
