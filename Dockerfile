@@ -19,9 +19,8 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install -y cloudflare-warp && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-# Start the Cloudflare WARP service
-RUN git config --global --add safe.directory /usr/src/app && \
+    rm -rf /var/lib/apt/lists/* && \
+    git config --global --add safe.directory /usr/src/app && \
     chmod +x /usr/src/app/start.sh 
     # echo "warp ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/warp && \
 # Set ENTRYPOINT to run your Python script
