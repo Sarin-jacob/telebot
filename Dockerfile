@@ -17,8 +17,8 @@ RUN apt-get update && \
 # Start the Cloudflare WARP service
 COPY start.sh /usr/src/app/
 RUN git config --global --add safe.directory /usr/src/app && \
-    chmod +x /usr/src/app/start.sh
-    # useradd -m -s /bin/bash warp && \
+    chmod +x /usr/src/app/start.sh && \
+    useradd -m -s /bin/bash warp
     # echo "warp ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/warp && \
 USER warp
 RUN mkdir -p /home/warp/.local/share/warp && \
