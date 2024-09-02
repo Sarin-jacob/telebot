@@ -19,8 +19,12 @@ RUN warp-svc & \
     sleep 5 && \
     warp-cli --accept-tos registration new
     
-# Script to start warp-svc and wait until it is ready
-RUN echo '#!/bin/sh\nwarp-svc &\nsleep 3\nwarp-cli --accept-tos connect\nexec "$@"' > /usr/src/app/start.sh && \
+RUN echo '#!/bin/sh' > /usr/src/app/start.sh && \
+    echo 'warp-svc &' >> /usr/src/app/start.sh && \
+    echo 'sleep 3' >> /usr/src/app/start.sh && \
+    echo 'warp-cli --accept-tos connect' >> /usr/src/app/start.sh && \
+    echo 'exec "$@"' >> /usr/src/app/start.sh && \
     chmod +x /usr/src/app/start.sh
+    
 # Set ENTRYPOINT to run your Python script
 ENTRYPOINT ["/usr/src/app/start.sh","python", "telebot.py"]
