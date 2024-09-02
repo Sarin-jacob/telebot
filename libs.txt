@@ -4,3 +4,4 @@ rd-api-py
 cryptg
 mautrix
 rarfile
+langcodes

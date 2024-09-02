@@ -1,13 +1,14 @@
-import sys
-from dotenv import load_dotenv
-load_dotenv()
-from rdapi import RD
-from requests import get
-rd = RD()
-def shot_bird(link):
-    ba=rd.unrestrict.link(link=link).json()
-    print(ba)
-    print(f"Downloading: {ba['filename']} \n Size: {ba['filesize']}\nlink: {ba['download']}")
-    return ba['download']
-if len(sys.argv) > 1:
-    print(shot_bird(sys.argv[-1]))
+import subprocess
+import json
+
+def get_media_info_ffprobe(url):
+    command = [
+        'ffprobe', '-v', 'quiet', '-print_format', 'json', 
+        '-show_format', '-show_streams', url
+    ]
+    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    return json.loads(result.stdout)
+
+# url = "https://example.com/path/to/media/file.mp4"
+media_info = get_media_info_ffprobe(url)
+print(json.dumps(media_info, indent=2))
