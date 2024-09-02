@@ -23,4 +23,4 @@ RUN apt-get update && \
     echo "warp ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/warp
 USER warp
 # Set ENTRYPOINT to run your Python script
-ENTRYPOINT ["./entry/start.sh"]
+ENTRYPOINT ["/usr/src/app/entry/start.sh"]
