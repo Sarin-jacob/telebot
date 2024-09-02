@@ -270,10 +270,10 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         cap = "Uploaded by ProSearch Bot"
         thumb = "thumb.jpg"
         fnms = []
-        
+        dir='downloads'
         for i in links:
             try:
-                fl = shot_bird(i)
+                fl = shot_bird(i,dir=dir)
                 fnms.append(fl)
             except Exception as e:
                 await msgo("Could not download file\nError: " + str(e))
@@ -297,12 +297,11 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 for fl in fnms:
                     if fl ==None:continue
                     if path.isfile(fl):
-                        # last_message = ['']
-                        # last_update_time = [datetime.now()]
-                        # await uploood(fl, sm, channelid, last_message, last_update_time, caption=f"{fl.split('/')[-1]}\n{cap}", thumb=thumb)
                         await uploood(fl, sm, channelid, caption=f"{fl.split('/')[-1]}\n{cap}", thumb=thumb)
                     else:
                         await msgo(f"Error: {fl} not found!!")
+                #remove empty dirs if any in dir folder
+                system(f'find {dir} -type d -empty -delete')
         except Exception as e:
             await msgo("Error: " + str(e))
 

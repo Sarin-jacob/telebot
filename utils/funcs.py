@@ -36,6 +36,7 @@ def extract_file(file_path):
                     j=path.join(extracted_file_path,j)
                     a[i]=j
                     if j.split('.')[-1] in ['url','txt']:
+                        remove(j)
                         a.pop(i)
                 return a
         return None
