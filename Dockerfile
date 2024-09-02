@@ -24,4 +24,4 @@ USER warp
 RUN mkdir -p /home/warp/.local/share/warp && \
     echo -n 'yes' > /home/warp/.local/share/warp/accepted-tos.txt
 # Set ENTRYPOINT to run your Python script
-ENTRYPOINT ["./start.sh"]
+ENTRYPOINT ["start.sh"]
