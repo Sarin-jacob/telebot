@@ -18,6 +18,8 @@ RUN apt-get update && \
     echo "deb http://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/cloudflare-client.list && \
     apt-get update && \
     apt-get install -y cloudflare-warp
+    warp-cli register
+    warp-cli connect
 
 # Copy the rest of the application code to the working directory
 COPY . .
