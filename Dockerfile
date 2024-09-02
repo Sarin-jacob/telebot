@@ -15,6 +15,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 # Start the Cloudflare WARP service
+COPY start.sh /usr/src/app/
 RUN git config --global --add safe.directory /usr/src/app && \
     chmod +x /usr/src/app/start.sh
     # useradd -m -s /bin/bash warp && \
