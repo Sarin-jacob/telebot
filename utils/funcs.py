@@ -17,7 +17,9 @@ def walker(directory):
     return files_list
 
 def extract_file(file_path):
-    extt = file_path.split('.')[-1].lower()
+    dots=file_path.split('.')
+    extracted_file_path=''.join(dots[:-2])
+    extt = dots[-1].lower()
     folder_path = path.dirname(file_path)
     
     if extt in ['zip', 'rar', 'tar']:
@@ -33,19 +35,15 @@ def extract_file(file_path):
         
         # Remove the original archive file
         remove(file_path)
-        
-        extracted_files = listdir(folder_path)
-        for extracted_file in extracted_files:
-            extracted_file_path = path.join(folder_path, extracted_file)
-            if path.isfile(extracted_file_path):
-                return extracted_file_path
-            elif path.isdir(extracted_file_path):
-                a=walker(extracted_file_path)
-                for i,j in enumerate(a):
-                    if j.split('.')[-1] in ['url','txt']:
-                        remove(j)
-                        a.pop(i)
-                return a
+        if path.isfile(extracted_file_path):
+            return extracted_file_path
+        elif path.isdir(extracted_file_path):
+            a=walker(extracted_file_path)
+            for i,j in enumerate(a):
+                if j.split('.')[-1] in ['url','txt']:
+                    remove(j)
+                    a.pop(i)
+            return a
         return None
     else:
         return None
