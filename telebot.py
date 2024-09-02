@@ -288,6 +288,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     fnms[i]=None
                     fnms.extend(extt)
                 fnms[i]=extt
+        await msgo(f"Files to be uploaded: {fnms}")
         sm = await msgo("Uploading files...")
 
         try:
@@ -295,9 +296,10 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 for fl in fnms:
                     if fl ==None:continue
                     if path.isfile(fl):
-                        last_message = ['']
-                        last_update_time = [datetime.now()]
-                        await uploood(fl, sm, channelid, last_message, last_update_time, caption=f"{fl.split('/')[-1]}\n{cap}", thumb=thumb)
+                        # last_message = ['']
+                        # last_update_time = [datetime.now()]
+                        # await uploood(fl, sm, channelid, last_message, last_update_time, caption=f"{fl.split('/')[-1]}\n{cap}", thumb=thumb)
+                        await uploood(fl, sm, channelid, caption=f"{fl.split('/')[-1]}\n{cap}", thumb=thumb)
                     else:
                         await msgo(f"Error: {fl} not found!!")
         except Exception as e:
