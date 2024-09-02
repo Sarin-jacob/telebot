@@ -602,6 +602,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     prt=valve[4:]
                     prts=prt.split(',')
                     prts=list(prts)
+                    await msgo("Processing Files to Download...")
                     # await con_warp()
                     # await up_bird(prts)
                     await run_parallel(up_bird,prts)
