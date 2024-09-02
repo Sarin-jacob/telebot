@@ -19,6 +19,7 @@ def walker(directory):
 def extract_file(file_path):
     dots=file_path.split('.')
     extracted_file_path=''.join(dots[:-2])
+    eval("await msgo(f'{extracted_file_path}')")
     extt = dots[-1].lower()
     folder_path = path.dirname(file_path)
     
