@@ -18,13 +18,7 @@ RUN apt-get update && \
 RUN warp-svc & \
     sleep 5 && \
     warp-cli --accept-tos registration new
-    
-RUN echo '#!/bin/sh' > /usr/src/app/start.sh && \
-    echo 'warp-svc &' >> /usr/src/app/start.sh && \
-    echo 'sleep 3' >> /usr/src/app/start.sh && \
-    echo 'warp-cli --accept-tos connect' >> /usr/src/app/start.sh && \
-    echo 'exec "$@"' >> /usr/src/app/start.sh && \
-    chmod +x /usr/src/app/start.sh
-    
+CMD ["warp-svc &","sleep 5"]
+CMD ["warp-cli", "--accept-tos","connect"]
 # Set ENTRYPOINT to run your Python script
-ENTRYPOINT ["/usr/src/app/start.sh","python", "telebot.py"]
+ENTRYPOINT ["python", "telebot.py"]
