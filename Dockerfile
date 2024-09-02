@@ -15,10 +15,12 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 # Start the Cloudflare WARP service
-RUN warp-svc & \
-    sleep 5 && \
-    warp-cli --accept-tos registration new && \
-    git config --global --add safe.directory /usr/src/app
-
+RUN git config --global --add safe.directory /usr/src/app && \
+    useradd -m -s /bin/bash warp && \
+    echo "warp ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/warp && \
+    chmod +x /usr/src/app/start.sh
+USER warp
+RUN mkdir -p /home/warp/.local/share/warp && \
+    echo -n 'yes' > /home/warp/.local/share/warp/accepted-tos.txt
 # Set ENTRYPOINT to run your Python script
-ENTRYPOINT ["python", "telebot.py"]
+ENTRYPOINT ["start.sh"]
