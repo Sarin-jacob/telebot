@@ -7,6 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: telebot-docker
+    command: sleep 2 && warp-svc>/dev/null &  sleep 3 && warp-cli --accept-tos connect  
     cap_add:
       - NET_ADMIN
       - NET_RAW
