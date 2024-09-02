@@ -291,7 +291,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         #             fnms[i]=extt
         processed_files = []
         for j in fnms:
+            await msgo(f"Processing file: {j}")
             extt = extract_file(j)
+            await msgo(f"Extracted files for {j}:\n{extt}")
             if extt:
                 if isinstance(extt, list):
                     processed_files.extend(extt)
