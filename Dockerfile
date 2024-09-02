@@ -20,7 +20,7 @@ RUN apt-get update && \
     chmod a+x /usr/src/app/entry/start.sh && \
     mkdir -p /home/warp/.local/share/warp && \
     echo -n 'yes' > /home/warp/.local/share/warp/accepted-tos.txt && \
-    echo "warp ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/warp && \
+    echo "warp ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/warp
 USER warp
 # Set ENTRYPOINT to run your Python script
 ENTRYPOINT ["entry/start.sh"]
