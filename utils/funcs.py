@@ -34,6 +34,7 @@ def extract_file(file_path):
                 a=listdir(extracted_file_path)
                 for i,j in enumerate(a):
                     j=path.join(extracted_file_path,j)
+                    a[i]=j
                     if j.split('.')[-1] in ['url','txt']:
                         a.pop(i)
                 return a
