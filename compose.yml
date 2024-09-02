@@ -7,6 +7,9 @@ services:
       context: .
       dockerfile: Dockerfile
     image: telebot-docker
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
     volumes:
       - .:/usr/src/app
     restart: unless-stopped
