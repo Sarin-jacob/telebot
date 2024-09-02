@@ -12,17 +12,14 @@ RUN pip install --no-cache-dir -r libs.txt
 
 # Install additional dependencies
 RUN apt-get update && \
-    apt-get install -y unrar unzip ffmpeg && \
+    apt-get install -y unrar unzip ffmpeg git && \
     apt-get install -y gnupg && \
     curl -sSL https://pkg.cloudflareclient.com/pubkey.gpg | apt-key add - && \
     echo "deb http://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/cloudflare-client.list && \
     apt-get update && \
-    apt-get install -y cloudflare-warp
-    warp-cli register
+    apt-get install -y cloudflare-warp && \
+    warp-cli register && \
     warp-cli connect
 
-# Copy the rest of the application code to the working directory
-COPY . .
-
 # Run the application
-CMD ["python", "telebot.py"]
+ENTRYPOINT ["python", "bot.py"]

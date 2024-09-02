@@ -2,6 +2,7 @@
 import asyncio
 from datetime import datetime, timedelta
 from os import path, remove, system, getenv
+import sys
 import re
 import unicodedata
 from telethon import TelegramClient,events,Button
@@ -29,8 +30,8 @@ CONFIG_FILE="telebot.cnf"
 SESSION="telebot"
 MOVIES_FILE_PATH = 'movies.txt'
 TV_SHOWS_FILE_PATH = 'tv_shows.txt'
-
-
+DOCKER= bool(getenv("DOCKER","False"))
+rcmd= "sys.exit(0)" if DOCKER else "systemctl --user restart telebot"
 
 
 if path.isfile(CONFIG_FILE):
@@ -565,11 +566,12 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         output+=f"`{i}`"
                 elif command=="roast":
                     await msgo("trying to sta..")
-                    system('systemctl --user restart telebot')
+                    system(rcmd)
                 elif command=="update":
-                    system('cd ~/telebot && git pull')
+                    loca='/usr/src/app' if DOCKER else 'cd ~/telebot'
+                    system(f'{loca} && git pull')
                     await msgo("Downloaded New files..\nRestarting Service")
-                    system('systemctl --user restart telebot')
+                    system(rcmd)
                     output="Updated"
                 elif "mov" == command[:3]:
                     prt=valve[4:]

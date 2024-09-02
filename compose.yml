@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  telebot:
+    build: .
+    volumes:
+      - .:/usr/src/app
+    restart: unless-stopped
+    environment:
+      DOCKER: True
