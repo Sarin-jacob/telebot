@@ -17,10 +17,13 @@ RUN apt-get update && \
     echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/cloudflare-client.list && \
     apt-get update && \
     apt-get install -y cloudflare-warp && \
-    warp-cli register && \
-    warp-cli connect && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Start the Cloudflare WARP service
+RUN service warp-svc start && \
+    warp-cli register && \
+    warp-cli connect
 
 # Run the application
 ENTRYPOINT ["python", "bot.py"]
