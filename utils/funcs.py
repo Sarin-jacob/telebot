@@ -1,13 +1,12 @@
 from os import path,remove,listdir,walk
 import re
 try:
+    from ..telebot import msgo 
     import zipfile
     import rarfile
     import tarfile
 except ImportError:
     print("Please install the required packages: rarfile, zipfile, and tarfile")
-
-
 
 def walker(directory):
     files_list = []
@@ -17,8 +16,10 @@ def walker(directory):
     return files_list
 
 def extract_file(file_path):
+    global err
     dots=file_path.split('.')
     extracted_file_path='.'.join(dots[:-2])
+    err=extracted_file_path
     # eval("await msgo(f'{extracted_file_path}')")
     extt = dots[-1].lower()
     folder_path = path.dirname(file_path)
@@ -102,3 +103,8 @@ def add_entry(file_path, entry):
         data.append(entry_with_newline)
         data.sort(key=lambda x: x.lower())
         save_data(file_path, data)
+
+try:
+    msgo(f"{err}")
+except:
+    pass
