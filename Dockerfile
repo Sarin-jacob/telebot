@@ -15,7 +15,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 # Start the Cloudflare WARP service
-RUN /usr/lib/cloudflare-warp/warp-svc & \
+RUN warp-svc & \
     sleep 5 && \
     warp-cli register && \
     warp-cli connect
