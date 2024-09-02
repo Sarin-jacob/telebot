@@ -44,7 +44,8 @@ def merge_chunks(filename, dir, num_chunks):
             os.remove(chunk_path)
 
 def shot_bird(link, dir=None, num_chunks=4):
-    dir = dir if dir else "."
+    dir = dir if dir else "downloads"
+    os.makedirs(dir, exist_ok=True)
     if "download.real-debrid.com" in link:
         print("Direct download link detected. Skipping real-debrid.")
         ba=dict()
