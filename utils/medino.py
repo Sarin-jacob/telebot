@@ -51,4 +51,4 @@ async def get_media_info(path, metadata=False):
     return duration, artist, title
 
 
-dur, qual, lang, subs = get_media_info(up_path, True)
+# dur, qual, lang, subs = get_media_info(up_path, True)
