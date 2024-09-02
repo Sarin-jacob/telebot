@@ -20,4 +20,4 @@ RUN warp-svc & \
     warp-cli --accept-tos registration new && \
     warp-cli --accept-tos connect
 # Run the application
-ENTRYPOINT ["python", "bot.py"]
+ENTRYPOINT ["python", "telebot.py"]

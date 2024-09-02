@@ -8,3 +8,9 @@ services:
     restart: unless-stopped
     environment:
       DOCKER: True
+    networks:
+      - telebot-network
+
+networks:
+  telebot-network:
+    driver: bridge
