@@ -278,7 +278,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             except Exception as e:
                 await msgo("Could not download file\nError: " + str(e))
                 return
-
+        await msgo(f"Downloaded files:{fnms}")
         await msgo("All files downloaded. Preparing for upload...")
         for i,j in enumerate(fnms):
             extt=extract_file(j)
