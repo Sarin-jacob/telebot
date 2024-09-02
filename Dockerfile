@@ -18,6 +18,6 @@ RUN apt-get update && \
 RUN warp-svc & \
     sleep 5 && \
     warp-cli --accept-tos registration new && \
-    warp-cli connect
+    warp-cli --accept-tos connect
 # Run the application
 ENTRYPOINT ["python", "bot.py"]
