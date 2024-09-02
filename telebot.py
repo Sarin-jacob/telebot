@@ -293,8 +293,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         for j in fnms:
             await msgo(f"Processing file: {j}")
             extt = extract_file(j)
-            await msgo(f"Extracted path for {j}:\n{extt}")#del
-            return#del
             await msgo(f"Extracted files for {j}:\n{extt}")
             if extt:
                 if isinstance(extt, list):
