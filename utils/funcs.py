@@ -30,6 +30,12 @@ def extract_file(file_path):
             extracted_file_path = path.join(folder_path, extracted_file)
             if path.isfile(extracted_file_path):
                 return extracted_file_path
+            elif path.isdir(extracted_file_path):
+                a=listdir(extracted_file_path)
+                for i,j in enumerate(a):
+                    if j.split('.')[-1] in ['url','txt']:
+                        a.pop(i)
+                return a
         return None
     else:
         return None

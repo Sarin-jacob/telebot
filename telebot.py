@@ -284,12 +284,16 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             extt=extract_file(j)
             #if file is archived
             if extt:
+                if isinstance(extt, list):
+                    fnms[i]=None
+                    fnms.extend(extt)
                 fnms[i]=extt
         sm = await msgo("Uploading files...")
 
         try:
             if len(fnms) > 0:
                 for fl in fnms:
+                    if fl ==None:continue
                     if path.isfile(fl):
                         last_message = ['']
                         last_update_time = [datetime.now()]
