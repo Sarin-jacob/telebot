@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r libs.txt
 
 # Install additional dependencies
 RUN apt-get update && \
-    apt-get install -y unrar unzip ffmpeg git && \
+    apt-get install -y unar unzip ffmpeg git && \
     apt-get install -y gnupg && \
     curl -sSL https://pkg.cloudflareclient.com/pubkey.gpg | apt-key add - && \
     echo "deb http://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/cloudflare-client.list && \
