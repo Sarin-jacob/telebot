@@ -17,8 +17,8 @@ RUN apt-get update && \
 # Start the Cloudflare WARP service
 RUN warp-svc & \
     sleep 5 && \
-    warp-cli --accept-tos registration new
-    
+    echo "y" | warp-cli registration new
+
 # Script to start warp-svc and wait until it is ready
 COPY start-warp.sh /usr/src/app/start-warp.sh
 RUN chmod +x /usr/src/app/start-warp.sh
