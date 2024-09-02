@@ -1,5 +1,36 @@
-from os import path
+from os import path,remove,listdir
 import re
+import zipfile
+import rarfile
+import tarfile
+
+def extract_file(file_path):
+    extt = file_path.split('.')[-1].lower()
+    folder_path = path.dirname(file_path)
+    
+    if extt in ['zip', 'rar', 'tar']:
+        if extt == 'zip':
+            with zipfile.ZipFile(file_path, 'r') as zip_ref:
+                zip_ref.extractall(folder_path)
+        elif extt == 'rar':
+            with rarfile.RarFile(file_path, 'r') as rar_ref:
+                rar_ref.extractall(folder_path)
+        elif extt == 'tar':
+            with tarfile.open(file_path, 'r') as tar_ref:
+                tar_ref.extractall(folder_path)
+        
+        # Remove the original archive file
+        remove(file_path)
+        
+        # Find the first extracted file and return its path
+        extracted_files = listdir(folder_path)
+        for extracted_file in extracted_files:
+            extracted_file_path = path.join(folder_path, extracted_file)
+            if path.isfile(extracted_file_path):
+                return extracted_file_path
+        return None
+    else:
+        return None
 
 def read_config(file_path):
     config = {}

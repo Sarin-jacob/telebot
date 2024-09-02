@@ -16,6 +16,7 @@ from utils.fasttelethon import fupload_file
 from humanize import naturalsize
 from telethon.utils import get_attributes
 from telethon.errors import FloodWaitError, RpcCallFailError
+from utils.funcs import read_config,sendHelloMessage,log_reply,log_edit,finddetails,load_data,save_data,add_entry,extract_file
 import uuid
 import traceback
 from asyncio import sleep
@@ -29,7 +30,6 @@ SESSION="telebot"
 MOVIES_FILE_PATH = 'movies.txt'
 TV_SHOWS_FILE_PATH = 'tv_shows.txt'
 
-from utils.funcs import read_config,sendHelloMessage,log_reply,log_edit,finddetails,load_data,save_data,add_entry
 
 
 
@@ -280,6 +280,11 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 return
 
         await msgo("All files downloaded. Preparing for upload...")
+        for i,j in enumerate(fnms):
+            extt=extract_file(j)
+            #if file is archived
+            if extt:
+                fnms[i]=extt
         sm = await msgo("Uploading files...")
 
         try:
