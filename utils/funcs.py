@@ -1,4 +1,4 @@
-from os import path,remove,listdir
+from os import path,remove,listdir,walk
 import re
 try:
     import zipfile
@@ -6,6 +6,16 @@ try:
     import tarfile
 except ImportError:
     print("Please install the required packages: rarfile, zipfile, and tarfile")
+
+
+
+def walker(directory):
+    files_list = []
+    for root, dirs, files in walk(directory):
+        for file in files:
+            files_list.append(path.join(root, file))
+    return files_list
+
 def extract_file(file_path):
     extt = file_path.split('.')[-1].lower()
     folder_path = path.dirname(file_path)
@@ -24,17 +34,14 @@ def extract_file(file_path):
         # Remove the original archive file
         remove(file_path)
         
-        # Find the first extracted file and return its path
         extracted_files = listdir(folder_path)
         for extracted_file in extracted_files:
             extracted_file_path = path.join(folder_path, extracted_file)
             if path.isfile(extracted_file_path):
                 return extracted_file_path
             elif path.isdir(extracted_file_path):
-                a=listdir(extracted_file_path)
+                a=walker(extracted_file_path)
                 for i,j in enumerate(a):
-                    j=path.join(extracted_file_path,j)
-                    a[i]=j
                     if j.split('.')[-1] in ['url','txt']:
                         remove(j)
                         a.pop(i)
