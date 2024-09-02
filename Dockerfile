@@ -17,7 +17,7 @@ RUN apt-get update && \
 # Start the Cloudflare WARP service
 RUN warp-svc & \
     sleep 5 && \
-    warp-cli register && \
-    warp-cli --accept-tos connect
+    warp-cli --accept-tos registration new && \
+    warp-cli connect
 # Run the application
 ENTRYPOINT ["python", "bot.py"]
