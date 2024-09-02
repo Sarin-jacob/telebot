@@ -16,7 +16,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     git config --global --add safe.directory /usr/src/app && \
-    chmod a+x /usr/src/app/start.sh && \
+    chmod a+x /usr/src/app/entry/start.sh && \
     useradd -m -s /bin/bash warp && \
     mkdir -p /home/warp/.local/share/warp && \
     echo -n 'yes' > /home/warp/.local/share/warp/accepted-tos.txt && \
