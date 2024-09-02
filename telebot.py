@@ -31,7 +31,7 @@ SESSION="telebot"
 MOVIES_FILE_PATH = 'movies.txt'
 TV_SHOWS_FILE_PATH = 'tv_shows.txt'
 DOCKER= bool(getenv("DOCKER","False"))
-rcmd= "sys.exit(0)" if DOCKER else "systemctl --user restart telebot"
+rcmd= "sys.exit(0)" if DOCKER else "system('systemctl --user restart telebot')"
 
 
 if path.isfile(CONFIG_FILE):
@@ -566,9 +566,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         output+=f"`{i}`"
                 elif command=="roast":
                     await msgo("trying to sta..")
-                    system(rcmd)
+                    eval(rcmd)
                 elif command=="update":
-                    loca='/usr/src/app' if DOCKER else 'cd ~/telebot'
+                    loca='cd /usr/src/app' if DOCKER else 'cd ~/telebot'
                     system(f'{loca} && git pull')
                     await msgo("Downloaded New files..\nRestarting Service")
                     system(rcmd)
