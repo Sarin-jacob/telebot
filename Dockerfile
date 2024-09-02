@@ -3,12 +3,12 @@ FROM python:3.10-slim
 WORKDIR /usr/src/app
 # Copy the requirements file into the container
 COPY libs.txt ./
-COPY ./start.sh /usr/src/app/
+COPY ./start.sh /usr/src/app/entry/
 # Install any needed packages specified in libs.txt
 RUN pip install --no-cache-dir -r libs.txt
 # Install additional dependencies
 RUN apt-get update && \
-    apt-get install -y unar unzip ffmpeg git gnupg curl lsb-release && \
+    apt-get install -y unar unzip ffmpeg git gnupg curl sudo lsb-release && \
     curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg && \
     echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/cloudflare-client.list && \
     apt-get update && \
@@ -20,8 +20,7 @@ RUN apt-get update && \
     useradd -m -s /bin/bash warp && \
     mkdir -p /home/warp/.local/share/warp && \
     echo -n 'yes' > /home/warp/.local/share/warp/accepted-tos.txt && \
-    chown -R warp:warp /usr/src/app /home/warp
-    # echo "warp ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/warp && \
+    echo "warp ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/warp && \
 USER warp
 # Set ENTRYPOINT to run your Python script
-ENTRYPOINT ["./start.sh"]
+ENTRYPOINT ["entry/start.sh"]
