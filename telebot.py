@@ -280,15 +280,26 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 return
         await msgo(f"Downloaded files:{fnms}")
         await msgo("All files downloaded. Preparing for upload...")
-        for i,j in enumerate(fnms):
-            extt=extract_file(j)
-            #if file is archived
+        # for i,j in enumerate(fnms):
+        #     extt=extract_file(j)
+        #     #if file is archived
+        #     if extt:
+        #         if isinstance(extt, list):
+        #             fnms[i]=None
+        #             fnms.extend(extt)
+        #         else:
+        #             fnms[i]=extt
+        processed_files = []
+        for j in fnms:
+            extt = extract_file(j)
             if extt:
                 if isinstance(extt, list):
-                    fnms[i]=None
-                    fnms.extend(extt)
+                    processed_files.extend(extt)
                 else:
-                    fnms[i]=extt
+                    processed_files.append(extt)
+            else:
+                processed_files.append(j)
+        fnms = processed_files
         await msgo(f"Files to be uploaded: {fnms}")
         sm = await msgo("Uploading files...")
 
