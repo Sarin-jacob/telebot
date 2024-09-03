@@ -560,7 +560,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         output+=f"`{i}`"
                 elif command=="roast":
                     await msgo("trying to sta..\nNO nO NO")
-                    if DOCKER:system("docker restart telebot")  
+                    if DOCKER:
+                        sys.exit(21)
+                        system("docker restart telebot")  
                     else: system('systemctl restart telebot')
                 elif command=="update":
                     loca='cd /usr/src/app' if DOCKER else 'cd ~/telebot'
