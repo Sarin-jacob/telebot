@@ -34,6 +34,8 @@ def extract_file(file_path):
         remove(file_path)
         extracted_file_path = [path.join(folder_path, f) for f in extracted_files]
         for i,j in enumerate(extracted_file_path):
+            if j[-1] == '/':
+                extracted_file_path.pop(i)
             if j.split('.')[-1] in ['url','txt','idx','sub']:
                 remove(j)
                 extracted_file_path.pop(i)
