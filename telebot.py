@@ -21,6 +21,7 @@ from utils.funcs import read_config,sendHelloMessage,log_reply,log_edit,finddeta
 import uuid
 import traceback
 from asyncio import sleep
+from info import PROGRESS_FREQUENCY,SESSION,TELEGRAM_DAEMON_SESSION_PATH,CONFIG_FILE,MOVIES_FILE_PATH,TV_SHOWS_FILE_PATH
 
 PROGRESS_FREQUENCY=10
 TELEGRAM_DAEMON_API_ID =None

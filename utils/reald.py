@@ -14,6 +14,7 @@
 #     return f"{dir}/{ba['filename']}"
 
 ###########################
+from ..info import PARALLEL_DOWNLOADS
 from dotenv import load_dotenv
 load_dotenv()
 from rdapi import RD
@@ -43,7 +44,7 @@ def merge_chunks(filename, dir, num_chunks):
                 outfile.write(infile.read())
             os.remove(chunk_path)
 
-def shot_bird(link, dir=None, num_chunks=4):
+def shot_bird(link, dir=None, num_chunks=PARALLEL_DOWNLOADS):
     dir = dir if dir else "downloads"
     os.makedirs(dir, exist_ok=True)
     if "download.real-debrid.com" in link:
