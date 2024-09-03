@@ -16,8 +16,7 @@ from utils.reald import shot_bird
 from utils.fasttelethon import fupload_file
 from humanize import naturalsize
 from telethon.utils import get_attributes
-from telethon.errors import FloodWaitError, RpcCallFailError
-from utils.funcs import read_config,sendHelloMessage,log_reply,log_edit,finddetails,load_data,save_data,add_entry,extract_file
+from utils.funcs import read_config,sendHelloMessage,finddetails,load_data,save_data,add_entry,extract_file
 import uuid
 import traceback
 from asyncio import sleep
