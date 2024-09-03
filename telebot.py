@@ -22,6 +22,7 @@ import uuid
 import traceback
 from asyncio import sleep
 
+PROGRESS_FREQUENCY=10
 TELEGRAM_DAEMON_API_ID =None
 TELEGRAM_DAEMON_API_HASH =None
 TELEGRAM_DAEMON_CHANNEL=None
@@ -31,7 +32,6 @@ SESSION="telebot"
 MOVIES_FILE_PATH = 'movies.txt'
 TV_SHOWS_FILE_PATH = 'tv_shows.txt'
 DOCKER= bool(getenv("DOCKER","False"))
-rcmd= "sys.exit(0)" if DOCKER else "system('systemctl --user restart telebot')"
 
 
 if path.isfile(CONFIG_FILE):
@@ -243,7 +243,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
         total_size = naturalsize(total, binary=True)
 
         # Create a progress bar with better visuals
-        progress_bar_length = 20
+        progress_bar_length = 25
         filled_length = int(progress_bar_length * sent / total)
         progress_bar = '█' * filled_length + '░' * (progress_bar_length - filled_length)
 
@@ -256,7 +256,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
 
         # Check if 5 seconds have passed since the last update
         current_time = datetime.now()
-        if current_time - last_update_time[0] >= timedelta(seconds=5) and progress_message != last_message[0]:
+        if current_time - last_update_time[0] >= timedelta(seconds=PROGRESS_FREQUENCY) and progress_message != last_message[0]:
             await sm.edit(progress_message)
             last_message[0] = progress_message
             last_update_time[0] = current_time
@@ -566,12 +566,12 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         output+=f"`{i}`"
                 elif command=="roast":
                     await msgo("trying to sta..")
-                    eval(rcmd)
+                    sys.exit(0) if DOCKER else system('systemctl restart telebot')
                 elif command=="update":
                     loca='cd /usr/src/app' if DOCKER else 'cd ~/telebot'
                     system(f'{loca} && git pull')
+                    sys.exit(0) if DOCKER else system('systemctl restart telebot')
                     await msgo("Downloaded New files..\nRestarting Service")
-                    system(rcmd)
                     output="Updated"
                 elif "mov" == command[:3]:
                     prt=valve[4:]
