@@ -568,7 +568,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 elif command=="update":
                     loca='cd /usr/src/app' if DOCKER else 'cd ~/telebot'
                     system(f'{loca} && git pull')
-                    if DOCKER:system("docker restart telebot")  
+                    if DOCKER:
+                        await msgo("yesp babu")
+                        system("docker restart telebot")  
                     else: system('systemctl restart telebot')
                     await msgo("Downloaded New files..\nRestarting Service")
                     output="Updated"
