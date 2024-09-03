@@ -16,7 +16,7 @@ fi
 sudo dbus-daemon --config-file=/usr/share/dbus-1/system.conf
 
 # start the daemon
-sudo warp-svc --accept-tos &
+sudo warp-svc --accept-tos > /dev/null &
 
 # sleep to wait for the daemon to start, default 2 seconds
 sleep 3
