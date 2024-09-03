@@ -559,7 +559,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     for i in load_data(TV_SHOWS_FILE_PATH):
                         output+=f"`{i}`"
                 elif command=="roast":
-                    await msgo("trying to sta..")
+                    await msgo("trying to sta..\nNO nO NO")
                     if DOCKER:system("docker restart telebot")  
                     else: system('systemctl restart telebot')
                 elif command=="update":
