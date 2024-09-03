@@ -561,6 +561,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 elif command=="roast":
                     await msgo("trying to sta..\nNO nO NO")
                     if DOCKER:
+                        await msgo("yes Docker")
                         sys.exit(21)
                         system("docker restart telebot")  
                     else: system('systemctl restart telebot')
