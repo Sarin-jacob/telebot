@@ -14,7 +14,7 @@
 #     return f"{dir}/{ba['filename']}"
 
 ###########################
-from ..info import PARALLEL_DOWNLOADS
+from .info import PARALLEL_DOWNLOADS
 print(PARALLEL_DOWNLOADS)
 from dotenv import load_dotenv
 load_dotenv()
