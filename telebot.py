@@ -560,11 +560,13 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         output+=f"`{i}`"
                 elif command=="roast":
                     await msgo("trying to sta..")
-                    system("docker restart telebot") if DOCKER else system('systemctl restart telebot')
+                    if DOCKER:system("docker restart telebot")  
+                    else: system('systemctl restart telebot')
                 elif command=="update":
                     loca='cd /usr/src/app' if DOCKER else 'cd ~/telebot'
                     system(f'{loca} && git pull')
-                    system("docker restart telebot") if DOCKER else system('systemctl restart telebot')
+                    if DOCKER:system("docker restart telebot")  
+                    else: system('systemctl restart telebot')
                     await msgo("Downloaded New files..\nRestarting Service")
                     output="Updated"
                 elif "mov" == command[:3]:
