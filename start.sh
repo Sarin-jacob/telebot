@@ -37,6 +37,6 @@ if [ ! -f /var/lib/cloudflare-warp/reg.json ]; then
 else
     echo "Warp client already registered, skip registration"
 fi
-
+sudo chown -R warp:warp /usr/src/app
 cd /usr/src/app
 python telebot.py
