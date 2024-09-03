@@ -20,7 +20,7 @@ RUN apt-get update && \
     echo -n 'yes' > /home/warp/.local/share/warp/accepted-tos.txt && \
     echo "warp ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/warp
 ENV DOCKERVERSION=27.2.0
-RUN curl -fsSLO https://download.docker.com/linux/static/stable/${uname -m}/docker-${DOCKERVERSION}.tgz \
+RUN curl -fsSLO https://download.docker.com/linux/static/stable/$(uname -m)/docker-${DOCKERVERSION}.tgz \
     && tar xzvf docker-${DOCKERVERSION}.tgz --strip 1 \
                     -C /usr/local/bin docker/docker \
     && rm docker-${DOCKERVERSION}.tgz
