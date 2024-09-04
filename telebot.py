@@ -670,7 +670,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         output+=str(e)
                 elif "giy" in  command[:3]:
                     prt=valve[4:]
-                    prts=prt.split(',')
+                    prts=prt.split('\n')
                     prts=list(prts)
                     output="Processing Files to Download..."
                     await run_parallel(up_bird,prts)
