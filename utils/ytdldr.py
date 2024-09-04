@@ -86,3 +86,23 @@ async def yt_down(video_url,dir, output_template):
         return True, None
     else:
         return False, "No format found under 4GB!"
+
+def p_links(playlist_url):
+    try:
+        # Run yt-dlp to extract video URLs directly
+        result = subprocess.run(
+            ['yt-dlp', '--flat-playlist', '--get-url', playlist_url],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=True
+        )
+        
+        # Split the output into lines (each line is a video URL)
+        links = result.stdout.strip().split('\n')
+        
+        # Join the links into a single string
+        return '\n'.join(links)
+    
+    except subprocess.CalledProcessError as e:
+        return f"Error fetching playlist: {e.stderr}"

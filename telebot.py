@@ -15,7 +15,7 @@ from utils.imdbs import search_files,gen4mId
 from utils.tmdb import TMDB,clean_name
 from utils.reald import async_shot_bird, shot_bird
 from utils.fasttelethon import fupload_file
-from utils.ytdldr import yt_down
+from utils.ytdldr import p_links, yt_down
 from humanize import naturalsize
 from telethon.utils import get_attributes
 from utils.funcs import read_config,sendHelloMessage,finddetails,load_data,save_data,add_entry,extract_file,finddetails
@@ -674,14 +674,15 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     prts=list(prts)
                     output="Processing Files to Download..."
                     await run_parallel(up_bird,prts)
-                elif "upp" in  command[:3]:
+                elif "ypt" in  command[:3]:
                     prt=valve[4:]
-                    prts=prt.split(',')
+                    prts=prt.split('\n')
                     prts=list(prts)
-                    msg=await msgo("Uploading Files...")
+                    output=''
                     for i in prts:
-                        await uploood(i,msg)
-                    output="Uploaded"
+                        output+=f"{i}\n```"
+                        p_links(i)
+                        output+="```"
 
                 elif "lest" in  command[:4]:
                     output=""
