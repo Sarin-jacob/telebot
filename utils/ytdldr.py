@@ -93,7 +93,7 @@ async def p_links(playlist_url):
             'yt-dlp', '--flat-playlist', '--no-warnings', '--get-url', playlist_url,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True
+            text=False
         )
         
         # Capture stdout and stderr
