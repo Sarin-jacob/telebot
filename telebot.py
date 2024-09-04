@@ -682,7 +682,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         output=''
                         for i in prts:
                             output+=f"{i}\n```\n"
-                            links=p_links(i)
+                            links=await p_links(i)
                             output+=links
                             output+="\n```"
                         await msgo(output)
