@@ -5,8 +5,8 @@ async def get_available_formats(video_url):
         f"yt-dlp -F {video_url}",
         stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
-    stdout, _ = await process.communicate()
-    print(stdout.decode())
+    stdout, serr = await process.communicate()
+    print(stdout.decode(),serr.decode())
     return stdout.decode()
 
 def select_format(formats_output):
