@@ -20,7 +20,7 @@ from utils.funcs import read_config,sendHelloMessage,finddetails,load_data,save_
 import uuid
 import traceback
 from asyncio import sleep
-from info import PROGRESS_FREQUENCY,SESSION,TELEGRAM_DAEMON_SESSION_PATH,CONFIG_FILE,MOVIES_FILE_PATH,TV_SHOWS_FILE_PATH
+from info import PROGRESS_FREQUENCY,SESSION,TELEGRAM_DAEMON_SESSION_PATH,CONFIG_FILE,MOVIES_FILE_PATH,TV_SHOWS_FILE_PATH,PARALLEL_DOWNLOADS
 
 TELEGRAM_DAEMON_API_ID =None
 TELEGRAM_DAEMON_API_HASH =None
@@ -154,7 +154,7 @@ async def yt_downloader(text):
     dir=f"downloads"
     makedirs(dir,exist_ok=True)
     await msgo("Downloading Youtube link")
-    di=system(f"python /usr/local/bin/yt-dlp -i -P '{dir}' -o '{nm}' '{yt}'")
+    di=system(f"yt-dlp --concurrent-fragments {PARALLEL_DOWNLOADS} -i -P '{dir}' -o '{nm}' '{yt}'")
     if di!=0:await msgo("Error Downloading")
     files=[f"{dir}/{i}" for i in listdir(dir)]
     lis='\n'.join(files)
