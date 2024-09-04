@@ -102,7 +102,6 @@ async def p_links(playlist_url):
         await process.wait()
         sl=await stdout_task
         el=await stderr_task
-        print(f"check out if this works {sl=}")
         if process.returncode != 0:
             return f"Error fetching playlist: {el.strip()}"
         # Split the output into lines (each line is a video URL)
