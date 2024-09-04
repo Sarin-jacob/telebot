@@ -9,12 +9,16 @@ except ImportError:
 
 
 async def stream_output(stream, stream_type):
+    out=''
     while True:
         line = await stream.readline()
         if not line:
             break
         decoded_line = line.decode().strip()
         print(decoded_line)
+        out+=decoded_line+'\n'
+    return out
+    
 
 def walker(directory):
     files_list = []

@@ -94,23 +94,18 @@ async def p_links(playlist_url):
             'yt-dlp', '--flat-playlist', '--no-warnings', '--get-url', playlist_url,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            # text=False
         )
         stdout_task = asyncio.create_task(stream_output(process.stdout, "stdout"))
         stderr_task = asyncio.create_task(stream_output(process.stderr, "stderr"))
 
         # Wait for the process to complete and the tasks to finish
         await process.wait()
-        await stdout_task
-        await stderr_task
-        # Capture stdout and stderr
-        stdout, stderr = await process.communicate()
-        # Check if the process returned an error
+        sl=await stdout_task
+        el=await stderr_task
         if process.returncode != 0:
-            return f"Error fetching playlist: {stderr.strip()}"
+            return f"Error fetching playlist: {el.strip()}"
         # Split the output into lines (each line is a video URL)
-        links = stdout.decode().strip().split('\n')
         # Join the links into a single string
-        return '\n'.join(links)
+        return sl
     except Exception as e:
         return f"An unexpected error occurred: {str(e)}"
