@@ -1,6 +1,7 @@
 import asyncio
 import subprocess
 from info import PARALLEL_DOWNLOADS
+from utils.funcs import stream_output
 async def get_available_formats(video_url):
     process = await asyncio.create_subprocess_shell(
         f"yt-dlp -F {video_url}",
@@ -93,9 +94,15 @@ async def p_links(playlist_url):
             'yt-dlp', '--flat-playlist', '--no-warnings', '--get-url', playlist_url,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=False
+            # text=False
         )
-        
+        stdout_task = asyncio.create_task(stream_output(process.stdout, "stdout"))
+        stderr_task = asyncio.create_task(stream_output(process.stderr, "stderr"))
+
+        # Wait for the process to complete and the tasks to finish
+        await process.wait()
+        await stdout_task
+        await stderr_task
         # Capture stdout and stderr
         stdout, stderr = await process.communicate()
         # Check if the process returned an error

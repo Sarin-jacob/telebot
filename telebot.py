@@ -18,7 +18,7 @@ from utils.fasttelethon import fupload_file
 from utils.ytdldr import p_links, yt_down
 from humanize import naturalsize
 from telethon.utils import get_attributes
-from utils.funcs import read_config,sendHelloMessage,finddetails,load_data,save_data,add_entry,extract_file,finddetails
+from utils.funcs import read_config,sendHelloMessage,finddetails,load_data,save_data,add_entry,extract_file,finddetails,stream_output
 import uuid
 import traceback
 from asyncio import sleep
@@ -161,14 +161,6 @@ async def yt_downloader(text):
         f"yt-dlp --no-check-certificate -f 'bv*[filesize<3.7G]+ba/b[filesize<4G]' -N {PARALLEL_DOWNLOADS} -i -P 'downloads' -o '{nm}' --restrict-filenames --no-warnings  '{yt}'",
         stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
-    
-    async def stream_output(stream, stream_type):
-        while True:
-            line = await stream.readline()
-            if not line:
-                break
-            decoded_line = line.decode().strip()
-            print(decoded_line)
 
     # Stream stdout and stderr asynchronously
     stdout_task = asyncio.create_task(stream_output(process.stdout, "stdout"))

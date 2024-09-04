@@ -7,6 +7,15 @@ try:
 except ImportError:
     print("Please install the required packages: rarfile, zipfile, and tarfile")
 
+
+async def stream_output(stream, stream_type):
+    while True:
+        line = await stream.readline()
+        if not line:
+            break
+        decoded_line = line.decode().strip()
+        print(decoded_line)
+
 def walker(directory):
     files_list = []
     for root, dirs, files in walk(directory):
