@@ -6,6 +6,7 @@ async def get_available_formats(video_url):
         stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     stdout, _ = await process.communicate()
+    print(stdout.decode())
     return stdout.decode()
 
 def select_format(formats_output):
