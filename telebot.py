@@ -680,9 +680,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     prts=list(prts)
                     output=''
                     for i in prts:
-                        output+=f"{i}\n```"
+                        output+=f"{i}\n```\n"
                         p_links(i)
-                        output+="```"
+                        output+="\n```"
 
                 elif "lest" in  command[:4]:
                     output=""

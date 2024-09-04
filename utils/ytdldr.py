@@ -98,6 +98,10 @@ def p_links(playlist_url):
             check=True
         )
         
+        # Check if output is empty
+        if not result.stdout.strip():
+            return "No videos found or the playlist is empty."
+
         # Split the output into lines (each line is a video URL)
         links = result.stdout.strip().split('\n')
         
@@ -106,3 +110,5 @@ def p_links(playlist_url):
     
     except subprocess.CalledProcessError as e:
         return f"Error fetching playlist: {e.stderr}"
+    except Exception as e:
+        return f"An unexpected error occurred: {str(e)}"
