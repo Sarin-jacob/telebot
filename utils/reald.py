@@ -43,6 +43,7 @@ def shot_bird(link, dir=None, num_chunks=PARALLEL_DOWNLOADS):
         print(f"Generating link for: {link}")
         try:
             ba = rd.unrestrict.link(link=link).json()
+            print(ba)
         except Exception as e:
             print(f"Failed to generate download link for {link}. Error: {e}")
             return None
