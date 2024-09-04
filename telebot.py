@@ -214,6 +214,7 @@ async def up_bird(links: list, channelid=-1002171035047):
     fnms = processed_files
     uplds=''
     for i in fnms:
+        if i.endswith('/'):fnms.remove(i)
         uplds+=f"{i.split('/')[-1]}\n"
     await msgo(f"Files to be uploaded: \n{uplds}")
     sm = await msgo("Uploading files...")
