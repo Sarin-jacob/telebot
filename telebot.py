@@ -151,14 +151,14 @@ async def yt_downloader(text):
     makedirs("downloads", exist_ok=True)
     await msgo("Downloading Youtube link")
     
-    # process = await asyncio.create_subprocess_shell(
-    #     f"yt-dlp -f 'best[filesize<4G]' --no-check-certificate --concurrent-fragments {PARALLEL_DOWNLOADS - 2} -i -P 'downloads' -o '{nm}' '{yt}'",
-    #     stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    # )
     process = await asyncio.create_subprocess_shell(
-        f"yt-dlp --no-check-certificate --concurrent-fragments {PARALLEL_DOWNLOADS} -i -P 'downloads' -o '{nm}' '{yt}'",
+        f"yt-dlp -f 'best[filesize<4G]' --no-check-certificate --concurrent-fragments {PARALLEL_DOWNLOADS} -i -P 'downloads' -o '{nm}' '{yt}'",
         stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
+    # process = await asyncio.create_subprocess_shell(
+    #     f"yt-dlp --no-check-certificate --concurrent-fragments {PARALLEL_DOWNLOADS} -i -P 'downloads' -o '{nm}' '{yt}'",
+    #     stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    # )
 
     stdout, stderr = await process.communicate()
     print(stdout.decode())
