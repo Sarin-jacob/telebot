@@ -39,4 +39,5 @@ else
 fi
 sudo chown -R warp:warp /usr/src/app
 cd /usr/src/app
-python telebot.py
+export PYTHONUNBUFFERED=1
+exec python telebot.py
