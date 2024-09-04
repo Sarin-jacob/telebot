@@ -91,7 +91,7 @@ def p_links(playlist_url):
     try:
         # Run yt-dlp to extract video URLs directly
         result = subprocess.run(
-            ['yt-dlp', '--flat-playlist', '--get-url', playlist_url],
+            ['yt-dlp', '--flat-playlist','--no-warnings', '--get-url', playlist_url],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
