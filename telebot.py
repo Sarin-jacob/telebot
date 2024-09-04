@@ -73,10 +73,14 @@ def getSession():
 
 def normalize_string(s):
     return unicodedata.normalize('NFKD', s).encode('ascii', 'ignore').decode('ascii').lower()
+# async def run_parallel(func, *args):
+#     loop = asyncio.get_running_loop()
+#     task = loop.create_task(func(*args))
+#     return task
 async def run_parallel(func, *args):
-    loop = asyncio.get_running_loop()
-    task = loop.create_task(func(*args))
+    task = asyncio.create_task(func(*args))
     return task
+
 def saveSession(session):
     if TELEGRAM_DAEMON_SESSION_PATH is not None:
         sessionPath = path.join(TELEGRAM_DAEMON_SESSION_PATH, stringSessionFilename)
