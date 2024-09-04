@@ -2,6 +2,7 @@
 import asyncio
 from datetime import datetime, timedelta
 from os import listdir, makedirs, path, remove, system, getenv
+import subprocess
 import sys
 import re
 import unicodedata
@@ -142,28 +143,48 @@ async def update_progress(sent, total, file_name, sm, last_message, last_update_
         await sm.edit(final_message)
         last_message[0] = final_message
 
-
 async def yt_downloader(text):
-    mat=finddetails(text)
-    mat=dict(mat)
-    yt,nm = mat.get("yt") or mat.get("Yt"), mat.get("nm")
-    await msgo(f"Link:{yt}\nRename:{nm}")
-    if not nm:
-        nm='%(title)'+'s'
-    nm+='.%(ext)'+'s'
-    dir=f"downloads"
-    makedirs(dir,exist_ok=True)
+    mat = dict(finddetails(text))
+    yt, nm = mat.get("yt") or mat.get("Yt"), mat.get("nm") or '%(title)s'
+    await msgo(f"Link: {yt}\nRename: {nm}")
+    nm += '.%(ext)s'
+    makedirs("downloads", exist_ok=True)
     await msgo("Downloading Youtube link")
-    di=system(f"yt-dlp --concurrent-fragments {PARALLEL_DOWNLOADS} -i -P '{dir}' -o '{nm}' '{yt}'")
-    if di!=0:await msgo("Error Downloading")
-    files=[f"{dir}/{i}" for i in listdir(dir)]
-    lis='\n'.join(files)
-    await msgo(f"Files to be uploaded: \n{lis}")
-    thumb="thumb.jpg"
+    
+    process = await asyncio.create_subprocess_shell(
+        f"yt-dlp -f 'best[filesize<4G]' --concurrent-fragments {PARALLEL_DOWNLOADS} -i -P 'downloads' -o '{nm}' '{yt}'",
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
+    stdout, stderr = await process.communicate()
+    if process.returncode != 0: return await msgo(f"Error: {stderr.decode().strip()}")
+    
+    files = [f"downloads/{i}" for i in listdir("downloads")]
+    await msgo(f"Files to upload: \n{'\n'.join(files)}")
     sm = await msgo("Uploading files...")
-    for fl in files:
-        cap=fl.split('/')[1]
-        await uploood(fl, sm,caption=cap,thumb=thumb)
+    for fl in files: await uploood(fl, sm, caption=fl.split('/')[1], thumb="thumb.jpg")
+
+
+# async def yt_downloader(text):
+#     mat=finddetails(text)
+#     mat=dict(mat)
+#     yt,nm = mat.get("yt") or mat.get("Yt"), mat.get("nm")
+#     await msgo(f"Link:{yt}\nRename:{nm}")
+#     if not nm:
+#         nm='%(title)'+'s'
+#     nm+='.%(ext)'+'s'
+#     dir=f"downloads"
+#     makedirs(dir,exist_ok=True)
+#     await msgo("Downloading Youtube link")
+#     di=system(f"yt-dlp --concurrent-fragments {PARALLEL_DOWNLOADS} -i -P '{dir}' -o '{nm}' '{yt}'")
+#     if di!=0:await msgo("Error Downloading")
+#     files=[f"{dir}/{i}" for i in listdir(dir)]
+#     lis='\n'.join(files)
+#     await msgo(f"Files to be uploaded: \n{lis}")
+#     thumb="thumb.jpg"
+#     sm = await msgo("Uploading files...")
+#     for fl in files:
+#         cap=fl.split('/')[1]
+#         await uploood(fl, sm,caption=cap,thumb=thumb)
 
 async def up_bird(links: list, channelid=-1002171035047):
     cap = "Uploaded by ProSearch Bot"
