@@ -594,6 +594,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output="Updated"
                 elif "yt:" in command:
                     await run_parallel(yt_downloader,valve)
+                    output="Downloading Youtube Link"
                 elif "mov" == command[:3]:
                     prt=valve[4:]
                     output='Processing...'
