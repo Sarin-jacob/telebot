@@ -164,10 +164,7 @@ async def yt_downloader(text):
             if not line:
                 break
             decoded_line = line.decode().strip()
-            if stream_type == 'stderr':
-                await msgo(f"Error: {decoded_line}")
-            else:
-                print(decoded_line)
+            print(decoded_line)
 
     # Stream stdout and stderr asynchronously
     stdout_task = asyncio.create_task(stream_output(process.stdout, "stdout"))
