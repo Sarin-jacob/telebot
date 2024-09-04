@@ -621,7 +621,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output="Updated"
                 elif "yt:" in command:
                     # await run_parallel(yt_downloader,valve)
-                    yt_downloader(valve)
+                    await yt_downloader(valve)
                     output=""
                 elif "mov" == command[:3]:
                     prt=valve[4:]
