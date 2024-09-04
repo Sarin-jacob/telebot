@@ -261,6 +261,29 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await sm.edit(final_message)
             last_message[0] = final_message
 
+
+    async def yt_downloader(text):
+        mat=finddetails(text)
+        mat=dict(mat)
+        yt,nm = mat.get("yt") or mat.get("Yt"), mat.get("nm")
+        await msgo(f"Link:{yt}\nRename:{nm}")
+        if not nm:
+            nm='%(title)'+'s'
+        nm+='.%(ext)'+'s'
+        dir=f"downloads"
+        makedirs(dir,exist_ok=True)
+        await msgo("Downloading Youtube link")
+        di=system(f"python /usr/local/bin/yt-dlp -i -P '{dir}' -o '{nm}' '{yt}'")
+        if di!=0:await msgo("Error Downloading")
+        files=[f"{dir}/{i}" for i in listdir(dir)]
+        lis='\n'.join(files)
+        await msgo(f"Files to be uploaded: \n{lis}")
+        thumb="thumb.jpg"
+        sm = await msgo("Uploading files...")
+        for fl in files:
+            cap=fl.split('/')[1]
+            await uploood(fl, sm,caption=cap,thumb=thumb)
+
     async def up_bird(links: list, channelid=-1002171035047):
         cap = "Uploaded by ProSearch Bot"
         thumb = "thumb.jpg"
@@ -570,29 +593,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     await msgo("Downloaded New files..\nRestarting Service")
                     output="Updated"
                 elif "yt:" in command:
-                    mat=finddetails(valve)
-                    mat=dict(mat)
-                    yt,nm = mat.get("yt") or mat.get("Yt"), mat.get("nm")
-                    await msgo(f"Link:{yt}\nRename:{nm}")
-                    if not nm:
-                        nm='%(title)'+'s'
-                    nm+='.%(ext)'+'s'
-                    dir=f"downloads"
-                    makedirs(dir,exist_ok=True)
-                    await msgo("Downloading Youtube link")
-                    di=system(f"python /usr/local/bin/yt-dlp -i -P '{dir}' -o '{nm}' '{yt}'")
-                    if di==0:
-                        output=f"Downloaded {nm}"
-                    else:
-                        output="Failed to download"
-                    files=[f"{dir}/{i}" for i in listdir(dir)]
-                    lis='\n'.join(files)
-                    await msgo(f"Files to be uploaded: \n{lis}")
-                    thumb="thumb.jpg"
-                    sm = await msgo("Uploading files...")
-                    for fl in files:
-                        cap=fl.split('/')[1]
-                        await uploood(fl, sm,caption=cap,thumb=thumb)
+                    await run_parallel(yt_downloader,valve)
                 elif "mov" == command[:3]:
                     prt=valve[4:]
                     output='Processing...'
