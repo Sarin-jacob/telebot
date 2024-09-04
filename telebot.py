@@ -146,7 +146,7 @@ async def update_progress(sent, total, file_name, sm, last_message, last_update_
 async def yt_downloader(text):
     mat = dict(finddetails(text))
     yt, nm = mat.get("yt") or mat.get("Yt"), mat.get("nm") or '%(title)s'
-    await msgo(f"Link: {yt}\nRename: {nm}")
+    await msgo(f"Link: {yt}")
     nm += '.%(ext)s'
     makedirs("downloads", exist_ok=True)
     await msgo("Downloading Youtube link")
