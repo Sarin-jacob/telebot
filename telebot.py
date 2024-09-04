@@ -153,7 +153,7 @@ async def yt_downloader(text):
     await msgo("Downloading Youtube link")
     
     process = await asyncio.create_subprocess_shell(
-        f"yt-dlp --no-check-certificate -N {PARALLEL_DOWNLOADS} -i -P 'downloads' -o '{nm}' --extractor-args youtube:formats=dashy '{yt}'",
+        f"yt-dlp --no-check-certificate -f 'best[filesize<4G]' -N {PARALLEL_DOWNLOADS} -i -P 'downloads' -o '{nm}' --extractor-args youtube:formats=dashy '{yt}'",
         stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     stdout, stderr = await process.communicate()
