@@ -15,6 +15,7 @@ from utils.imdbs import search_files,gen4mId
 from utils.tmdb import TMDB,clean_name
 from utils.reald import shot_bird
 from utils.fasttelethon import fupload_file
+from utils.ytdldr import yt_down
 from humanize import naturalsize
 from telethon.utils import get_attributes
 from utils.funcs import read_config,sendHelloMessage,finddetails,load_data,save_data,add_entry,extract_file,finddetails
@@ -151,19 +152,13 @@ async def yt_downloader(text):
     makedirs("downloads", exist_ok=True)
     await msgo("Downloading Youtube link")
     
-    process = await asyncio.create_subprocess_shell(
-        f"yt-dlp -f 'best[filesize<4G]' --no-check-certificate --concurrent-fragments {PARALLEL_DOWNLOADS} -i -P 'downloads' -o '{nm}' '{yt}'",
-        stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
     # process = await asyncio.create_subprocess_shell(
     #     f"yt-dlp --no-check-certificate --concurrent-fragments {PARALLEL_DOWNLOADS} -i -P 'downloads' -o '{nm}' '{yt}'",
     #     stdout=subprocess.PIPE, stderr=subprocess.PIPE
     # )
-
-    stdout, stderr = await process.communicate()
-    print(stdout.decode())
-    if process.returncode != 0: return await msgo(f"Error: {stderr.decode().strip()}")
-    
+    success, error_message = await yt_down(yt, f'downloads/{nm}')
+    if not success:
+        return await msgo(f"Error: {error_message}")
     files = [f"downloads/{i}" for i in listdir("downloads")]
     sm = await msgo("Uploading files...")
     for fl in files: await uploood(fl, sm, caption=fl.split('/')[1], thumb="thumb.jpg")
