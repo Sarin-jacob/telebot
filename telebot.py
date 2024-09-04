@@ -680,7 +680,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     prts=list(prts)
                     async def plister(prts):
                         output=''
-                        await msgo()
                         for i in prts:
                             output+=f"{i}\n```\n"
                             p_links(i)
