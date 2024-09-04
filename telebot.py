@@ -110,32 +110,131 @@ This script contains the following commands and their usage:
 10. `comm <commands>`: change the bot commands. Usage: comm <command1:use,command2:use...>
 '''
 
+
+async def update_progress(sent, total, file_name, sm, last_message, last_update_time):
+    # Calculate progress
+    progress = sent / total * 100
+    sent_size = naturalsize(sent, binary=True)
+    total_size = naturalsize(total, binary=True)
+
+    # Create a progress bar with better visuals
+    progress_bar_length = 25
+    filled_length = int(progress_bar_length * sent / total)
+    progress_bar = '█' * filled_length + '░' * (progress_bar_length - filled_length)
+
+    # Format the progress message with file size and progress percentage
+    progress_message = (
+        f"Uploading {file_name}...\n"
+        f"[{progress_bar}] {progress:.2f}%\n"
+        f"{sent_size} of {total_size}"
+    )
+
+    # Check if 5 seconds have passed since the last update
+    current_time = datetime.now()
+    if current_time - last_update_time[0] >= timedelta(seconds=PROGRESS_FREQUENCY) and progress_message != last_message[0]:
+        await sm.edit(progress_message)
+        last_message[0] = progress_message
+        last_update_time[0] = current_time
+
+    # Edit the final message when upload is complete
+    if sent >= total:
+        final_message = f"Finished uploading {file_name} ({total_size})"
+        await sm.edit(final_message)
+        last_message[0] = final_message
+
+
+async def yt_downloader(text):
+    mat=finddetails(text)
+    mat=dict(mat)
+    yt,nm = mat.get("yt") or mat.get("Yt"), mat.get("nm")
+    await msgo(f"Link:{yt}\nRename:{nm}")
+    if not nm:
+        nm='%(title)'+'s'
+    nm+='.%(ext)'+'s'
+    dir=f"downloads"
+    makedirs(dir,exist_ok=True)
+    await msgo("Downloading Youtube link")
+    di=system(f"python /usr/local/bin/yt-dlp -i -P '{dir}' -o '{nm}' '{yt}'")
+    if di!=0:await msgo("Error Downloading")
+    files=[f"{dir}/{i}" for i in listdir(dir)]
+    lis='\n'.join(files)
+    await msgo(f"Files to be uploaded: \n{lis}")
+    thumb="thumb.jpg"
+    sm = await msgo("Uploading files...")
+    for fl in files:
+        cap=fl.split('/')[1]
+        await uploood(fl, sm,caption=cap,thumb=thumb)
+
+async def up_bird(links: list, channelid=-1002171035047):
+    cap = "Uploaded by ProSearch Bot"
+    thumb = "thumb.jpg"
+    fnms = []
+    dir='downloads'
+    for i in links:
+        try:
+            fl = shot_bird(i,dir=dir)
+            fnms.append(fl)
+        except Exception as e:
+            await msgo("Could not download file\nError: " + str(e))
+            return
+    await msgo("All files downloaded. Preparing for upload...")
+
+    processed_files = []
+    for j in fnms:
+        extt = extract_file(j)
+        if extt:
+            if isinstance(extt, list):
+                processed_files.extend(extt)
+            else:
+                processed_files.append(extt)
+        else:
+            processed_files.append(j)
+    fnms = processed_files
+    uplds='\n'.join(fnms)
+    await msgo(f"Files to be uploaded: \n{uplds}")
+    sm = await msgo("Uploading files...")
+
+    try:
+        if len(fnms) > 0:
+            for fl in fnms:
+                if fl ==None:continue
+                if path.isfile(fl):
+                    await uploood(fl, sm, channelid, caption=f"{fl.split('/')[1]}\n{cap}", thumb=thumb)
+                else:
+                    await msgo(f"Error: {fl} not found!!")
+            #remove empty dirs if any in dir folder
+            system(f'find {dir} -type d -empty -delete')
+    except Exception as e:
+        await msgo("Error: " + str(e))
+
+
+async def con_warp():
+    res=system('warp-cli connect')
+    if res==0: await msgo("Connected Warp")
+    if res!=0:
+        await msgo("Error Connecting Warp")
+        while res!=0:
+            await sleep(2)
+            res=system('warp-cli connect')
+            if res==0:
+                await msgo("Connected Warp")
+
+async def dis_warp():
+    res=system('warp-cli disconnect')
+    if res==0: await msgo("Disconnected Warp")
+    if res!=0:
+        await msgo("Error Disconnecting Warp")
+        while res!=0:
+            await sleep(2)
+            res=system('warp-cli disconnect')
+            if res==0:
+                await msgo("Disconnected Warp")
+
 with TelegramClient(getSession(), api_id, api_hash).start() as client:
     saveSession(client.session)
     global peerChannel
     peerChannel = PeerChannel(channel_id)
 
-    async def con_warp():
-        res=system('warp-cli connect')
-        if res==0: await msgo("Connected Warp")
-        if res!=0:
-            await msgo("Error Connecting Warp")
-            while res!=0:
-                await sleep(2)
-                res=system('warp-cli connect')
-                if res==0:
-                    await msgo("Connected Warp")
-
-    async def dis_warp():
-        res=system('warp-cli disconnect')
-        if res==0: await msgo("Disconnected Warp")
-        if res!=0:
-            await msgo("Error Disconnecting Warp")
-            while res!=0:
-                await sleep(2)
-                res=system('warp-cli disconnect')
-                if res==0:
-                    await msgo("Disconnected Warp")
 
     async def clearchannels():
         # List of keywords to look for in group names
@@ -230,101 +329,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     async def start_bot_client():
         if not bot_client.is_connected():
             await bot_client.start(bot_token=BOT_TOKEN)
-    async def update_progress(sent, total, file_name, sm, last_message, last_update_time):
-        # Calculate progress
-        progress = sent / total * 100
-        sent_size = naturalsize(sent, binary=True)
-        total_size = naturalsize(total, binary=True)
 
-        # Create a progress bar with better visuals
-        progress_bar_length = 25
-        filled_length = int(progress_bar_length * sent / total)
-        progress_bar = '█' * filled_length + '░' * (progress_bar_length - filled_length)
-
-        # Format the progress message with file size and progress percentage
-        progress_message = (
-            f"Uploading {file_name}...\n"
-            f"[{progress_bar}] {progress:.2f}%\n"
-            f"{sent_size} of {total_size}"
-        )
-
-        # Check if 5 seconds have passed since the last update
-        current_time = datetime.now()
-        if current_time - last_update_time[0] >= timedelta(seconds=PROGRESS_FREQUENCY) and progress_message != last_message[0]:
-            await sm.edit(progress_message)
-            last_message[0] = progress_message
-            last_update_time[0] = current_time
-
-        # Edit the final message when upload is complete
-        if sent >= total:
-            final_message = f"Finished uploading {file_name} ({total_size})"
-            await sm.edit(final_message)
-            last_message[0] = final_message
-
-
-    async def yt_downloader(text):
-        mat=finddetails(text)
-        mat=dict(mat)
-        yt,nm = mat.get("yt") or mat.get("Yt"), mat.get("nm")
-        await msgo(f"Link:{yt}\nRename:{nm}")
-        if not nm:
-            nm='%(title)'+'s'
-        nm+='.%(ext)'+'s'
-        dir=f"downloads"
-        makedirs(dir,exist_ok=True)
-        await msgo("Downloading Youtube link")
-        di=system(f"python /usr/local/bin/yt-dlp -i -P '{dir}' -o '{nm}' '{yt}'")
-        if di!=0:await msgo("Error Downloading")
-        files=[f"{dir}/{i}" for i in listdir(dir)]
-        lis='\n'.join(files)
-        await msgo(f"Files to be uploaded: \n{lis}")
-        thumb="thumb.jpg"
-        sm = await msgo("Uploading files...")
-        for fl in files:
-            cap=fl.split('/')[1]
-            await uploood(fl, sm,caption=cap,thumb=thumb)
-
-    async def up_bird(links: list, channelid=-1002171035047):
-        cap = "Uploaded by ProSearch Bot"
-        thumb = "thumb.jpg"
-        fnms = []
-        dir='downloads'
-        for i in links:
-            try:
-                fl = shot_bird(i,dir=dir)
-                fnms.append(fl)
-            except Exception as e:
-                await msgo("Could not download file\nError: " + str(e))
-                return
-        await msgo("All files downloaded. Preparing for upload...")
-
-        processed_files = []
-        for j in fnms:
-            extt = extract_file(j)
-            if extt:
-                if isinstance(extt, list):
-                    processed_files.extend(extt)
-                else:
-                    processed_files.append(extt)
-            else:
-                processed_files.append(j)
-        fnms = processed_files
-        uplds='\n'.join(fnms)
-        await msgo(f"Files to be uploaded: \n{uplds}")
-        sm = await msgo("Uploading files...")
-
-        try:
-            if len(fnms) > 0:
-                for fl in fnms:
-                    if fl ==None:continue
-                    if path.isfile(fl):
-                        await uploood(fl, sm, channelid, caption=f"{fl.split('/')[1]}\n{cap}", thumb=thumb)
-                    else:
-                        await msgo(f"Error: {fl} not found!!")
-                #remove empty dirs if any in dir folder
-                system(f'find {dir} -type d -empty -delete')
-        except Exception as e:
-            await msgo("Error: " + str(e))
 
     async def uploood(fl, sm, channelid=-1002171035047, last_message=[''], last_update_time=[datetime.now()], caption=None, thumb=None):
         async def progress_callback(sent, total):
@@ -594,7 +599,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output="Updated"
                 elif "yt:" in command:
                     await run_parallel(yt_downloader,valve)
-                    output="Downloading Youtube Link"
+                    output=""
                 elif "mov" == command[:3]:
                     prt=valve[4:]
                     output='Processing...'
