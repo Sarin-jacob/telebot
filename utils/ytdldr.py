@@ -1,5 +1,6 @@
 import asyncio
 import subprocess
+from info import PARALLEL_DOWNLOADS
 async def get_available_formats(video_url):
     process = await asyncio.create_subprocess_shell(
         f"yt-dlp -F {video_url}",
@@ -65,7 +66,7 @@ def select_format(formats_output):
     return selected_format
 
 async def download_video(video_url, format_code, output_template):
-    command = f"yt-dlp -f {format_code} -o '{output_template}' {video_url}"
+    command = f"yt-dlp -f {format_code} -o '{output_template}' -N {PARALLEL_DOWNLOADS} {video_url}"
     process = await asyncio.create_subprocess_shell(
         command,
         stdout=subprocess.PIPE, stderr=subprocess.PIPE
