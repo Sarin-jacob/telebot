@@ -685,7 +685,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                             output+=p_links(i)
                             output+="\n```"
                         await msgo(output)
-                    await run_parallel(plister,prts)
+                    run_parallel(plister,prts)
                     output=f"Processing {prts}.."
                 elif "lest" in  command[:4]:
                     output=""
