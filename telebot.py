@@ -110,10 +110,13 @@ This script contains the following commands and their usage:
 4. `sen:`: send a file to the sender. Usage: sen: <file_path>
 5. `delch`: delete channels with specific keywords. Usage: delch <keywords to be added, seperated by space>
 6. `sd:`: schedule a command to be sent multiple times. Usage: sd:<command> ev:<interval in minutes> fr:<times>
-7. `mov <Moviename year>`: sent movie added message with button to update channel. Usage: mov <name>
-8. `ser <Seriesname season>`: sent series added message with button to update channel. Usage: ser <name>
+7. `mov <Moviename year>`: sent movie added message with button to update channel. Usage: mov <name>#rest of message, each entry seperated by /
+8. `ser <Seriesname season>`: sent series added message with button to update channel. Usage: ser <name>#rest of message, each entry seperated by /
 9. `update`: update the telebot script. Usage: update
 10. `comm <commands>`: change the bot commands. Usage: comm <command1:use,command2:use...>
+11. `test <Moviename year>`: sent movie added message with button to test channel. Usage: test <name>
+12. `giy <links>`: download files from links and upload to channel. Usage: giy <link...> each link in new line
+13. `ypt <links>`: get links from yt playlist and upload to channel. Usage: ypt <link...> each link in new line
 '''
 
 
