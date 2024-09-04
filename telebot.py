@@ -154,7 +154,7 @@ async def yt_downloader(text):
     
     process = await asyncio.create_subprocess_shell(
         # f"yt-dlp --no-check-certificate -f 'bv*[filesize<3.7G]+ba/b[filesize<4G]' -N {PARALLEL_DOWNLOADS} -i -P 'downloads' -o '{nm}' --restrict-filenames --extractor-args youtube:formats=dashy '{yt}'",
-        f"yt-dlp --no-check-certificate -f 'bv*[filesize<3.7G]+ba/b[filesize<4G]' -N {PARALLEL_DOWNLOADS} -i -P 'downloads' -o '{nm}' --restrict-filenames '{yt}'",
+        f"yt-dlp --no-check-certificate -f 'bv*[filesize<3.7G]+ba/b[filesize<4G]' -N {PARALLEL_DOWNLOADS} -i -P 'downloads' -o '{nm}' --restrict-filenames --no-warnings  '{yt}'",
         stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     
