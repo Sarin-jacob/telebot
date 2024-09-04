@@ -25,7 +25,7 @@ def select_format(formats_output):
 
             except ValueError:
                 continue
-
+    print(f"Selected format: {selected_format}")
     return selected_format
 
 async def download_video(video_url, format_code, output_template):
