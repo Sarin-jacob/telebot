@@ -109,7 +109,7 @@ async def p_links(playlist_url):
         if process.returncode != 0:
             return f"Error fetching playlist: {stderr.strip()}"
         # Split the output into lines (each line is a video URL)
-        links = stdout.strip().split('\n')
+        links = stdout.decode().strip().split('\n')
         # Join the links into a single string
         return '\n'.join(links)
     except Exception as e:
