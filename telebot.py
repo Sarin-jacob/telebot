@@ -586,7 +586,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     else:
                         output="Failed to download"
                     files=[f"{dir}/{i}" for i in listdir(dir)]
-                    await msgo(f"Files to be uploaded: \n{'\n'.join(files)}")
+                    lis='\n'.join(files)
+                    await msgo(f"Files to be uploaded: \n{lis}")
                     thumb="thumb.jpg"
                     sm = await msgo("Uploading files...")
                     for fl in files:
