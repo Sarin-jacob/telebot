@@ -580,7 +580,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     dir=f"downloads"
                     makedirs(dir,exist_ok=True)
                     await msgo("Downloading Youtube link")
-                    di=system(f"python yt-dlp -i -P '{dir}' -o '{nm}' '{yt}'")
+                    di=system(f"python /usr/local/bin/yt-dlp -i -P '{dir}' -o '{nm}' '{yt}'")
                     if di==0:
                         output=f"Downloaded {nm}"
                     else:
