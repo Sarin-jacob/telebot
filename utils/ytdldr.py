@@ -87,22 +87,23 @@ async def yt_down(video_url,dir, output_template):
     else:
         return False, "No format found under 4GB!"
 
-def p_links(playlist_url):
+async def p_links(playlist_url):
     try:
-        # Run yt-dlp to extract video URLs directly
-        result = subprocess.run(
-            ['yt-dlp', '--flat-playlist','--no-warnings', '--get-url', playlist_url],
+        process = await asyncio.create_subprocess_exec(
+            'yt-dlp', '--flat-playlist', '--no-warnings', '--get-url', playlist_url,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True,
-            check=True
+            text=True
         )
         
+        # Capture stdout and stderr
+        stdout, stderr = await process.communicate()
+        # Check if the process returned an error
+        if process.returncode != 0:
+            return f"Error fetching playlist: {stderr.strip()}"
         # Split the output into lines (each line is a video URL)
-        links = result.stdout.strip().split('\n')
-        
+        links = stdout.strip().split('\n')
         # Join the links into a single string
         return '\n'.join(links)
-    
-    except subprocess.CalledProcessError as e:
-        return f"Error fetching playlist: {e.stderr}"
+    except Exception as e:
+        return f"An unexpected error occurred: {str(e)}"
