@@ -4,7 +4,7 @@ COPY libs.txt ./
 COPY ./start.sh /start.sh
 # Install additional dependencies
 RUN apt-get update && \
-    apt-get install -y unar unzip ffmpeg git gnupg curl sudo lsb-release && \
+    apt-get install -y unar unzip ffmpeg git tree gnupg curl sudo lsb-release && \
     curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg && \
     echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/cloudflare-client.list && \
     apt-get update && \
