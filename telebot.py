@@ -169,28 +169,6 @@ async def yt_downloader(text):
     for fl in files: await uploood(fl, sm, caption=fl.split('/')[1], thumb="thumb.jpg")
 
 
-# async def yt_downloader(text):
-#     mat=finddetails(text)
-#     mat=dict(mat)
-#     yt,nm = mat.get("yt") or mat.get("Yt"), mat.get("nm")
-#     await msgo(f"Link:{yt}\nRename:{nm}")
-#     if not nm:
-#         nm='%(title)'+'s'
-#     nm+='.%(ext)'+'s'
-#     dir=f"downloads"
-#     makedirs(dir,exist_ok=True)
-#     await msgo("Downloading Youtube link")
-#     di=system(f"yt-dlp --concurrent-fragments {PARALLEL_DOWNLOADS} -i -P '{dir}' -o '{nm}' '{yt}'")
-#     if di!=0:await msgo("Error Downloading")
-#     files=[f"{dir}/{i}" for i in listdir(dir)]
-#     lis='\n'.join(files)
-#     await msgo(f"Files to be uploaded: \n{lis}")
-#     thumb="thumb.jpg"
-#     sm = await msgo("Uploading files...")
-#     for fl in files:
-#         cap=fl.split('/')[1]
-#         await uploood(fl, sm,caption=cap,thumb=thumb)
-
 async def up_bird(links: list, channelid=-1002171035047):
     cap = "Uploaded by ProSearch Bot"
     thumb = "thumb.jpg"
