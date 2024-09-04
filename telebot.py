@@ -678,12 +678,16 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     prt=valve[4:]
                     prts=prt.split('\n')
                     prts=list(prts)
-                    output=''
-                    for i in prts:
-                        output+=f"{i}\n```\n"
-                        p_links(i)
-                        output+="\n```"
-
+                    async def plister(prts):
+                        output=''
+                        await msgo()
+                        for i in prts:
+                            output+=f"{i}\n```\n"
+                            p_links(i)
+                            output+="\n```"
+                        await msgo(output)
+                    await run_parallel(plister,prts)
+                    output=f"Processing {prts}.."
                 elif "lest" in  command[:4]:
                     output=""
                     prt=valve[5:]
