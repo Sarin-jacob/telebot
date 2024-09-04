@@ -159,7 +159,6 @@ async def yt_downloader(text):
     if process.returncode != 0: return await msgo(f"Error: {stderr.decode().strip()}")
     
     files = [f"downloads/{i}" for i in listdir("downloads")]
-    await msgo(f"Files to upload: \n{'\n'.join(files)}")
     sm = await msgo("Uploading files...")
     for fl in files: await uploood(fl, sm, caption=fl.split('/')[1], thumb="thumb.jpg")
 
