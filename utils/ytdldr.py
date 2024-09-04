@@ -65,8 +65,8 @@ def select_format(formats_output):
     print(f"Selected format: {selected_format}")
     return selected_format
 
-async def download_video(video_url, format_code, output_template):
-    command = f"yt-dlp -f {format_code} -o '{output_template}' -N {PARALLEL_DOWNLOADS} {video_url}"
+async def download_video(video_url, format_code, dir,output_template):
+    command = f"yt-dlp -f {format_code} -P '{dir}' -o '{output_template}' -N {PARALLEL_DOWNLOADS} {video_url}"
     process = await asyncio.create_subprocess_shell(
         command,
         stdout=subprocess.PIPE, stderr=subprocess.PIPE
@@ -74,12 +74,12 @@ async def download_video(video_url, format_code, output_template):
     stdout, stderr = await process.communicate()
     return process.returncode, stdout.decode(), stderr.decode()
 
-async def yt_down(video_url, output_template):
+async def yt_down(video_url,dir, output_template):
     formats_output = await get_available_formats(video_url)
     format_code = select_format(formats_output)
 
     if format_code:
-        returncode, stdout, stderr = await download_video(video_url, format_code, output_template)
+        returncode, stdout, stderr = await download_video(video_url, format_code, dir,output_template)
         print(stdout)
         if returncode != 0:
             return False, stderr.strip()
