@@ -2,8 +2,6 @@ FROM python:3.10-slim
 # Copy the requirements file into the container
 COPY libs.txt ./
 COPY ./start.sh /start.sh
-# Install any needed packages specified in libs.txt
-RUN pip install --no-cache-dir -r libs.txt
 # Install additional dependencies
 RUN apt-get update && \
     apt-get install -y unar unzip ffmpeg git gnupg curl sudo lsb-release && \
@@ -19,6 +17,10 @@ RUN apt-get update && \
     mkdir -p /home/warp/.local/share/warp && \
     echo -n 'yes' > /home/warp/.local/share/warp/accepted-tos.txt && \
     echo "warp ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/warp
+
+# Install any needed packages specified in libs.txt
+RUN pip install --no-cache-dir -r libs.txt
+
 ENV DOCKERVERSION=27.2.0
 RUN curl -fsSLO https://download.docker.com/linux/static/stable/$(uname -m)/docker-${DOCKERVERSION}.tgz \
     && tar xzvf docker-${DOCKERVERSION}.tgz --strip 1 \

@@ -14,6 +14,10 @@ def walker(directory):
             files_list.append(path.join(root, file))
     return files_list
 
+def finddetails(input_string):
+    pattern = r'(\w+):((?:\w+://)?.*?)\s*(?=\w+:|$)'
+    return re.findall(pattern, input_string)
+
 def extract_file(file_path):
     extt = file_path.split('.')[-1].lower()
     folder_path = path.dirname(file_path)

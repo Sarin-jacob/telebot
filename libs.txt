@@ -6,3 +6,4 @@ mautrix
 rarfile
 langcodes
 cinemagoer
+yt-dlp

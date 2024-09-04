@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import asyncio
 from datetime import datetime, timedelta
-from os import path, remove, system, getenv
+from os import listdir, makedirs, path, remove, system, getenv
 import sys
 import re
 import unicodedata
@@ -16,7 +16,7 @@ from utils.reald import shot_bird
 from utils.fasttelethon import fupload_file
 from humanize import naturalsize
 from telethon.utils import get_attributes
-from utils.funcs import read_config,sendHelloMessage,finddetails,load_data,save_data,add_entry,extract_file
+from utils.funcs import read_config,sendHelloMessage,finddetails,load_data,save_data,add_entry,extract_file,finddetails
 import uuid
 import traceback
 from asyncio import sleep
@@ -569,6 +569,29 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     else: system('systemctl restart telebot --user')
                     await msgo("Downloaded New files..\nRestarting Service")
                     output="Updated"
+                elif "yt:" in command:
+                    mat=finddetails(valve)
+                    mat=dict(mat)
+                    yt,nm = mat.get("yt") or mat.get("Yt"), mat.get("nm")
+                    await msgo(f"Link:{yt}\nRename:{nm}")
+                    if not nm:
+                        nm='%(title)'+'s'
+                    nm+='.%(ext)'+'s'
+                    dir=f"downloads"
+                    makedirs(dir,exist_ok=True)
+                    await msgo("Downloading Youtube link")
+                    di=system(f"python yt-dlp -i -P '{dir}' -o '{nm}' '{yt}'")
+                    if di==0:
+                        output=f"Downloaded {nm}"
+                    else:
+                        output="Failed to download"
+                    files=[f"{dir}/{i}" for i in listdir(dir)]
+                    await msgo(f"Files to be uploaded: \n{'\n'.join(files)}")
+                    thumb="thumb.jpg"
+                    sm = await msgo("Uploading files...")
+                    for fl in files:
+                        cap=fl.split('/')[1]
+                        await uploood(fl, sm,caption=cap,thumb=thumb)
                 elif "mov" == command[:3]:
                     prt=valve[4:]
                     output='Processing...'
@@ -615,11 +638,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     prts=prt.split(',')
                     prts=list(prts)
                     await msgo("Processing Files to Download...")
-                    # await con_warp()
-                    # await up_bird(prts)
                     await run_parallel(up_bird,prts)
-                    # await dis_warp()
-                    output="Uploaded N Disconnected Warp"
+                    output="Downloaded"
                 elif "upp" in  command[:3]:
                     prt=valve[4:]
                     prts=prt.split(',')
