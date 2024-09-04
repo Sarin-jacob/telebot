@@ -152,7 +152,7 @@ async def yt_downloader(text):
     await msgo("Downloading Youtube link")
     
     process = await asyncio.create_subprocess_shell(
-        f"yt-dlp -f 'best[filesize<4G]' --no-check-certificate --concurrent-fragments {PARALLEL_DOWNLOADS} -i -P 'downloads' -o '{nm}' '{yt}'",
+        f"yt-dlp -f 'best[filesize<4G]' --no-check-certificate --concurrent-fragments {PARALLEL_DOWNLOADS - 2} -i -P 'downloads' -o '{nm}' '{yt}'",
         stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
 
@@ -620,6 +620,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     await msgo("Downloaded New files..\nRestarting Service")
                     output="Updated"
                 elif "yt:" in command:
+                    await msgo(f"{PARALLEL_DOWNLOADS=}")
                     # await run_parallel(yt_downloader,valve)
                     await yt_downloader(valve)
                     output=""
