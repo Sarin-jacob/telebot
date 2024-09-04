@@ -1,4 +1,5 @@
 
+import asyncio
 from info import PARALLEL_DOWNLOADS
 from dotenv import load_dotenv
 load_dotenv()
@@ -77,3 +78,5 @@ def shot_bird(link, dir=None, num_chunks=PARALLEL_DOWNLOADS):
     merge_chunks(ba['filename'], dir, num_chunks)
     return f"{dir}/{ba['filename']}"
 
+async def async_shot_bird(link, dir=None):
+    return await asyncio.to_thread(shot_bird, link, dir)

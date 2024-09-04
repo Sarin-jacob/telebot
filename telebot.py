@@ -13,7 +13,7 @@ from telethon.tl.functions.bots import SetBotCommandsRequest
 from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,BotCommand, BotCommandScopeDefault, InputMediaUploadedDocument,InputFile
 from utils.imdbs import search_files,gen4mId
 from utils.tmdb import TMDB,clean_name
-from utils.reald import shot_bird
+from utils.reald import async_shot_bird, shot_bird
 from utils.fasttelethon import fupload_file
 from utils.ytdldr import yt_down
 from humanize import naturalsize
@@ -189,13 +189,16 @@ async def up_bird(links: list, channelid=-1002171035047):
     thumb = "thumb.jpg"
     fnms = []
     dir='downloads'
-    for i in links:
+    async def process_link(link):
         try:
-            fl = shot_bird(i,dir=dir)
+            fl = await async_shot_bird(link, dir=dir)
             fnms.append(fl)
         except Exception as e:
             await msgo("Could not download file\nError: " + str(e))
-            return
+            # Optional: You might want to add logging here instead of returning
+
+    # Process all links concurrently
+    await asyncio.gather(*[process_link(link) for link in links])
     await msgo("All files downloaded. Preparing for upload...")
 
     processed_files = []
