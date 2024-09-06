@@ -84,7 +84,7 @@ def shot_bird(link, dir=None, num_chunks=PARALLEL_DOWNLOADS):
         for i in range(num_chunks):
             start = i * chunk_size
             end = start + chunk_size - 1 if i < num_chunks - 1 else file_size - 1
-            futures.append(executor.submit(download_chunk, ln, start, end, dir, ba['filename'], i))
+            futures.append(executor.submit(download_chunk, ln, start, end, dir, filename, i))
         
         for future in as_completed(futures):
             future.result()
