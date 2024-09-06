@@ -239,6 +239,7 @@ async def up_bird(links: list, channelid=-1002171035047):
                     await msgo(f"Error: {fl} not found!!")
             #remove empty dirs if any in dir folder
             system(f'find {dir} -type d -empty -delete')
+            system(f'rm -r {dir}/*.part*')
     except Exception as e:
         await msgo("Error: " + str(e))
 
@@ -669,11 +670,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 elif "test" in  command[:4]:
                     output=""
                     prt=valve[5:]
-                    
-                    # nm=await newfile(prt,channelid=-1002171035047,searchbot="ProSearchTestBot",strt=1)
-                    # output+=f"{nm} added message Sent.\n"
                     try:
-                        # await change_commands()
                         await fet(prt)
                     except Exception as e:
                         output+=str(e)
@@ -697,8 +694,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     await run_parallel(plister,prts)
                     output=f"Processing {prts}.."
                 elif command=="rm":
-                    system(f'find {dir} -type d -empty -delete')
-                    output="Empty Directories Deleted"
+                    system(f'rm -r downloads/*')
+                    output="Download Directories Cleared"
                 elif "lest" in  command[:4]:
                     output=""
                     prt=valve[5:]
