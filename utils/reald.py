@@ -7,12 +7,13 @@ from rdapi import RD
 from requests import get
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
+from urllib.parse import unquote
 
 rd = RD()
 
 def download_chunk(url, start, end, dir, filename, part_num):
     headers = {'Range': f'bytes={start}-{end}'}
-    response = get(url, headers=headers, stream=True)
+    response = get(url, headers=headers, stream=True,verify=False)
     chunk_path = f"{dir}/{filename}.part{part_num}"
     print(f"Downloading chunk: {chunk_path}")
     with open(chunk_path, "wb") as f:
@@ -38,7 +39,7 @@ def shot_bird(link, dir=None, num_chunks=PARALLEL_DOWNLOADS):
         ba=dict()
         r = get(link, allow_redirects=True, stream=True)
         ba['download']=link
-        ba['filename']=link.split("/")[-1].replace("%20", " ")
+        ba['filename']=unquote(link.split("/")[-1])
         ba['filesize']=int(r.headers.get("Content-Length", 0))  
     else:
         print(f"Generating link for: {link}")
@@ -50,12 +51,13 @@ def shot_bird(link, dir=None, num_chunks=PARALLEL_DOWNLOADS):
             return None
     print(f"Download link generated: {ba['download']}")
     print(f"Downloading: {ba['filename']} \n Size: {ba['filesize']}\nlink: {ba['download']}")
-    ln = ba["download"].replace("http://", "https://")
+    # ln = ba["download"].replace("http://", "https://")
+    ln=ba['download']
     
     file_size = int(ba['filesize'])
     if file_size == 0:
         print(f"File size is zero for {ba['filename']}. Downloading as a single chunk.")
-        response = get(ln, stream=True)
+        response = get(ln, stream=True,verify=False)
         file_path = f"{dir}/{ba['filename']}"
         with open(file_path, "wb") as f:
             for chunk in response.iter_content(chunk_size=8192):
