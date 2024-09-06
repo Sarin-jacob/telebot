@@ -11,6 +11,21 @@ from urllib.parse import unquote
 
 rd = RD()
 
+def humanize_size(size):
+    for unit in ['B', 'KB', 'MB', 'GB', 'TB']:
+        if size < 1024:
+            return f"{size:.2f}{unit}" if unit == "GB" else f"{size:.0f}{unit}"
+        size /= 1024
+
+def get_unique_filename(dir, filename, filesize):
+    base, ext = os.path.splitext(filename)
+    humanized_size = humanize_size(filesize)
+    new_filename = f"{base}-{humanized_size}{ext}"
+    while os.path.exists(os.path.join(dir, new_filename)):
+        new_filename = f"{base}-{humanized_size}{ext}"
+    return new_filename
+
+
 def download_chunk(url, start, end, dir, filename, part_num):
     headers = {'Range': f'bytes={start}-{end}'}
     response = get(url, headers=headers, stream=True,verify=False)
@@ -49,16 +64,15 @@ def shot_bird(link, dir=None, num_chunks=PARALLEL_DOWNLOADS):
         except Exception as e:
             print(f"Failed to generate download link for {link}. Error: {e}")
             return None
-    print(f"Download link generated: {ba['download']}")
     print(f"Downloading: {ba['filename']} \n Size: {ba['filesize']}\nlink: {ba['download']}")
     # ln = ba["download"].replace("http://", "https://")
     ln=ba['download']
-    
+    filename = get_unique_filename(dir, ba['filename'], file_size)
     file_size = int(ba['filesize'])
     if file_size == 0:
         print(f"File size is zero for {ba['filename']}. Downloading as a single chunk.")
         response = get(ln, stream=True,verify=False)
-        file_path = f"{dir}/{ba['filename']}"
+        file_path = f"{dir}/{filename}"
         with open(file_path, "wb") as f:
             for chunk in response.iter_content(chunk_size=8192):
                 if chunk:
@@ -77,8 +91,8 @@ def shot_bird(link, dir=None, num_chunks=PARALLEL_DOWNLOADS):
         for future in as_completed(futures):
             future.result()
     
-    merge_chunks(ba['filename'], dir, num_chunks)
-    return f"{dir}/{ba['filename']}"
+    merge_chunks(filename, dir, num_chunks)
+    return f"{dir}/{filename}"
 
 async def async_shot_bird(link, dir=None):
     return await asyncio.to_thread(shot_bird, link, dir)
