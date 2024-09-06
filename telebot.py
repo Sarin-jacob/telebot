@@ -223,7 +223,7 @@ async def up_bird(links: list, channelid=-1002171035047):
     # Process all links concurrently
     await asyncio.gather(*[process_link(link) for link in links])
     await msgo("All files downloaded & Upload...")
-    
+    system(f'find {dir} -type d -empty -delete')
 
 async def con_warp():
     res=system('warp-cli connect')
