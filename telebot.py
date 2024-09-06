@@ -223,7 +223,7 @@ async def up_bird(links: list, channelid=-1002171035047):
     # Process all links concurrently
     await asyncio.gather(*[process_link(link) for link in links])
     await msgo("All files downloaded & Upload...")
-    system(f'find {dir} -type d -empty -delete')
+    
 
 async def con_warp():
     res=system('warp-cli connect')
@@ -679,6 +679,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                             await msgo(output)
                     await run_parallel(plister,prts)
                     output=f"Processing {prts}.."
+                elif command=="rm":
+                    system(f'find {dir} -type d -empty -delete')
+                    output="Empty Directories Deleted"
                 elif "lest" in  command[:4]:
                     output=""
                     prt=valve[5:]
