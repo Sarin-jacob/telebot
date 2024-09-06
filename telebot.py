@@ -623,7 +623,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         output+=f"`{i}`"
                 elif command=="roast":
                     execv(sys.executable, ['python'] + sys.argv)
-
+                elif command=="reboot":
+                    if DOCKER:system('sudo docker restart telebot')
                 elif command=="update":
                     loca='cd /usr/src/app' if DOCKER else 'cd ~/telebot'
                     system(f'{loca} && git pull')
