@@ -67,7 +67,7 @@ def shot_bird(link, dir=None, num_chunks=PARALLEL_DOWNLOADS):
     print(f"Downloading: {ba['filename']} \n Size: {ba['filesize']}\nlink: {ba['download']}")
     # ln = ba["download"].replace("http://", "https://")
     ln=ba['download']
-    filename = get_unique_filename(dir, ba['filename'], file_size)
+    filename = get_unique_filename(dir, ba['filename'], ba['filesize'])
     file_size = int(ba['filesize'])
     if file_size == 0:
         print(f"File size is zero for {ba['filename']}. Downloading as a single chunk.")
