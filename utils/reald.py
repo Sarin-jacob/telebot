@@ -103,7 +103,7 @@ def shot_bird(link, dir=None, num_chunks=PARALLEL_DOWNLOADS):
     
     file=merge_chunks(filename, dir, num_chunks)
     asiz=os.path.getsize(file)
-    file=re.sub(r'o\.o.*\.', f'-{humanize_size(asiz)}.', file)
+    file=re.sub(r'o\.o.*\.', f' - [{humanize_size(asiz)}].', file)
     os.rename(f"{dir}/{filename}", file)
     return file
 
