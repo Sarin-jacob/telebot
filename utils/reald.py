@@ -38,7 +38,7 @@ def shot_bird(link, dir=None, num_chunks=PARALLEL_DOWNLOADS):
         ba=dict()
         r = get(link, allow_redirects=True, stream=True)
         ba['download']=link
-        ba['filename']=link.split("/")[-1]
+        ba['filename']=link.split("/")[-1].replace("%20", " ")
         ba['filesize']=int(r.headers.get("Content-Length", 0))  
     else:
         print(f"Generating link for: {link}")
