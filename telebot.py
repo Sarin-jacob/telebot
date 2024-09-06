@@ -134,7 +134,7 @@ async def update_progress(sent, total, file_name, sm, last_message, last_update_
 
     # Format the progress message with file size and progress percentage
     progress_message = (
-        f"Uploading {file_name}...\n"
+        f"Uploading {file_name.split('/')[-1]}\n"
         f"[{progress_bar}] {progress:.2f}%\n"
         f"{sent_size} of {total_size}"
     )
