@@ -626,8 +626,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
 
                 elif command=="update":
                     loca='cd /usr/src/app' if DOCKER else 'cd ~/telebot'
-                    val=system(f'{loca} && git pull')
-                    print(f"{val=}")
+                    system(f'{loca} && git pull')
                     if DOCKER:execv(sys.executable, ['python'] + sys.argv)  
                     else: system('systemctl restart telebot --user')
                     await msgo("Downloaded New files..\nRestarting Service")
