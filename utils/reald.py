@@ -1,5 +1,6 @@
 
 import asyncio
+import re
 from time import sleep
 from info import PARALLEL_DOWNLOADS
 from dotenv import load_dotenv
@@ -21,11 +22,11 @@ def humanize_size(size):
 def get_unique_filename(filename, filesize):
     base, ext = os.path.splitext(filename)
     humanized_size = humanize_size(filesize)
-    new_filename = f"{base}-{humanized_size}{ext}"
+    new_filename = f"{base}o.o{humanized_size}{ext}"
     return new_filename
 
 
-def download_chunk(url, start, end, dir, filename, part_num, retries=3):
+def download_chunk(url, start, end, dir, filename, part_num, retries=5):
     headers = {'Range': f'bytes={start}-{end}'}
     chunk_path = f"{dir}/{filename}.part{part_num}"
     for attempt in range(retries):
@@ -53,6 +54,7 @@ def merge_chunks(filename, dir, num_chunks):
             with open(chunk_path, "rb") as infile:
                 outfile.write(infile.read())
             os.remove(chunk_path)
+    return f"{dir}/{filename}"
 
 def shot_bird(link, dir=None, num_chunks=PARALLEL_DOWNLOADS):
     dir = dir if dir else "downloads"
@@ -99,8 +101,11 @@ def shot_bird(link, dir=None, num_chunks=PARALLEL_DOWNLOADS):
         for future in as_completed(futures):
             future.result()
     
-    merge_chunks(filename, dir, num_chunks)
-    return f"{dir}/{filename}"
+    file=merge_chunks(filename, dir, num_chunks)
+    asiz=os.path.getsize(file)
+    file=re.sub(r'o\.o.*\.', f'-{humanize_size(asiz)}.', file)
+    os.rename(f"{dir}/{filename}", file)
+    return file
 
 async def async_shot_bird(link, dir=None):
     return await asyncio.to_thread(shot_bird, link, dir)
