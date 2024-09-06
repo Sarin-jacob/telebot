@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import asyncio
 from datetime import datetime, timedelta
-from os import listdir, makedirs, path, remove, system, getenv
+from os import execv, listdir, makedirs, path, remove, system, getenv
 import subprocess
 import sys
 import re
@@ -622,6 +622,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     for i in load_data(TV_SHOWS_FILE_PATH):
                         output+=f"`{i}`"
                 elif command=="roast":
+                    execv(sys.executable, ['python'] + sys.argv)
                     await msgo("trying to sta..")
                     if DOCKER:system("sudo docker restart telebot")  
                     else: system('systemctl restart telebot --user')
