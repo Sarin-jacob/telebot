@@ -232,7 +232,7 @@ async def up_bird(links: list, channelid=-1002171035047):
                     else:
                         duration, qual, lang, subs  = await get_media_info(fl, metadata=True)
                         duration=sectostr(duration)
-                        media_info_str = f"\n🎥 **{hr}H:{mn}** {qual}\n🔉: {lang} \n💬: {subs}"
+                        media_info_str = f"\n🎥 **{duration}** {qual}\n🔉: {lang} \n💬: {subs}"
                     updated_cap = f"{fl.split('/')[1]}{media_info_str}\n{cap}"
 
                     await uploood(fl, sm, channelid, caption=updated_cap, thumb=thumb)
