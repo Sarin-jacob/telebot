@@ -7,14 +7,15 @@ try:
 except ImportError:
     print("Please install the required packages: rarfile, zipfile, and tarfile")
 
-def min_hour(time):
+def sectostr(time):
     """
-    Convert minutes to hours and minutes
-
+    Convert seconds to hours and minutes and seconds
     """
-    hours = time // 60
-    minutes = time % 60
-    return hours, minutes
+    hours = time // 3600
+    time %= 3600
+    minutes = time // 60
+    seconds = time % 60
+    return f"{hours}H:{minutes}M:{seconds}S" if hours else f"{minutes}M:{seconds}S"    
 async def stream_output(stream, stream_type):
     out=''
     while True:

@@ -19,7 +19,7 @@ from utils.fasttelethon import fupload_file
 from utils.ytdldr import p_links, yt_down
 from humanize import naturalsize
 from telethon.utils import get_attributes
-from utils.funcs import read_config,sendHelloMessage,finddetails,load_data,save_data,add_entry,extract_file,finddetails,stream_output
+from utils.funcs import read_config, sectostr,sendHelloMessage,finddetails,load_data,save_data,add_entry,extract_file,finddetails,stream_output
 import uuid
 import traceback
 from asyncio import sleep
@@ -225,12 +225,13 @@ async def up_bird(links: list, channelid=-1002171035047):
                     #if fl is audio run media info without metadata, if video run with metadata
                     if fl.endswith('.mp3') or fl.endswith('.m4a'):
                         duration, artist, title=await get_media_info(fl, metadata=False)
+                        duration=sectostr(duration)
                         media_info_str=f"\n🎵 **{artist} - {title}** [{duration}]"
                     elif fl.endswith('.sub') or fl.endswith('.srt'):
                         pass
                     else:
                         duration, qual, lang, subs  = await get_media_info(fl, metadata=True)
-                        hr, mn = divmod(duration, 60)
+                        duration=sectostr(duration)
                         media_info_str = f"\n🎥 **{hr}H:{mn}** {qual}\n🔉: {lang} \n💬: {subs}"
                     updated_cap = f"{fl.split('/')[1]}{media_info_str}\n{cap}"
 
