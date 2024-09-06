@@ -181,68 +181,49 @@ async def yt_downloader(text):
 
 
 async def up_bird(links: list, channelid=-1002171035047):
-    cap = "Uploaded by ProSearch Bot"
     thumb = "thumb.jpg"
     fnms = []
     dir='downloads'
     async def process_link(link):
         try:
             fl = await async_shot_bird(link, dir=dir)
-            fnms.append(fl)
+            # fnms.append(fl)
+            processed_files = []
+            extt=extract_file(fl)
+            if extt:
+                if isinstance(extt, list):
+                    processed_files.extend(extt)
+                else:
+                    processed_files.append(extt)
+            sm = await msgo("Uploading files...")
+            for i in processed_files:
+                if not i.endswith('/'):
+                    if path.isfile(fl):
+                        media_info_str = ""
+                        # Get media info and update the caption
+                        #if fl is audio run media info without metadata, if video run with metadata
+                        if fl.endswith('.mp3') or fl.endswith('.m4a'):
+                            duration, artist, title=await get_media_info(fl, metadata=False)
+                            duration=sectostr(duration)
+                            media_info_str=f"\n🎵 **{artist if artist else ''}{' - '+title if title else ''}** [{duration}]"
+                        elif fl.endswith('.sub') or fl.endswith('.srt'):
+                            pass
+                        else:
+                            duration, qual, lang, subs  = await get_media_info(fl, metadata=True)
+                            duration=sectostr(duration)
+                            media_info_str = f"\n🎬 **{qual}** | ⏳ **{duration}**\n{'🔉: **'+ lang+'**' if lang != 'Unknown language'else '' }   \n{'**💬: ESUB**' if 'English' in subs else ''}"
+                        updated_cap = f"{fl.split('/')[1]}\n{media_info_str}"
+
+                        await uploood(fl, sm, channelid, caption=updated_cap, thumb=thumb)
+                else:
+                    await msgo(f"Error: {fl} not found!!")
         except Exception as e:
-            await msgo("Could not download file\nError: " + str(e))
-            # Optional: You might want to add logging here instead of returning
+            await msgo("Error: " + str(e))
 
     # Process all links concurrently
     await asyncio.gather(*[process_link(link) for link in links])
-    await msgo("All files downloaded. Preparing for upload...")
-
-    processed_files = []
-    for j in fnms:
-        extt = extract_file(j)
-        if extt:
-            if isinstance(extt, list):
-                processed_files.extend(extt)
-            else:
-                processed_files.append(extt)
-        else:
-            processed_files.append(j)
-    fnms = processed_files
-    uplds=''
-    for i in fnms:
-        if i.endswith('/'):fnms.remove(i)
-        uplds+=f"{i.split('/')[-1]}\n"
-    await msgo(f"Files to be uploaded: \n{uplds}")
-    sm = await msgo("Uploading files...")
-
-    try:
-        if len(fnms) > 0:
-            for fl in fnms:
-                if fl ==None:continue
-                if path.isfile(fl):
-                    media_info_str = ""
-                    # Get media info and update the caption
-                    #if fl is audio run media info without metadata, if video run with metadata
-                    if fl.endswith('.mp3') or fl.endswith('.m4a'):
-                        duration, artist, title=await get_media_info(fl, metadata=False)
-                        duration=sectostr(duration)
-                        media_info_str=f"\n🎵 **{artist if artist else ''}{' - '+title if title else ''}** [{duration}]"
-                    elif fl.endswith('.sub') or fl.endswith('.srt'):
-                        pass
-                    else:
-                        duration, qual, lang, subs  = await get_media_info(fl, metadata=True)
-                        duration=sectostr(duration)
-                        media_info_str = f"\n🎬 **{qual}** | ⏳ **{duration}**\n{'🔉: **'+ lang+'**' if lang != 'Unknown language'else '' }   \n{'**💬: ESUB**' if 'English' in subs else ''}"
-                    updated_cap = f"{fl.split('/')[1]}\n{media_info_str}"
-
-                    await uploood(fl, sm, channelid, caption=updated_cap, thumb=thumb)
-                else:
-                    await msgo(f"Error: {fl} not found!!")
-            #remove empty dirs if any in dir folder
-            system(f'find {dir} -type d -empty -delete')
-    except Exception as e:
-        await msgo("Error: " + str(e))
-
+    await msgo("All files downloaded & Upload...")
+    system(f'find {dir} -type d -empty -delete')
 
 async def con_warp():
     res=system('warp-cli connect')
