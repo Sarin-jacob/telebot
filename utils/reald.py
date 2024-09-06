@@ -73,7 +73,6 @@ def shot_bird(link, dir=None, num_chunks=PARALLEL_DOWNLOADS):
     ba['download']=link
     ba['filename']=unquote(os.path.basename(urlparse(link).path))
     ba['filesize']=int(r.headers.get("Content-Length", 0))  
-
     print(f"Downloading: {ba['filename']} \n Size: {ba['filesize']}\nlink: {ba['download']}")
     # ln = ba["download"].replace("http://", "https://")
     ln=ba['download']
