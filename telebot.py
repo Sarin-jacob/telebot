@@ -12,6 +12,7 @@ from telethon.tl.functions.channels import CreateChannelRequest ,EditPhotoReques
 from telethon.tl.functions.bots import SetBotCommandsRequest
 from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,BotCommand, BotCommandScopeDefault, InputMediaUploadedDocument,InputFile
 from utils.imdbs import search_files,gen4mId
+from utils.medino import get_media_info
 from utils.tmdb import TMDB,clean_name
 from utils.reald import async_shot_bird, shot_bird
 from utils.fasttelethon import fupload_file
@@ -219,6 +220,24 @@ async def up_bird(links: list, channelid=-1002171035047):
             for fl in fnms:
                 if fl ==None:continue
                 if path.isfile(fl):
+                    media_info = await get_media_info(fl, metadata=True)
+                    duration = media_info.get('duration', 'N/A')
+                    artist = media_info.get('artist', 'N/A')
+                    tags = media_info.get('tags', 'N/A')
+                    resolution = media_info.get('resolution', 'N/A')
+                    audio_language = media_info.get('audio_language', 'N/A')
+                    subtitles = media_info.get('subtitles', 'N/A')
+
+                    media_info_str = (
+                        f"Duration: {duration}\n"
+                        f"Artist: {artist}\n"
+                        f"Tags: {tags}\n"
+                        f"Resolution: {resolution}\n"
+                        f"Audio Language: {audio_language}\n"
+                        f"Subtitles: {subtitles}"
+                    )
+                    updated_cap = f"{fl.split('/')[1]}\n{media_info_str}\n{cap}"
+
                     await uploood(fl, sm, channelid, caption=f"{fl.split('/')[1]}\n{cap}", thumb=thumb)
                 else:
                     await msgo(f"Error: {fl} not found!!")
