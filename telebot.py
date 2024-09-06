@@ -220,25 +220,20 @@ async def up_bird(links: list, channelid=-1002171035047):
             for fl in fnms:
                 if fl ==None:continue
                 if path.isfile(fl):
-                    media_info = await get_media_info(fl, metadata=True)
-                    duration = media_info.get('duration', 'N/A')
-                    artist = media_info.get('artist', 'N/A')
-                    tags = media_info.get('tags', 'N/A')
-                    resolution = media_info.get('resolution', 'N/A')
-                    audio_language = media_info.get('audio_language', 'N/A')
-                    subtitles = media_info.get('subtitles', 'N/A')
+                    media_info_str = ""
+                    # Get media info and update the caption
+                    #if fl is audio run media info without metadata, if video run with metadata
+                    if fl.endswith('.mp3') or fl.endswith('.m4a'):
+                        duration, artist, title=await get_media_info(fl, metadata=False)
+                        media_info_str=f"\n🎵 **{artist} - {title}** [{duration}]"
+                    elif fl.endswith('.sub') or fl.endswith('.srt'):
+                        pass
+                    else:
+                        duration, qual, lang, subs  = await get_media_info(fl, metadata=True)
+                        media_info_str = f"\n🎥 **{duration}** {qual}\n🔉: {lang} \n💬: {subs}"
+                    updated_cap = f"{fl.split('/')[1]}{media_info_str}\n{cap}"
 
-                    media_info_str = (
-                        f"Duration: {duration}\n"
-                        f"Artist: {artist}\n"
-                        f"Tags: {tags}\n"
-                        f"Resolution: {resolution}\n"
-                        f"Audio Language: {audio_language}\n"
-                        f"Subtitles: {subtitles}"
-                    )
-                    updated_cap = f"{fl.split('/')[1]}\n{media_info_str}\n{cap}"
-
-                    await uploood(fl, sm, channelid, caption=f"{fl.split('/')[1]}\n{updated_capcap}", thumb=thumb)
+                    await uploood(fl, sm, channelid, caption=f"{fl.split('/')[1]}\n{updated_cap}", thumb=thumb)
                 else:
                     await msgo(f"Error: {fl} not found!!")
             #remove empty dirs if any in dir folder

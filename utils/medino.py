@@ -14,6 +14,45 @@ async def cmd_exec(cmd, shell=False):
     return stdout, stderr, proc.returncode
 
 async def get_media_info(path, metadata=False):
+    """
+    Retrieves media information from a specified file using `ffprobe` via a subprocess.
+    
+    Parameters:
+    -----------
+    path : str
+        The file path of the media to analyze.
+    metadata : bool, optional
+        If `True`, returns additional metadata such as quality, language, and subtitle info. 
+        If `False`, only duration, artist, and title are returned (default is `False`).
+
+    Returns:
+    --------
+    tuple
+        If `metadata` is `True`:
+            (duration: int, quality: str, language: str, subtitles: str)
+            - duration: The media duration in seconds.
+            - quality: The video quality in "p" resolution format (e.g., "720p", "1080p").
+            - language: Comma-separated string of audio language(s), if available.
+            - subtitles: Comma-separated string of subtitle language(s), if available.
+        If `metadata` is `False`:
+            (duration: int, artist: str, title: str)
+            - duration: The media duration in seconds.
+            - artist: The artist's name from the media tags, if available.
+            - title: The title of the media from the tags, if available.
+    
+    Exceptions:
+    -----------
+    Returns `(0, None, None)` or `(0, "", "", "")` on failure or if the file does not exist.
+    Prints an error message if `ffprobe` fails or if the file is not found.
+    
+    Example:
+    --------
+    # With metadata enabled (video-specific details)
+    duration, qual, lang, subs = await get_media_info('/path/to/video.mp4', metadata=True)
+    
+    # Without metadata (audio details)
+    duration, artist, title = await get_media_info('/path/to/audio.mp3', metadata=False)
+    """
     try:
         result = await cmd_exec(["ffprobe", "-hide_banner", "-loglevel", "error", "-print_format",
                                  "json", "-show_format", "-show_streams", path])
