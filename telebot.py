@@ -191,11 +191,15 @@ async def up_bird(links: list, channelid=-1002171035047):
             # fnms.append(fl)
             processed_files = []
             extt=extract_file(fl)
+            print(
+                f"link:{link}\nExtracted: {extt} from {fl}"
+            )
             if extt:
                 if isinstance(extt, list):
                     processed_files.extend(extt)
                 else:
                     processed_files.append(extt)
+            print(f"Processed Files: {processed_files}")
             sm = await msgo("Uploading files...")
             for i in processed_files:
                 if not i.endswith('/'):
