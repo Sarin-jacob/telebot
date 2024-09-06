@@ -185,7 +185,7 @@ async def up_bird(links: list, channelid=-1002171035047):
     fnms = []
     dir='downloads'
     async def process_link(link,wait):
-        asyncio.spleep(wait*5)
+        await asyncio.sleep(wait*5)
         try:
             fl = await async_shot_bird(link, dir=dir)
             # fnms.append(fl)
