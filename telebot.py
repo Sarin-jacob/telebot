@@ -184,7 +184,8 @@ async def up_bird(links: list, channelid=-1002171035047):
     thumb = "thumb.jpg"
     fnms = []
     dir='downloads'
-    async def process_link(link):
+    async def process_link(link,wait):
+        asyncio.spleep(wait*3)
         try:
             fl = await async_shot_bird(link, dir=dir)
             # fnms.append(fl)
@@ -221,7 +222,7 @@ async def up_bird(links: list, channelid=-1002171035047):
             await msgo("Error: " + str(e))
 
     # Process all links concurrently
-    await asyncio.gather(*[process_link(link) for link in links])
+    await asyncio.gather(*[process_link(link,i) for i,link in enumerate(links)])
     await msgo("All files downloaded & Upload...")
     system(f'find {dir} -type d -empty -delete')
 
