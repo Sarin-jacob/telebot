@@ -1,5 +1,6 @@
 
 import asyncio
+from time import sleep
 from info import PARALLEL_DOWNLOADS
 from dotenv import load_dotenv
 load_dotenv()
@@ -24,16 +25,25 @@ def get_unique_filename(filename, filesize):
     return new_filename
 
 
-def download_chunk(url, start, end, dir, filename, part_num):
+def download_chunk(url, start, end, dir, filename, part_num, retries=3):
     headers = {'Range': f'bytes={start}-{end}'}
-    response = get(url, headers=headers, stream=True,verify=False)
     chunk_path = f"{dir}/{filename}.part{part_num}"
-    print(f"Downloading chunk: {chunk_path}")
-    with open(chunk_path, "wb") as f:
-        for chunk in response.iter_content(chunk_size=8192):
-            if chunk:
-                f.write(chunk)
-    return chunk_path
+    for attempt in range(retries):
+        try:
+            response = get(url, headers=headers, stream=True, verify=False)
+            print(f"Downloading chunk: {chunk_path}")
+            with open(chunk_path, "wb") as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    if chunk:
+                        f.write(chunk)
+            return chunk_path
+        except Exception as e:
+            print(f"Attempt {attempt + 1} failed: {e}")
+            if attempt < retries - 1:
+                sleep(2 ** attempt)  # Exponential backoff
+            else:
+                print(f"Max retries exceeded for chunk: {chunk_path}")
+                raise
 
 def merge_chunks(filename, dir, num_chunks):
     with open(f"{dir}/{filename}", "wb") as outfile:
