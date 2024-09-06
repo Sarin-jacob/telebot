@@ -238,7 +238,7 @@ async def up_bird(links: list, channelid=-1002171035047):
                     )
                     updated_cap = f"{fl.split('/')[1]}\n{media_info_str}\n{cap}"
 
-                    await uploood(fl, sm, channelid, caption=f"{fl.split('/')[1]}\n{cap}", thumb=thumb)
+                    await uploood(fl, sm, channelid, caption=f"{fl.split('/')[1]}\n{updated_capcap}", thumb=thumb)
                 else:
                     await msgo(f"Error: {fl} not found!!")
             #remove empty dirs if any in dir folder
