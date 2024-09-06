@@ -15,7 +15,7 @@ def sectostr(time):
     time %= 3600
     minutes = time // 60
     seconds = time % 60
-    return f"{hours}H:{minutes}M:{seconds}S" if hours else f"{minutes}M:{seconds}S"    
+    return f"{hours:02d}:{minutes:02d}:{seconds:02d}"
 async def stream_output(stream, stream_type):
     out=''
     while True:

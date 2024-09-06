@@ -9,7 +9,7 @@ from rdapi import RD
 from requests import get
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
-from urllib.parse import unquote
+from urllib.parse import unquote, urlparse
 
 rd = RD()
 
@@ -56,24 +56,24 @@ def merge_chunks(filename, dir, num_chunks):
             os.remove(chunk_path)
     return f"{dir}/{filename}"
 
+def debird(link):
+    try:
+        ba = rd.unrestrict.link(link=link).json()
+        print(ba)
+    except Exception as e:
+        print(f"Failed to generate download link for {link}. Error: {e}")
+        return None
+    return shot_bird(ba['download'])
+
 def shot_bird(link, dir=None, num_chunks=PARALLEL_DOWNLOADS):
     dir = dir if dir else "downloads"
     os.makedirs(dir, exist_ok=True)
-    if "download.real-debrid.com" in link:
-        print("Direct download link detected. Skipping real-debrid.")
-        ba=dict()
-        r = get(link, allow_redirects=True, stream=True)
-        ba['download']=link
-        ba['filename']=unquote(link.split("/")[-1])
-        ba['filesize']=int(r.headers.get("Content-Length", 0))  
-    else:
-        print(f"Generating link for: {link}")
-        try:
-            ba = rd.unrestrict.link(link=link).json()
-            print(ba)
-        except Exception as e:
-            print(f"Failed to generate download link for {link}. Error: {e}")
-            return None
+    ba=dict()   
+    r = get(link, allow_redirects=True, stream=True)
+    ba['download']=link
+    ba['filename']=unquote(os.path.basename(urlparse(link).path))
+    ba['filesize']=int(r.headers.get("Content-Length", 0))  
+
     print(f"Downloading: {ba['filename']} \n Size: {ba['filesize']}\nlink: {ba['download']}")
     # ln = ba["download"].replace("http://", "https://")
     ln=ba['download']

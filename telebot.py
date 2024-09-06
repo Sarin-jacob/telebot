@@ -226,14 +226,14 @@ async def up_bird(links: list, channelid=-1002171035047):
                     if fl.endswith('.mp3') or fl.endswith('.m4a'):
                         duration, artist, title=await get_media_info(fl, metadata=False)
                         duration=sectostr(duration)
-                        media_info_str=f"\n🎵 **{artist} - {title}** [{duration}]"
+                        media_info_str=f"\n🎵 **{artist if artist else ''}{' - '+title if title else ''}** [{duration}]"
                     elif fl.endswith('.sub') or fl.endswith('.srt'):
                         pass
                     else:
                         duration, qual, lang, subs  = await get_media_info(fl, metadata=True)
                         duration=sectostr(duration)
-                        media_info_str = f"\n🎥 **{duration}** {qual}\n🔉: {lang} \n💬: {subs}"
-                    updated_cap = f"{fl.split('/')[1]}{media_info_str}\n{cap}"
+                        media_info_str = f"\n🎬 **{qual}** | ⏳ {duration}\n🔉: {lang}   {'\n💬: ESUB' if 'English' in subs else ''}"
+                    updated_cap = f"{fl.split('/')[1]}{media_info_str}"
 
                     await uploood(fl, sm, channelid, caption=updated_cap, thumb=thumb)
                 else:
