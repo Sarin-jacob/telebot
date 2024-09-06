@@ -201,8 +201,8 @@ async def up_bird(links: list, channelid=-1002171035047):
                     processed_files.append(extt)
             await msgo(f"Processed Files: {processed_files}")
             sm = await msgo("Uploading files...")
-            for i in processed_files:
-                if not i.endswith('/'):
+            for fl in processed_files:
+                if not fl.endswith('/'):
                     if path.isfile(fl):
                         media_info_str = ""
                         # Get media info and update the caption
@@ -220,8 +220,8 @@ async def up_bird(links: list, channelid=-1002171035047):
                         updated_cap = f"{fl.split('/')[1]}\n{media_info_str}"
 
                         await uploood(fl, sm, channelid, caption=updated_cap, thumb=thumb)
-                else:
-                    await msgo(f"Error: {fl} not found!!")
+                    else:
+                        await msgo(f"Error: {fl} not found!!")
         except Exception as e:
             await msgo("Error: " + str(e))
 
