@@ -7,7 +7,14 @@ try:
 except ImportError:
     print("Please install the required packages: rarfile, zipfile, and tarfile")
 
+def min_hour(time):
+    """
+    Convert minutes to hours and minutes
 
+    """
+    hours = time // 60
+    minutes = time % 60
+    return hours, minutes
 async def stream_output(stream, stream_type):
     out=''
     while True:
