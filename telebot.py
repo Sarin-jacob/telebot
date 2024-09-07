@@ -652,6 +652,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         output+=f"{a}\n"
                 elif command=="ls":
                     output=subprocess.check_output('ls downloads', shell=True).decode()
+                    if output=='':output="No files in downloads"
                 elif "ser" == command[:3]:
                     output='Processing...'
                     prt=valve[4:]
