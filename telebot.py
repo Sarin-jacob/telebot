@@ -198,7 +198,11 @@ async def up_bird(links: list, channelid=-1002171035047):
 
     processed_files = []
     for j in fnms:
-        extt = extract_file(j)
+        try:
+            extt = extract_file(j)
+        except Exception as e:
+            await msgo("Extraction Failed\nError: " + str(e))
+            extt = None
         if extt:
             if isinstance(extt, list):
                 processed_files.extend(extt)
@@ -233,8 +237,10 @@ async def up_bird(links: list, channelid=-1002171035047):
                         duration=sectostr(duration)
                         media_info_str = f"\n🎬 **{qual}** | ⏳ **{duration}**\n{'🔉: **'+ lang+'**' if lang != 'Unknown language' or lang == '' else '' }   \n{'**💬: ESUB**' if 'English' in subs else ''}"
                     updated_cap = f"{fl.split('/')[1]}\n{media_info_str}"
-
-                    await uploood(fl, sm, channelid, caption=updated_cap, thumb=thumb)
+                    try:
+                        await uploood(fl, sm, channelid, caption=updated_cap, thumb=thumb)
+                    except Exception as e:
+                        await msgo("Upload Failed\nError: " + str(e))
                 else:
                     await msgo(f"Error: {fl} not found!!")
             #remove empty dirs if any in dir folder

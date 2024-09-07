@@ -26,7 +26,7 @@ def get_unique_filename(filename, filesize):
     return new_filename
 
 
-def download_chunk(url, start, end, dir, filename, part_num, retries=5):
+def download_chunk(url, start, end, dir, filename, part_num, retries=6):
     headers = {'Range': f'bytes={start}-{end}'}
     chunk_path = f"{dir}/{filename}.part{part_num}"
     for attempt in range(retries):
@@ -44,7 +44,13 @@ def download_chunk(url, start, end, dir, filename, part_num, retries=5):
                 sleep(2 ** attempt)  # Exponential backoff
             else:
                 print(f"Max retries exceeded for chunk: {chunk_path}")
-                raise
+                raise MaxRetryError(dir, filename)
+            
+class MaxRetryError(Exception):
+    def __init__(self, dir, filename):
+        self.message = f"Max Retry reached for {dir}/{filename}. Download failed!!"
+        super().__init__(self.message)
+
 
 def merge_chunks(filename, dir, num_chunks):
     with open(f"{dir}/{filename}", "wb") as outfile:
