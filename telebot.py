@@ -650,6 +650,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                         a=await fet(i,channelid=-1001847045854,searchbot="ProSearchX1Bot",strt=1)
                         await latester(i)
                         output+=f"{a}\n"
+                elif command=="ls":
+                    output=subprocess.check_output('ls downloads', shell=True).decode()
                 elif "ser" == command[:3]:
                     output='Processing...'
                     prt=valve[4:]
