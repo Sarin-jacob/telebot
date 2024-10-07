@@ -724,6 +724,9 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             pass
     
     async def start():
-        await sendHelloMessage(client, peerChannel)
+        try:
+            await sendHelloMessage(client, peerChannel)
+        except Exception as e:
+            await msgo("Error: "+str(e))
         await client.run_until_disconnected()
     client.loop.run_until_complete(start())
