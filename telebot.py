@@ -95,7 +95,7 @@ def saveSession(session):
 api_id = TELEGRAM_DAEMON_API_ID
 api_hash = TELEGRAM_DAEMON_API_HASH
 channel_id = TELEGRAM_DAEMON_CHANNEL
-
+print(f"channel_id: {channel_id},\n  {TELEGRAM_DAEMON_CHANNEL = }")
 bot_client = TelegramClient('bot', api_id, api_hash)
 bot_client.start(bot_token=BOT_TOKEN)
 # tmdb=TMDB(TMDB_API_KEY)
