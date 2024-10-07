@@ -649,9 +649,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output='Processing...'
                     for i in prt.split('/'):
                         a=await fet(i,channelid=-1001847045854,searchbot="ProSearchX1Bot",strt=1)
-                        await msgo("send added message for "+i)
                         await latester(i)
-                        await msgo('waiting for latester')
                         output+=f"{a}\n"
                 elif command=="ls":
                     output=subprocess.check_output('ls downloads', shell=True).decode()
