@@ -277,6 +277,11 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     peerChannel = PeerChannel(channel_id)
 
     print(f"channel_id: {channel_id},\n  {TELEGRAM_DAEMON_CHANNEL = },\n  {peerChannel = }")
+    try:
+        sendHelloMessage(client, peerChannel)
+    except Exception as e:
+        sendHelloMessage(client, channel_id)
+        # msgo("Error: "+str(e))
 
     async def clearchannels():
         # List of keywords to look for in group names
