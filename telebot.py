@@ -95,7 +95,7 @@ def saveSession(session):
 api_id = TELEGRAM_DAEMON_API_ID
 api_hash = TELEGRAM_DAEMON_API_HASH
 channel_id = TELEGRAM_DAEMON_CHANNEL
-print(f"channel_id: {channel_id},\n  {TELEGRAM_DAEMON_CHANNEL = }")
+print(f"\033[1;32m\nTelebot is Up n Running on channel: {channel_id}\n\033[0m")
 bot_client = TelegramClient('bot', api_id, api_hash)
 bot_client.start(bot_token=BOT_TOKEN)
 # tmdb=TMDB(TMDB_API_KEY)
@@ -275,8 +275,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
     saveSession(client.session)
     global peerChannel
     peerChannel = PeerChannel(channel_id)
-
-    print(f"channel_id: {channel_id},\n  {TELEGRAM_DAEMON_CHANNEL = },\n  {peerChannel = }")
 
     async def clearchannels():
         # List of keywords to look for in group names
@@ -725,10 +723,6 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             pass
     
     async def start():
-        try:
-            await sendHelloMessage(client, peerChannel)
-        except Exception as e:
-            await sendHelloMessage(client, channel_id)
-            await msgo("Error: "+str(e))
+        await sendHelloMessage(client, peerChannel)
         await client.run_until_disconnected()
     client.loop.run_until_complete(start())
