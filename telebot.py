@@ -717,6 +717,8 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     sd,ev,fr=mat.get("Sd") or mat.get("sd"),mat.get("ev"),mat.get("fr",1)
                     await sdule(sd,int(ev),int(fr))
                     output=f"{sd} scheduled for {fr} times, every {ev} minutes"
+                else:
+                    return
                 await msgo(output)
                 await event.delete()
         except:
