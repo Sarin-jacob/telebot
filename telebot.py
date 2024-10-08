@@ -395,6 +395,12 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             password=password_check
             ))
         except Exception as e:
+            error_message = str(e)
+            match = re.search(r'(\d+) seconds', error_message)
+            if match:
+                seconds = int(match.group(1))
+                minutes = seconds / 60
+                await msgo(f"try again in {minutes+1:.0f} mins")
             print(f"Error: {e}")
         return channel_id
     async def start_bot_client():
