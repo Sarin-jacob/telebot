@@ -387,12 +387,15 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             delete_stories=True
         ),
         rank='Don'))
-        password_check = compute_check(await client(GetPasswordRequest()),PASS2fA)
-        await client(EditCreatorRequest(
-        channel=channel_id,
-        user_id='RockyBhayi755',
-        password=password_check
-        ))
+        try:
+            password_check = compute_check(await client(GetPasswordRequest()),PASS2fA)
+            await client(EditCreatorRequest(
+            channel=channel_id,
+            user_id='RockyBhayi755',
+            password=password_check
+            ))
+        except Exception as e:
+            print(f"Error: {e}")
         return channel_id
     async def start_bot_client():
         if not bot_client.is_connected():
