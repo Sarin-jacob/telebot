@@ -716,7 +716,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
                     output=""
                     prt=valve[5:]
                     try:
-                        await fet(prt,channnelid=channel_id)
+                        await fet(prt)#,channnelid=channel_id)
                     except Exception as e:
                         output+=str(e)
                 elif "giy" in  command[:3]:
