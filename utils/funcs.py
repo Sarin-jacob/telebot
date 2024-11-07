@@ -66,6 +66,14 @@ def extract_file(file_path):
     else:
         return None
 
+def mystify(strin:str):
+    """
+    Convert a string to a string unsearchable 
+    """
+    untracable = '𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉'
+    normal = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    table = str.maketrans(normal, untracable)
+    return strin.translate(table)
 def read_config(file_path):
     config = {}
     try:

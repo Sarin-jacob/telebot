@@ -21,7 +21,7 @@ from utils.fasttelethon import fupload_file
 from utils.ytdldr import p_links, yt_down
 from humanize import naturalsize
 from telethon.utils import get_attributes
-from utils.funcs import read_config, sectostr,sendHelloMessage,finddetails,load_data,save_data,add_entry,extract_file,finddetails,stream_output
+from utils.funcs import read_config, sectostr,sendHelloMessage,finddetails,load_data,save_data,add_entry,extract_file,finddetails,stream_output,mystify
 import uuid
 import traceback
 from asyncio import sleep
@@ -500,7 +500,7 @@ with TelegramClient(getSession(), api_id, api_hash).start() as client:
             await start_bot_client()
             entity = await bot_client.get_entity(channelid)
             name=name.replace("."," ")
-            message=f"✅ **{name}**"
+            message=f"✅ **{mystify(name)}**"
             name=name.split('#')[0].replace(' ', '%20').split('\n')[0]
             if imdb:
                 # nm=name.replace('%20',' ')
